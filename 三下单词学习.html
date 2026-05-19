@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⛏️ 单词大冒险 - 三年级英语学习</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --mc-grass:#7c9c5e;--mc-grass-dark:#5a7a3e;--mc-dirt:#8b5e3c;
+            --mc-dirt-dark:#6b3e1c;--mc-stone:#6b6b6b;--mc-stone-dark:#4a4a4a;
+            --mc-wood:#6b3a1f;--mc-gold:#FFD700;--mc-crafting:#c6a87c;
+            --mc-water:#3B7DD8;--mc-snow:#f0f0f0;--mc-sky:#87CEEB;
+            --text:#e8e8e8;--text-light:#a0a0a0
+        }
+        body{font-family:'Courier New','Microsoft YaHei',monospace;background:linear-gradient(180deg,#5a7a3e,#3d5a2e);color:var(--text);min-height:100vh;overflow-x:hidden}
+        
+        header{background:linear-gradient(180deg,#8b5e3c,#6b3e1c);padding:14px 20px;text-align:center;border-bottom:4px solid #4a2a10;box-shadow:0 4px 0 #3a1a08,0 6px 12px rgba(0,0,0,.4)}
+        header h1{font-size:1.4rem;color:var(--mc-gold);text-shadow:2px 2px 0 #6b3a1f,4px 4px 0 #4a2a10;letter-spacing:2px}
+        .badge-row{display:flex;justify-content:center;gap:10px;margin-top:6px;flex-wrap:wrap}
+        .badge{display:inline-flex;align-items:center;gap:4px;background:rgba(0,0,0,.4);padding:3px 12px;border:2px solid #4a2a10;font-size:.8rem;color:var(--mc-gold)}
+        
+        nav{display:flex;justify-content:center;gap:4px;padding:6px 10px;background:linear-gradient(180deg,#6b6b6b,#4a4a4a);border:3px solid #333;border-left:none;border-right:none;position:sticky;top:0;z-index:100;flex-wrap:wrap;box-shadow:0 4px 0 #333}
+        nav button{padding:6px 14px;border:2px solid #555;background:linear-gradient(180deg,#7a7a7a,#5a5a5a);color:#fff;cursor:pointer;font-size:.82rem;transition:all .1s;font-family:inherit;box-shadow:inset 0 1px 0 #999,0 2px 0 #333}
+        nav button:active{transform:translateY(2px);box-shadow:inset 0 2px 4px rgba(0,0,0,.4)}
+        nav button.active{background:linear-gradient(180deg,#FFD700,#DAA520);color:#3a2a00;border-color:#B8860B;box-shadow:inset 0 1px 0 #FFF8DC,0 2px 0 #8B6914}
+        
+        main{max-width:1200px;margin:0 auto;padding:12px}
+        .section{display:none}.section.active{display:block;animation:fadeIn .4s}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+        
+        .card{background:linear-gradient(180deg,#c6a87c,#a8885c);border-radius:2px;padding:18px;margin-bottom:12px;box-shadow:0 4px 0 #7a6040,0 6px 12px rgba(0,0,0,.3);border:2px solid #b89868;color:#2a1a0a}
+        
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:15px}
+        .stat-card{background:linear-gradient(180deg,#6b6b6b,#4a4a4a);padding:14px;border-radius:2px;text-align:center;border:2px solid #555;box-shadow:0 3px 0 #333;color:#e8e8e8}
+        .stat-card .number{font-size:1.5rem;font-weight:700;color:var(--mc-gold);text-shadow:1px 1px 0 #6b3a1f}
+        .stat-card .label{color:#aaa;font-size:.78rem}
+        
+        .unit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:12px}
+        .unit-btn{background:linear-gradient(180deg,#7a7a7a,#5a5a5a);color:#fff;border:2px solid #555;padding:14px;border-radius:2px;cursor:pointer;font-size:.9rem;transition:all .1s;font-family:inherit;box-shadow:inset 0 1px 0 #999,0 3px 0 #333}
+        .unit-btn:active{transform:translateY(3px);box-shadow:inset 0 2px 4px rgba(0,0,0,.4)}
+        .unit-btn.completed{background:linear-gradient(180deg,#5a8a3e,#3d6a2e);border-color:#4a7a2e;box-shadow:inset 0 1px 0 #7aaa5e,0 3px 0 #2a4a1e}
+        
+        .flashcard-container{perspective:1000px;margin:15px auto;max-width:420px}
+        .flashcard{position:relative;width:100%;height:300px;cursor:pointer;transform-style:preserve-3d;transition:transform .6s}
+        .flashcard.flipped{transform:rotateY(180deg)}
+        .flashcard-front,.flashcard-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:2px;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:0;box-shadow:0 6px 0 #3a1a3a,0 8px 16px rgba(0,0,0,.4);border:2px solid #5a2a5a;overflow:hidden}
+        .flashcard-front{background:linear-gradient(180deg,#4a0a2a,#2a0a4a);color:#fff}
+        .flashcard-back{background:linear-gradient(180deg,#2a1a4a,#1a0a2a);transform:rotateY(180deg);border:2px solid var(--mc-gold);color:var(--text);padding:20px}
+        .flashcard .word{font-size:2rem;font-weight:700}
+        .flashcard .phonetic{font-size:1rem;opacity:.8;margin-top:6px}
+        .flashcard .chinese{font-size:1.3rem;color:var(--mc-gold);margin-bottom:10px;font-weight:700;text-shadow:1px 1px 0 #6b3a1f}
+        .flashcard .sentence{font-size:.9rem;color:var(--text-light);text-align:center;line-height:1.4}
+        .flashcard .tip{font-size:.8rem;color:#aaa;margin-top:10px;padding:8px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.05)}
+        
+        .controls{display:flex;justify-content:center;gap:8px;margin:12px 0;flex-wrap:wrap}
+        .controls button{padding:8px 18px;border:2px solid #555;cursor:pointer;font-size:.85rem;transition:all .1s;font-family:inherit;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 3px 0 #333;border-radius:2px}
+        .controls button:active{transform:translateY(3px);box-shadow:inset 0 2px 4px rgba(0,0,0,.4)}
+        .btn-primary{background:linear-gradient(180deg,#5a8a3e,#3d6a2e);color:#fff;border-color:#4a7a2e}
+        .btn-secondary{background:linear-gradient(180deg,#c69a3e,#a8782e);color:#2a1a00;border-color:#b8883e}
+        .btn-gold{background:linear-gradient(180deg,#FFD700,#DAA520);color:#3a2a00;border-color:#B8860B;font-weight:700}
+        .btn-outline{background:transparent;color:var(--mc-gold);border:2px solid var(--mc-gold);box-shadow:none}
+        .btn-danger{background:linear-gradient(180deg,#a03030,#702020);color:#fff;border-color:#802828}
+        .controls button:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:0 3px 0 #333}
+        
+        .progress-container{background:#3a3a3a;height:8px;margin:8px 0;overflow:hidden;border:1px solid #555;box-shadow:inset 0 2px 4px rgba(0,0,0,.3)}
+        .progress-bar{background:linear-gradient(90deg,#5a8a3e,#FFD700);height:100%;transition:width .5s;box-shadow:0 0 6px rgba(255,215,0,.3)}
+        
+        .word-list{display:grid;gap:6px}
+        .word-item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(0,0,0,.1);cursor:pointer;transition:all .2s;border:1px solid rgba(0,0,0,.15);color:#2a1a0a}
+        .word-item:hover{background:rgba(0,0,0,.15);border-color:var(--mc-gold)}
+        .word-item .word{font-weight:700;font-size:.95rem}
+        .word-item .meaning{color:#5a3a1a;font-size:.82rem}
+        .word-item.learned{background:rgba(74,138,46,.2)}
+        .word-item.learned::after{content:'\u2713';color:#4a8a2e;font-weight:700}
+        
+        .quiz-container{max-width:480px;margin:0 auto;text-align:center}
+        .quiz-card{background:linear-gradient(180deg,#c6a87c,#a8885c);padding:22px;border:2px solid #b89868;box-shadow:0 4px 0 #7a6040;color:#2a1a0a}
+        .quiz-word{font-size:2rem;font-weight:700;color:var(--mc-gold);margin-bottom:15px;text-shadow:1px 1px 0 #6b3a1f}
+        .quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 0}
+        .quiz-option{padding:12px;background:linear-gradient(180deg,#6b6b6b,#4a4a4a);border:2px solid #555;cursor:pointer;font-size:.9rem;transition:all .1s;color:#e8e8e8;font-family:inherit;box-shadow:inset 0 1px 0 #999,0 2px 0 #333}
+        .quiz-option:active{transform:translateY(2px);box-shadow:inset 0 2px 4px rgba(0,0,0,.4)}
+        .quiz-option.correct{background:linear-gradient(180deg,#4a8a2e,#2a6a1e);border-color:#3a7a2e;color:#fff;box-shadow:inset 0 1px 0 #6aaa4e,0 2px 0 #1a4a0e}
+        .quiz-option.wrong{background:linear-gradient(180deg,#a03030,#702020);border-color:#802828;color:#fff;box-shadow:inset 0 1px 0 #c05050,0 2px 0 #501010}
+        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+        @keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+        
+        .dictation-card{display:flex;gap:10px;padding:12px;margin:6px 0;background:rgba(0,0,0,.08);border-left:3px solid var(--mc-water);border-radius:2px;color:#2a1a0a}
+        .dictation-num{width:26px;height:26px;background:linear-gradient(180deg,#3B7DD8,#2a5aa8);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:.8rem;border:1px solid #2a5aa8;box-shadow:inset 0 1px 0 rgba(255,255,255,.15)}
+        .dictation-en{font-size:.9rem;color:#2a1a0a;line-height:1.4;margin-bottom:2px}
+        .dictation-cn{font-size:.82rem;color:#5a3a1a}
+        .dictation-speak-btn{background:none;border:1px solid rgba(0,0,0,.15);font-size:1.1rem;cursor:pointer;padding:4px 6px;transition:all .2s;flex-shrink:0;align-self:center;border-radius:2px}
+        .dictation-speak-btn:hover{background:rgba(255,255,255,.15);transform:scale(1.15)}
+        .dictation-speak-btn:active{transform:scale(.9)}
+        .phonics-word{cursor:pointer;border-bottom:1px dashed rgba(0,0,0,.2);padding:0 2px;transition:all .2s;color:#2a1a0a}
+        .phonics-word:hover{color:var(--mc-gold);border-bottom-color:var(--mc-gold)}
+        
+        .phonics-table{width:100%;border-collapse:collapse;font-size:.85rem}
+        .phonics-table th,.phonics-table td{padding:6px 8px;text-align:left;border-bottom:1px solid rgba(0,0,0,.1);color:#2a1a0a}
+        .phonics-table th{background:linear-gradient(180deg,#6b6b6b,#4a4a4a);color:var(--mc-gold);border-bottom:2px solid #333}
+        
+        /* ===== GAME ===== */
+        .game-arena{background:linear-gradient(180deg,#3a3a3a,#2a2a2a);border-radius:2px;padding:16px;min-height:420px;position:relative;overflow:hidden;border:3px solid #555;box-shadow:0 4px 0 #333,inset 0 0 0 2px #4a4a4a;color:#e8e8e8}
+        
+        .game-sound-btn{position:absolute;top:10px;right:10px;z-index:10;background:rgba(0,0,0,.4);border:2px solid #555;color:#fff;font-size:1.2rem;cursor:pointer;padding:6px 10px;transition:all .1s;box-shadow:inset 0 1px 0 #888,0 2px 0 #333}
+        .game-sound-btn:active{transform:translateY(2px);box-shadow:inset 0 2px 4px rgba(0,0,0,.4)}
+        
+        .game-hud{display:flex;justify-content:space-between;padding:8px 12px;background:rgba(0,0,0,.5);border:2px solid #4a4a4a;margin-bottom:10px;flex-wrap:wrap;gap:5px}
+        .game-hud-item{text-align:center;min-width:60px}
+        .game-hud-item .label{font-size:.7rem;color:#aaa;text-transform:uppercase}
+        .game-hud-item .value{font-size:1rem;font-weight:700}
+        .game-hud-item .value.hp{color:#f44336;text-shadow:1px 1px 0 #600}
+        .game-hud-item .value.weapon{color:#FF9800}
+        .game-hud-item .value.xp{color:#5a8a3e}
+        
+        .hp-bar{width:100%;height:6px;background:#3a3a3a;overflow:hidden;margin-top:2px;border:1px solid #555}
+        .hp-bar-fill{height:100%;background:linear-gradient(90deg,#f44336,#ff9800);transition:width .3s}
+        
+        .monster-area{text-align:center;padding:15px 0;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;background:radial-gradient(ellipse at center, rgba(100,100,100,.2) 0%,transparent 70%)}
+        .monster-sprite{font-size:4.5rem;animation:monsterFloat 2.5s ease-in-out infinite;transition:all .3s;position:relative}
+        @keyframes monsterFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+        .monster-sprite.hit{animation:monsterHit .5s}
+        @keyframes monsterHit{0%,100%{transform:translateY(0) scale(1)}10%{transform:translateY(-20px) scale(1.2)}30%{transform:translateX(-8px)}50%{transform:translateX(8px)}70%{transform:translateY(10px) scale(.9)}}
+        .monster-sprite.defeated{animation:monsterDefeat .8s forwards}
+        @keyframes monsterDefeat{0%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.5}100%{transform:scale(0);opacity:0}}
+        
+        .monster-name{font-size:1.1rem;font-weight:700;color:#f44336;margin-top:4px;text-shadow:1px 1px 0 #600}
+        .monster-hp-bar{width:180px;height:10px;background:#3a3a3a;margin:6px auto;overflow:hidden;border:1px solid #555}
+        .monster-hp-fill{height:100%;background:linear-gradient(90deg,#f44336,#ff9800);transition:width .4s}
+        .monster-hp-text{font-size:.8rem;color:#aaa}
+        
+        .game-input-area{margin-top:10px;text-align:center;position:relative}
+        .game-prompt{font-size:1.3rem;color:var(--mc-gold);margin-bottom:8px;font-weight:700;text-shadow:1px 1px 0 #6b3a1f}
+        .game-input{padding:10px 20px;font-size:1rem;border:2px solid #B8860B;background:rgba(0,0,0,.4);color:#fff;width:240px;max-width:85%;outline:none;text-align:center;transition:all .3s;font-family:inherit;box-shadow:inset 0 2px 4px rgba(0,0,0,.3)}
+        .game-input:focus{border-color:#5a8a3e;box-shadow:inset 0 2px 4px rgba(0,0,0,.3),0 0 12px rgba(90,138,62,.3)}
+        .game-input:disabled{opacity:.5}
+        .game-feedback{font-size:1rem;margin-top:8px;min-height:28px;font-weight:700;transition:all .3s}
+        .game-feedback.correct{color:#5a8a3e;text-shadow:1px 1px 0 #2a4a1e}
+        .game-feedback.wrong{color:#f44336;text-shadow:1px 1px 0 #600}
+        
+        .combo-display{position:absolute;top:-10px;right:10px;font-size:1.5rem;font-weight:700;color:var(--mc-gold);opacity:0;transition:all .3s;text-shadow:2px 2px 0 #6b3a1f}
+        .combo-display.show{opacity:1;animation:comboPop .5s}
+        @keyframes comboPop{0%{transform:scale(.5);opacity:0}50%{transform:scale(1.3)}100%{transform:scale(1);opacity:1}}
+        
+        .dmg-float{position:absolute;font-size:1.5rem;font-weight:700;pointer-events:none;animation:dmgFloat 1s forwards;z-index:10}
+        @keyframes dmgFloat{0%{transform:translateY(0);opacity:1}100%{transform:translateY(-60px);opacity:0}}
+        
+        .game-battle-log{background:rgba(0,0,0,.4);border:1px solid #4a4a4a;padding:10px;margin-top:10px;max-height:80px;overflow-y:auto;font-size:.8rem;text-align:left;color:#ccc}
+        .game-mode-badge{padding:4px 14px;font-size:.8rem;display:inline-block;border:1px solid;font-family:inherit}
+        .game-mode-badge.attack{background:rgba(255,152,0,.2);color:#FF9800;border-color:#FF9800}
+        .game-mode-badge.defense{background:rgba(33,150,243,.2);color:#2196F3;border-color:#2196F3}
+        .game-mode-badge.recover{background:rgba(76,175,80,.2);color:#4CAF50;border-color:#4CAF50}
+        .defense-timer{font-size:.75rem;color:#ff6b6b;margin-top:4px}
+        .avatar-btn{font-size:1.6rem;padding:8px;border:2px solid transparent;cursor:pointer;background:rgba(0,0,0,.2);transition:all .2s;border-radius:2px}
+        .avatar-btn:hover{background:rgba(255,255,255,.1)}
+        .avatar-btn.selected{border-color:var(--mc-gold);background:rgba(255,215,0,.15);transform:scale(1.1)}
+        .game-battle-log div{margin:1px 0}
+        
+        .shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+        .shop-item{background:rgba(0,0,0,.1);border-radius:2px;padding:14px;text-align:center;border:2px solid rgba(0,0,0,.12);transition:all .2s;color:#2a1a0a}
+        .shop-item:hover{transform:translateY(-3px);border-color:var(--mc-gold);box-shadow:0 4px 0 #7a6040}
+        .shop-item-icon{font-size:2rem;margin-bottom:6px}
+        .shop-item-name{font-size:.9rem;font-weight:700}
+        .shop-item-desc{font-size:.78rem;color:#5a3a1a}
+        .shop-item-price{font-size:.85rem;color:var(--mc-gold);margin:4px 0;text-shadow:1px 1px 0 #6b3a1f}
+        .shop-item button{width:100%;padding:7px;border:2px solid;cursor:pointer;font-size:.82rem;font-family:inherit;box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 2px 0 #333}
+        .shop-item button:active{transform:translateY(2px);box-shadow:inset 0 2px 4px rgba(0,0,0,.4)}
+        .shop-item.owned{opacity:.5}.shop-item.owned::after{content:'\u2713 \u62e5\u6709';display:block;color:#4a8a2e;font-size:.75rem}
+        
+        .celebration{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.88);display:none;justify-content:center;align-items:center;z-index:1000}
+        .celebration.show{display:flex}
+        .celebration-content{text-align:center;color:#fff;padding:20px;animation:celebPop .5s}
+        @keyframes celebPop{0%{transform:scale(0)}80%{transform:scale(1.1)}100%{transform:scale(1)}}
+        .celebration h2{font-size:2.2rem;margin-bottom:10px;text-shadow:2px 2px 0 #6b3a1f}
+        .celebration .sub{font-size:1.1rem;color:var(--mc-gold)}
+        .confetti{position:absolute;width:6px;height:6px;border-radius:50%;animation:confettiFall 3s linear forwards}
+        @keyframes confettiFall{0%{transform:translateY(-100px) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+        
+        .screen-flash{position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;z-index:999;animation:flash .3s forwards}
+        @keyframes flash{0%{background:rgba(255,255,255,.3)}100%{background:transparent}}
+        
+        @media(max-width:600px){
+            header h1{font-size:1.1rem}nav button{padding:5px 10px;font-size:.75rem}
+            .flashcard{height:220px}.flashcard .word{font-size:1.6rem}
+            .quiz-options{grid-template-columns:1fr}
+            .monster-sprite{font-size:3.5rem}
+            .game-input{width:180px}
+            .game-hud{gap:3px}.game-hud-item{min-width:45px}.game-hud-item .value{font-size:.85rem}
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>⛏️ 单词大冒险</h1>
+        <div class="badge-row">
+            <span class="badge">🔥 <span id="streak">0</span> 天</span>
+            <span class="badge">🪙 <span id="headerCoins">0</span></span>
+            <span class="badge">⭐ Lv.<span id="headerLevel">1</span></span>
+        </div>
+    </header>
+    
+    <nav>
+        <button class="active" onclick="showSection('home')">🏠 首页</button>
+        <button onclick="showSection('learn')">📚 学习</button>
+        <button onclick="showSection('quiz')">🎯 测验</button>
+        <button onclick="showSection('game')">⚔️ 战斗</button>
+        <button onclick="showSection('shop')">🛒 商店</button>
+        <button onclick="showSection('phonics')">🔤 拼读</button>
+        <button onclick="showSection('dictation')">📝 默写</button>
+        <button onclick="showSection('progress')">📊 进度</button>
+    </nav>
+    
+    <main>
+        <section id="home" class="section active">
+            <div class="card">
+                <h2>👋 小勇士来了！</h2>
+                <p style="color:var(--text-light);font-size:.85rem;margin:6px 0">学会单词打怪兽，升级装备当英雄！</p>
+                <div class="progress-container"><div class="progress-bar" id="totalProgress" style="width:0%"></div></div>
+                <p style="text-align:center;color:var(--text-light);font-size:.8rem">总体: <span id="progressText">0%</span></p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="number" id="wordsLearned">0</div><div class="label">已学单词</div></div>
+                <div class="stat-card"><div class="number" id="wordsToLearn">126</div><div class="label">剩余</div></div>
+                <div class="stat-card"><div class="number" id="totalCoins">0</div><div class="label">总金币</div></div>
+                <div class="stat-card"><div class="number" id="monstersDefeated">0</div><div class="label">击败怪兽</div></div>
+            </div>
+            <h2 style="margin:12px 0 6px;font-size:1rem">📖 选择单元</h2>
+            <div class="unit-grid">
+                <button class="unit-btn" onclick="selectUnit(1)">Unit 1<br><small>动物</small></button>
+                <button class="unit-btn" onclick="selectUnit(2)">Unit 2<br><small>身体</small></button>
+                <button class="unit-btn" onclick="selectUnit(3)">Unit 3<br><small>食物</small></button>
+                <button class="unit-btn" onclick="selectUnit(4)">Unit 4<br><small>爱好</small></button>
+                <button class="unit-btn" onclick="selectUnit(5)">Unit 5<br><small>时间</small></button>
+                <button class="unit-btn" onclick="selectUnit(6)">Unit 6<br><small>周</small></button>
+                <button class="unit-btn" onclick="selectUnit(7)">补充<br><small>其他</small></button>
+            </div>
+        </section>
+        
+        <section id="learn" class="section">
+            <div class="card">
+                <h2 id="unitTitle">Unit 1</h2>
+                <div class="progress-container"><div class="progress-bar" id="unitProgress" style="width:0%"></div></div>
+                <p style="text-align:center;color:var(--text-light);font-size:.82rem">进度: <span id="unitProgressText">0/0</span></p>
+            </div>
+            <div class="flashcard-container">
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <div class="flashcard-front">
+                        <div id="cardImageContainer" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#4a0a2a,#2a0a4a)"></div>
+                        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,.8));padding:40px 20px 16px;z-index:2;text-align:center">
+                            <div style="display:flex;align-items:center;justify-content:center;gap:10px">
+                                <div class="word" id="cardWord" style="font-size:2rem;text-shadow:2px 2px 4px rgba(0,0,0,.8)">panda</div>
+                                <button class="dictation-speak-btn" onclick="event.stopPropagation();speakText(document.getElementById('cardWord').textContent)" style="font-size:1.3rem;background:rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:4px 8px;cursor:pointer">🔊</button>
+                            </div>
+                            <div class="phonetic" id="cardPhonetic" style="font-size:.85rem;opacity:.85">/ˈpændə/</div>
+                            <div style="margin-top:6px;opacity:.5;font-size:.75rem">点击翻转</div>
+                        </div>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="chinese" id="cardChinese">熊猫</div>
+                        <div class="sentence" id="cardSentence">Look at the panda!</div>
+                        <div class="tip" id="cardTip">🐼 panda = 胖达</div>
+                    </div>
+                </div>
+            </div>
+            <div class="controls">
+                <button class="btn-outline" onclick="prevCard()">◀</button>
+                <button class="btn-primary" onclick="markAsLearned()">✅ 学会(+5🪙)</button>
+                <button class="btn-secondary" onclick="nextCard()">▶</button>
+            </div>
+            <div class="card"><h3 style="font-size:.95rem">📝 单词列表</h3><div class="word-list" id="wordList"></div></div>
+        </section>
+        
+        <section id="quiz" class="section">
+            <div class="quiz-container">
+                <div class="quiz-card">
+                    <h2>🎯 单词测验</h2>
+                    <p style="color:var(--text-light);font-size:.85rem;margin:6px 0">看英文选中文</p>
+                    <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px">
+                        <div class="quiz-word" id="quizWord">panda</div>
+                        <button class="dictation-speak-btn" onclick="speakText(document.getElementById('quizWord').textContent)" style="font-size:1.2rem">🔊</button>
+                    </div>
+                    <div class="quiz-options" id="quizOptions"></div>
+                    <div style="margin-top:10px;color:var(--gold)">得分: <span id="quizCorrect">0</span> / <span id="quizTotal">0</span></div>
+                    <button class="btn-primary" style="margin-top:10px" onclick="startQuiz()">🔄 重新开始</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ===== GAME ===== -->
+        <section id="game" class="section">
+            <div class="card" style="margin-bottom:8px">
+                <h2 style="font-size:1.1rem">⚔️ 单词战斗</h2>
+                <p style="color:var(--text-light);font-size:.8rem">看中文 → 输入英文 → 攻击怪兽！</p>
+            </div>
+            <div class="game-arena" id="gameArena">
+                <button class="game-sound-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
+                
+                <div class="game-hud" style="align-items:center">
+                    <div style="display:flex;align-items:center;gap:8px">
+                        <div style="font-size:2rem;cursor:pointer" id="playerAvatar" onclick="showSettings()" title="点击换头像">🧑</div>
+                        <div>
+                            <div style="font-size:.9rem;font-weight:700;color:var(--gold)" id="playerNameDisplay">小勇士</div>
+                            <div style="font-size:.7rem;color:var(--text-light);cursor:pointer" onclick="showSettings()">点击改名</div>
+                        </div>
+                    </div>
+                    <div class="game-hud-item">
+                        <div class="label">❤️ HP</div>
+                        <div class="value hp" id="playerHP">100/100</div>
+                        <div class="hp-bar"><div class="hp-bar-fill" id="playerHPBar" style="width:100%"></div></div>
+                    </div>
+                    <div class="game-hud-item">
+                        <div class="label">🗡️ 武器</div>
+                        <div class="value weapon" id="playerWeapon">木剑(10)</div>
+                    </div>
+                    <div class="game-hud-item">
+                        <div class="label">🔥 连击</div>
+                        <div class="value" id="playerCombo">0x</div>
+                    </div>
+                    <div class="game-hud-item">
+                        <div class="label">⭐ 经验</div>
+                        <div class="value xp" id="playerXP">0/3</div>
+                        <div class="hp-bar"><div class="hp-bar-fill" id="playerXPBar" style="width:0%"></div></div>
+                    </div>
+                    <div class="game-hud-item">
+                        <div class="label">🪙 金币</div>
+                        <div class="value" id="gameCoins">0</div>
+                    </div>
+                </div>
+                
+                <div class="monster-area" id="monsterArea">
+                    <div class="monster-sprite" id="monsterSprite">👹</div>
+                    <div class="monster-name" id="monsterName">史莱姆 Lv.1</div>
+                    <div class="monster-hp-bar">
+                        <div class="monster-hp-fill" id="monsterHPFill" style="width:100%"></div>
+                    </div>
+                    <div class="monster-hp-text">HP: <span id="monsterHPText">50</span>/<span id="monsterMaxHP">50</span></div>
+                </div>
+                
+                <div class="game-input-area" id="gameInputArea">
+                    <div class="game-prompt" id="gamePrompt">熊猫</div>
+                    <input class="game-input" id="gameInput" placeholder="输入英文..." autocomplete="off" spellcheck="false" onkeydown="onGameKey(event)">
+                    <div class="game-feedback" id="gameFeedback"></div>
+                    <div class="combo-display" id="comboDisplay">🔥</div>
+                </div>
+                
+                <div class="game-mode-badge" id="gameModeBadge" style="text-align:center;font-size:.85rem;color:var(--gold);margin-top:8px">🗡️ 攻击模式 - 输入英文</div>
+                <div class="game-battle-log" id="battleLog">
+                    <div>⚔️ 输入单词攻击怪兽！</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- ===== SHOP ===== -->
+        <section id="shop" class="section">
+            <div class="card">
+                <h2>🛒 装备商店</h2>
+                <p style="color:var(--text-light);font-size:.85rem">用金币升级装备，变得更强！</p>
+                <div style="text-align:center;margin:8px 0;font-size:1.1rem;color:var(--gold)">🪙 <span id="shopCoins">0</span></div>
+            </div>
+            <div class="shop-grid" id="shopItems"></div>
+        </section>
+        
+        <section id="phonics" class="section">
+            <div class="card"><h2>🔤 自然拼读</h2></div>
+            <div class="card">
+                <h3 style="color:var(--gold);font-size:.95rem;margin-bottom:8px">📌 字母发音</h3>
+                <table class="phonics-table">
+                    <tr><th>字母</th><th>音标</th><th>例词</th></tr>
+                    <tr><td>A a</td><td>/eɪ/ /æ/</td><td>apple, cake</td></tr>
+                    <tr><td>B b</td><td>/b/</td><td>boy, big</td></tr>
+                    <tr><td>C c</td><td>/k/</td><td>cat, cake</td></tr>
+                    <tr><td>D d</td><td>/d/</td><td>dog, dad</td></tr>
+                    <tr><td>E e</td><td>/iː/ /e/</td><td>egg, eat</td></tr>
+                    <tr><td>F f</td><td>/f/</td><td>fish, fan</td></tr>
+                    <tr><td>G g</td><td>/g/</td><td>go, dog</td></tr>
+                    <tr><td>H h</td><td>/h/</td><td>hat, hot</td></tr>
+                    <tr><td>I i</td><td>/aɪ/ /ɪ/</td><td>it, like</td></tr>
+                    <tr><td>J j</td><td>/dʒ/</td><td>juice, job</td></tr>
+                    <tr><td>K k</td><td>/k/</td><td>key, king</td></tr>
+                    <tr><td>L l</td><td>/l/</td><td>leg, like</td></tr>
+                    <tr><td>M m</td><td>/m/</td><td>man, milk</td></tr>
+                    <tr><td>N n</td><td>/n/</td><td>no, name</td></tr>
+                    <tr><td>O o</td><td>/əʊ/ /ɒ/</td><td>on, orange</td></tr>
+                    <tr><td>P p</td><td>/p/</td><td>pen, pig</td></tr>
+                    <tr><td>Q q</td><td>/kw/</td><td>queen, quick</td></tr>
+                    <tr><td>R r</td><td>/r/</td><td>red, run</td></tr>
+                    <tr><td>S s</td><td>/s/</td><td>sun, sit</td></tr>
+                    <tr><td>T t</td><td>/t/</td><td>ten, not</td></tr>
+                    <tr><td>U u</td><td>/juː/ /ʌ/</td><td>cup, unit</td></tr>
+                    <tr><td>V v</td><td>/v/</td><td>very, love</td></tr>
+                    <tr><td>W w</td><td>/w/</td><td>we, will</td></tr>
+                    <tr><td>X x</td><td>/ks/</td><td>box, six</td></tr>
+                    <tr><td>Y y</td><td>/j/</td><td>yes, you</td></tr>
+                    <tr><td>Z z</td><td>/z/</td><td>zoo, zip</td></tr>
+                </table>
+            </div>
+            <div class="card">
+                <h3 style="color:var(--gold);font-size:.95rem;margin-bottom:8px">📌 字母组合</h3>
+                <table class="phonics-table">
+                    <tr><th>组合</th><th>发音</th><th>例词</th></tr>
+                    <tr><td>sh</td><td>/ʃ/</td><td>ship, she, fish</td></tr>
+                    <tr><td>ch</td><td>/tʃ/</td><td>chair, chin</td></tr>
+                    <tr><td>th</td><td>/θ/ /ð/</td><td>think, this</td></tr>
+                    <tr><td>ph</td><td>/f/</td><td>phone, photo</td></tr>
+                    <tr><td>oo</td><td>/uː/ /ʊ/</td><td>food, book</td></tr>
+                    <tr><td>ea</td><td>/iː/</td><td>eat, read</td></tr>
+                    <tr>                    <td>ai</td><td>/eɪ/</td><td>rain, train</td></tr>
+                </table>
+            </div>
+            <div class="card">
+                <h3 style="color:var(--mc-gold);font-size:.95rem;margin-bottom:8px">🔍 单词解码器</h3>
+                <p style="color:#5a3a1a;font-size:.82rem;margin-bottom:10px">输入单词，查看拼读分解</p>
+                <input id="decodeInput" class="game-input" placeholder="输入单词..." style="width:100%;max-width:300px;margin:0 auto;display:block" oninput="doDecode()" autocomplete="off" spellcheck="false">
+                <div id="decodeImageArea" style="margin-top:8px;text-align:center;min-height:100px"></div>
+                <div id="decodeResult" style="margin-top:8px;min-height:60px;text-align:center"></div>
+                <div id="decodePattern" style="margin-top:6px;text-align:center;font-size:.9rem;color:#5a3a1a"></div>
+            </div>
+        </section>
+        
+        <section id="dictation" class="section">
+            <div class="card">
+                <h2>📝 默写笔记</h2>
+                <p style="color:var(--text-light);font-size:.82rem;margin:6px 0">学校默写句子</p>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px" id="dictationUnitBtns"></div>
+            </div>
+            <div class="card" id="dictationContent" style="display:none">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                    <h3 id="dictationTitle" style="color:var(--gold);font-size:.95rem;margin:0"></h3>
+                    <button class="btn-secondary" id="dictationReadAll" onclick="readAllDictation()" style="padding:5px 12px;font-size:.8rem">🔊 朗读全部</button>
+                </div>
+                <div id="dictationSentences"></div>
+            </div>
+            <div class="card" id="dictationEmpty" style="text-align:center;padding:25px">
+                <p style="color:#666;font-size:1rem">👆 选择单元</p>
+            </div>
+        </section>
+        
+        <section id="progress" class="section">
+            <div class="card"><h2>📊 学习进度</h2></div>
+            <div class="stats-grid">
+                <div class="stat-card"><div class="number" id="pgLearned">0</div><div class="label">已学单词</div></div>
+                <div class="stat-card"><div class="number" id="pgMonsters">0</div><div class="label">击败怪兽</div></div>
+                <div class="stat-card"><div class="number" id="pgCoins">0</div><div class="label">总金币</div></div>
+                <div class="stat-card"><div class="number" id="pgLevel">1</div><div class="label">等级</div></div>
+            </div>
+            <div class="card"><h3 style="font-size:.9rem">📈 各单元进度</h3><div id="unitProgressList"></div></div>
+            <button class="btn-danger" onclick="resetProgress()" style="margin-top:12px">🔄 重置全部</button>
+        </section>
+    </main>
+    
+    <!-- Settings Modal -->
+    <div class="celebration" id="settingsModal" style="display:none">
+        <div class="celebration-content" style="background:var(--card-bg);padding:30px;border-radius:20px;max-width:360px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.5)">
+            <h2 style="font-size:1.4rem;margin-bottom:15px">⚙️ 我的角色</h2>
+            <div style="margin-bottom:15px">
+                <label style="display:block;font-size:.85rem;color:var(--text-light);text-align:left;margin-bottom:5px">名字</label>
+                <input id="playerNameInput" style="width:100%;padding:10px;border:2px solid var(--gold);border-radius:10px;background:rgba(255,255,255,.05);color:#fff;font-size:1rem;text-align:center;outline:none" value="小勇士" maxlength="8" placeholder="输入名字">
+            </div>
+            <div style="margin-bottom:15px">
+                <label style="display:block;font-size:.85rem;color:var(--text-light);text-align:left;margin-bottom:8px">选择头像</label>
+                <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px" id="avatarGrid"></div>
+            </div>
+            <div style="display:flex;gap:10px;justify-content:center;margin-top:10px">
+                <button class="btn-secondary" onclick="closeSettings()">取消</button>
+                <button class="btn-primary" onclick="saveSettings()">✅ 确定</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="celebration" id="celebration">
+        <div class="celebration-content">
+            <h2 id="celebrationTitle">🎉</h2>
+            <div class="sub" id="celebrationText"></div>
+        </div>
+    </div>
+
+    <script>
+        // ===== 单词数据 =====
+        const vocabulary={
+    1:{title:"U1 动物",words:[
+{w:"animal",p:"/ˈænɪməl/",c:"动物",s:"What animal is it?",t:"🐾 animal"},
+{w:"panda",p:"/ˈpændə/",c:"熊猫",s:"Look at the panda!",t:"🐼 panda"},
+{w:"elephant",p:"/ˈelifənt/",c:"大象",s:"The elephant is big.",t:"🐘 elephant"},
+{w:"bear",p:"/beə/",c:"熊",s:"The bear is brown.",t:"🐻 bear"},
+{w:"giraffe",p:"/dʒiˈrɑːf/",c:"长颈鹿",s:"The giraffe has a long neck.",t:"🦒 giraffe"},
+{w:"monkey",p:"/ˈmʌŋki/",c:"猴子",s:"The monkey likes bananas.",t:"🐒 monkey"},
+{w:"them",p:"/ðem/",c:"他们",s:"I see them.",t:"👥 them"},
+{w:"draw",p:"/drɔː/",c:"画画",s:"I can draw a picture.",t:"🎨 draw"},
+{w:"tiger",p:"/ˈtaɪɡə/",c:"老虎",s:"Tigers are strong.",t:"🐯 tiger"},
+{w:"strong",p:"/strɒŋ/",c:"强壮的",s:"He is very strong.",t:"💪 strong"},
+{w:"short",p:"/ʃɔːt/",c:"矮的",s:"The rabbit is short.",t:"📏 short"},
+{w:"white",p:"/waɪt/",c:"白色的",s:"Snow is white.",t:"⚪ white"},
+{w:"brown",p:"/braʊn/",c:"棕色的",s:"The bear is brown.",t:"🟫 brown"},
+{w:"tall",p:"/tɔːl/",c:"高的",s:"The giraffe is tall.",t:"📏 tall"},
+{w:"him",p:"/hɪm/",c:"他",s:"I like him.",t:"👦 him"},
+{w:"ostrich",p:"/ˈɒstrɪtʃ/",c:"鸵鸟",s:"The ostrich is fast.",t:"🦩 ostrich"},
+{w:"fast",p:"/fɑːst/",c:"快的",s:"The car is fast.",t:"🏃 fast"},
+{w:"chameleon",p:"/kəˈmiːliən/",c:"变色龙",s:"The chameleon changes colour.",t:"🦎 chameleon"},
+{w:"small",p:"/smɔːl/",c:"小的",s:"The mouse is small.",t:"🐭 small"},
+{w:"lion",p:"/ˈlaɪən/",c:"狮子",s:"The lion is the king.",t:"🦁 lion"},
+{w:"cute",p:"/kjuːt/",c:"可爱的",s:"The baby is cute.",t:"💖 cute"},
+{w:"out",p:"/aʊt/",c:"外面",s:"Let's go out.",t:"🚪 out"},
+{w:"zoo",p:"/zuː/",c:"动物园",s:"Let's go to the zoo.",t:"🏟️ zoo"},
+{w:"go",p:"/ɡəʊ/",c:"去",s:"Go to school.",t:"🏃 go"},
+{w:"zebra",p:"/ˈzebrə/",c:"斑马",s:"The zebra is black and white.",t:"🦓 zebra"},
+{w:"move",p:"/muːv/",c:"移动",s:"The cat can move.",t:"🚚 move"},
+{w:"road",p:"/rəʊd/",c:"路",s:"Walk on the road.",t:"🛣️ road"},
+{w:"dance",p:"/dɑːns/",c:"跳舞",s:"She can dance.",t:"💃 dance"},
+{w:"along",p:"/əˈlɒŋ/",c:"沿着",s:"Walk along the road.",t:"➡️ along"},
+{w:"smell",p:"/smel/",c:"闻",s:"I smell with my nose.",t:"👃 smell"},
+{w:"talk",p:"/tɔːk/",c:"说话",s:"We talk in class.",t:"💬 talk"},
+{w:"eat",p:"/iːt/",c:"吃",s:"I eat an apple.",t:"🍽️ eat"},
+{w:"stop",p:"/stɒp/",c:"停止",s:"Stop at the sign.",t:"🛑 stop"},
+{w:"important",p:"/ɪmˈpɔːtənt/",c:"重要的",s:"This is important.",t:"⭐ important"},
+{w:"team",p:"/tiːm/",c:"团队",s:"We are a team.",t:"👥 team"},
+{w:"dream",p:"/driːm/",c:"梦",s:"I have a dream.",t:"💭 dream"},
+{w:"ask",p:"/ɑːsk/",c:"问",s:"Ask a question.",t:"❓ ask"},
+{w:"answer",p:"/ˈɑːnsə/",c:"回答",s:"Answer the question.",t:"✅ answer"},
+{w:"hair",p:"/heə/",c:"头发",s:"She has long hair.",t:"💇 hair"},
+{w:"different",p:"/ˈdɪfərənt/",c:"不同的",s:"They are different.",t:"🌈 different"},
+{w:"face",p:"/feɪs/",c:"脸",s:"This is my face.",t:"😊 face"},
+{w:"hat",p:"/hæt/",c:"帽子",s:"I wear a hat.",t:"🧢 hat"},
+{w:"shoe",p:"/ʃuː/",c:"鞋",s:"I put on my shoes.",t:"👟 shoe"},
+{w:"stone",p:"/stəʊn/",c:"石头",s:"I found a stone.",t:"🪨 stone"},
+{w:"word",p:"/wɜːd/",c:"单词",s:"Learn this word.",t:"📝 word"},
+{w:"which",p:"/wɪtʃ/",c:"哪一个",s:"Which one do you like?",t:"❓ which"}]},
+2:{title:"U2 身体",words:[
+{w:"body",p:"/ˈbɒdi/",c:"身体",s:"This is my body.",t:"🧍 body"},
+{w:"head",p:"/hed/",c:"头",s:"I shake my head.",t:"👤 head"},
+{w:"eye",p:"/aɪ/",c:"眼睛",s:"I see with my eyes.",t:"👁️ eye"},
+{w:"ear",p:"/ɪə/",c:"耳朵",s:"I hear with my ears.",t:"👂 ear"},
+{w:"mouth",p:"/maʊθ/",c:"嘴巴",s:"I talk with my mouth.",t:"👄 mouth"},
+{w:"nose",p:"/nəʊz/",c:"鼻子",s:"I smell with my nose.",t:"👃 nose"},
+{w:"touch",p:"/tʌtʃ/",c:"触摸",s:"Touch your nose.",t:"✋ touch"},
+{w:"hand",p:"/hænd/",c:"手",s:"I wave my hand.",t:"✋ hand"},
+{w:"arm",p:"/ɑːm/",c:"手臂",s:"I raise my arm.",t:"💪 arm"},
+{w:"leg",p:"/leɡ/",c:"腿",s:"I kick with my leg.",t:"🦵 leg"},
+{w:"foot",p:"/fʊt/",c:"脚",s:"I stand on my foot.",t:"🦶 foot"},
+{w:"toe",p:"/təʊ/",c:"脚趾",s:"I have ten toes.",t:"🦶 toe"},
+{w:"get",p:"/ɡet/",c:"得到",s:"I get a gift.",t:"🎁 get"},
+{w:"snowy",p:"/ˈsnəʊi/",c:"下雪的",s:"It is snowy today.",t:"❄️ snowy"},
+{w:"child",p:"/tʃaɪld/",c:"孩子",s:"The child is playing.",t:"👧 child"},
+{w:"work",p:"/wɜːk/",c:"工作",s:"Let's work together.",t:"💼 work"},
+{w:"snowman",p:"/ˈsnəʊmæn/",c:"雪人",s:"We make a snowman.",t:"⛄ snowman"},
+{w:"long",p:"/lɒŋ/",c:"长的",s:"The snake is long.",t:"📏 long"},
+{w:"rock",p:"/rɒk/",c:"岩石",s:"I sit on a rock.",t:"🪨 rock"},
+{w:"cool",p:"/kuːl/",c:"酷的",s:"That is cool!",t:"😎 cool"},
+{w:"best",p:"/best/",c:"最好的",s:"You are the best!",t:"🏆 best"},
+{w:"part",p:"/pɑːt/",c:"部分",s:"This part is easy.",t:"🧩 part"},
+{w:"well",p:"/wel/",c:"好地",s:"I can do it well.",t:"👍 well"},
+{w:"hear",p:"/hɪə/",c:"听见",s:"I hear a sound.",t:"👂 hear"},
+{w:"juice",p:"/dʒuːs/",c:"果汁",s:"I drink juice.",t:"🧃 juice"},
+{w:"why",p:"/waɪ/",c:"为什么",s:"Why are you late?",t:"❓ why"},
+{w:"early",p:"/ˈɜːli/",c:"早的",s:"I wake up early.",t:"🌅 early"},
+{w:"breakfast",p:"/ˈbrekfəst/",c:"早餐",s:"I eat breakfast.",t:"🍳 breakfast"},
+{w:"time",p:"/taɪm/",c:"时间",s:"What time is it?",t:"⏰ time"},
+{w:"still",p:"/stɪl/",c:"仍然",s:"I am still here.",t:"⏸️ still"},
+{w:"ready",p:"/ˈredi/",c:"准备好的",s:"I am ready!",t:"✅ ready"},
+{w:"corn",p:"/kɔːn/",c:"玉米",s:"I like corn.",t:"🌽 corn"},
+{w:"lunch",p:"/lʌntʃ/",c:"午餐",s:"I have lunch at 12.",t:"🍱 lunch"},
+{w:"very",p:"/ˈveri/",c:"非常",s:"It is very big.",t:"⭐ very"},
+{w:"much",p:"/mʌtʃ/",c:"很多",s:"Thank you very much.",t:"📦 much"},
+{w:"yummy",p:"/ˈjʌmi/",c:"美味的",s:"This is yummy!",t:"😋 yummy"},
+{w:"food",p:"/fuːd/",c:"食物",s:"I like food.",t:"🍔 food"}]},
+3:{title:"U3 食物",words:[
+{w:"strawberry",p:"/ˈstrɔːbəri/",c:"草莓",s:"Strawberries are red.",t:"🍓 strawberry"},
+{w:"tomato",p:"/təˈmɑːtəʊ/",c:"番茄",s:"I like tomatoes.",t:"🍅 tomato"},
+{w:"noodles",p:"/ˈnuːdlz/",c:"面条",s:"I like noodles.",t:"🍜 noodles"},
+{w:"carrot",p:"/ˈkærət/",c:"胡萝卜",s:"Rabbits like carrots.",t:"🥕 carrot"},
+{w:"chicken",p:"/ˈtʃɪkɪn/",c:"鸡肉",s:"I like chicken.",t:"🍗 chicken"},
+{w:"fish",p:"/fɪʃ/",c:"鱼",s:"I eat fish.",t:"🐟 fish"},
+{w:"rice",p:"/raɪs/",c:"米饭",s:"I eat rice.",t:"🍚 rice"},
+{w:"meat",p:"/miːt/",c:"肉",s:"I like meat.",t:"🥩 meat"},
+{w:"fruit",p:"/fruːt/",c:"水果",s:"Fruit is healthy.",t:"🍎 fruit"},
+{w:"vegetable",p:"/ˈvedʒtəbəl/",c:"蔬菜",s:"Eat your vegetables.",t:"🥦 vegetable"},
+{w:"salad",p:"/ˈsæləd/",c:"沙拉",s:"I make a salad.",t:"🥗 salad"},
+{w:"banana",p:"/bəˈnɑːnə/",c:"香蕉",s:"Monkeys like bananas.",t:"🍌 banana"},
+{w:"bean",p:"/biːn/",c:"豆子",s:"Beans are healthy.",t:"🫘 bean"},
+{w:"cucumber",p:"/ˈkjuːkʌmbə/",c:"黄瓜",s:"Cucumber is green.",t:"🥒 cucumber"},
+{w:"then",p:"/ðen/",c:"然后",s:"First eat, then play.",t:"⏭️ then"},
+{w:"about",p:"/əˈbaʊt/",c:"关于",s:"Tell me about it.",t:"💬 about"},
+{w:"what about",p:"/wɒt əˈbaʊt/",c:"怎么样",s:"What about you?",t:"❓ what about"},
+{w:"grape",p:"/ɡreɪp/",c:"葡萄",s:"I like grapes.",t:"🍇 grape"},
+{w:"cupcake",p:"/ˈkʌpkeɪk/",c:"纸杯蛋糕",s:"I love cupcakes.",t:"🧁 cupcake"},
+{w:"sandwich",p:"/ˈsænwɪdʒ/",c:"三明治",s:"I make a sandwich.",t:"🥪 sandwich"},
+{w:"beef",p:"/biːf/",c:"牛肉",s:"Beef is tasty.",t:"🥩 beef"},
+{w:"dumpling",p:"/ˈdʌmplɪŋ/",c:"饺子",s:"I like dumplings.",t:"🥟 dumpling"},
+{w:"hot",p:"/hɒt/",c:"热的",s:"The soup is hot.",t:"🌡️ hot"},
+{w:"hot dog",p:"/hɒt dɒɡ/",c:"热狗",s:"I eat a hot dog.",t:"🌭 hot dog"},
+{w:"sushi",p:"/ˈsuːʃi/",c:"寿司",s:"I like sushi.",t:"🍣 sushi"},
+{w:"cake",p:"/keɪk/",c:"蛋糕",s:"Happy birthday! Here's a cake.",t:"🎂 cake"},
+{w:"afternoon",p:"/ˌɑːftəˈnuːn/",c:"下午",s:"Good afternoon.",t:"☀️ afternoon"},
+{w:"tea",p:"/tiː/",c:"茶",s:"I drink tea.",t:"🍵 tea"},
+{w:"every",p:"/ˈevri/",c:"每个",s:"I eat every day.",t:"📅 every"},
+{w:"week",p:"/wiːk/",c:"星期",s:"There are 7 days in a week.",t:"📅 week"},
+{w:"tree",p:"/triː/",c:"树",s:"The tree is tall.",t:"🌳 tree"},
+{w:"milk",p:"/mɪlk/",c:"牛奶",s:"I drink milk.",t:"🥛 milk"}]},
+4:{title:"U4 爱好",words:[
+{w:"hobby",p:"/ˈhɒbi/",c:"爱好",s:"What's your hobby?",t:"🎯 hobby"},
+{w:"free",p:"/friː/",c:"空闲的",s:"I am free today.",t:"🎉 free"},
+{w:"after",p:"/ˈɑːftə/",c:"之后",s:"After school I play.",t:"➡️ after"},
+{w:"swim",p:"/swɪm/",c:"游泳",s:"I can swim.",t:"🏊 swim"},
+{w:"lot",p:"/lɒt/",c:"很多",s:"I have a lot of toys.",t:"📦 lot"},
+{w:"a lot",p:"/ə lɒt/",c:"许多",s:"Thank you a lot.",t:"📦 a lot"},
+{w:"these",p:"/ðiːz/",c:"这些",s:"These are my books.",t:"📚 these"},
+{w:"tai chi",p:"/taɪ tʃiː/",c:"太极",s:"He does tai chi.",t:"🧘 tai chi"},
+{w:"his",p:"/hɪz/",c:"他的",s:"This is his book.",t:"👦 his"},
+{w:"insect",p:"/ˈɪnsekt/",c:"昆虫",s:"I see an insect.",t:"🐛 insect"},
+{w:"man",p:"/mæn/",c:"男人",s:"The man is tall.",t:"👨 man"},
+{w:"learn",p:"/lɜːn/",c:"学习",s:"I learn English.",t:"📖 learn"},
+{w:"plant",p:"/plɑːnt/",c:"植物",s:"I water the plant.",t:"🌱 plant"},
+{w:"when",p:"/wen/",c:"什么时候",s:"When do you eat?",t:"⏰ when"},
+{w:"question",p:"/ˈkwestʃən/",c:"问题",s:"I have a question.",t:"❓ question"},
+{w:"watch",p:"/wɒtʃ/",c:"看",s:"I watch TV.",t:"📺 watch"},
+{w:"study",p:"/ˈstʌdi/",c:"学习",s:"I study at home.",t:"📚 study"},
+{w:"mantis",p:"/ˈmæntɪs/",c:"螳螂",s:"The mantis is green.",t:"🦗 mantis"},
+{w:"stay",p:"/steɪ/",c:"停留",s:"Stay with me.",t:"🏠 stay"},
+{w:"interesting",p:"/ˈɪntrəstɪŋ/",c:"有趣的",s:"This is interesting.",t:"🤔 interesting"},
+{w:"grow",p:"/ɡrəʊ/",c:"生长",s:"Plants grow.",t:"🌱 grow"},
+{w:"grow up",p:"/ɡrəʊ ʌp/",c:"长大",s:"I want to grow up.",t:"📈 grow up"},
+{w:"country",p:"/ˈkʌntri/",c:"国家",s:"China is my country.",t:"🌏 country"},
+{w:"robot",p:"/ˈrəʊbɒt/",c:"机器人",s:"I like robots.",t:"🤖 robot"},
+{w:"kite",p:"/kaɪt/",c:"风筝",s:"I fly a kite.",t:"🪁 kite"},
+{w:"skate",p:"/skeɪt/",c:"滑板",s:"I can skate.",t:"🛹 skate"},
+{w:"ice",p:"/aɪs/",c:"冰",s:"Ice is cold.",t:"🧊 ice"},
+{w:"ski",p:"/skiː/",c:"滑雪",s:"I like to ski.",t:"⛷️ ski"},
+{w:"garden",p:"/ˈɡɑːdən/",c:"花园",s:"I play in the garden.",t:"🌻 garden"}]},
+5:{title:"U5 时间",words:[
+{w:"tick tock",p:"/tɪk tɒk/",c:"滴答",s:"Tick tock goes the clock.",t:"⏰ tick tock"},
+{w:"tell",p:"/tel/",c:"告诉",s:"Tell me the time.",t:"💬 tell"},
+{w:"clock",p:"/klɒk/",c:"钟",s:"Look at the clock.",t:"🕐 clock"},
+{w:"o'clock",p:"/əˈklɒk/",c:"点",s:"It's one o'clock.",t:"🕐 o'clock"},
+{w:"fifteen",p:"/ˌfɪfˈtiːn/",c:"十五",s:"It's ten fifteen.",t:"🔢 fifteen"},
+{w:"thirty",p:"/ˈθɜːti/",c:"三十",s:"It's three thirty.",t:"🔢 thirty"},
+{w:"forty five",p:"/ˈfɔːti faɪv/",c:"四十五",s:"It's eight forty-five.",t:"🔢 forty five"},
+{w:"dinner",p:"/ˈdɪnə/",c:"晚餐",s:"I eat dinner at six.",t:"🍽️ dinner"},
+{w:"half",p:"/hɑːf/",c:"一半",s:"Half of the apple.",t:"½ half"},
+{w:"past",p:"/pɑːst/",c:"过",s:"It's half past one.",t:"🕐 past"},
+{w:"half past one",p:"/hɑːf pɑːst wʌn/",c:"一点半",s:"It's half past one.",t:"🕐 half past one"},
+{w:"homework",p:"/ˈhəʊmwɜːk/",c:"作业",s:"I do my homework.",t:"📝 homework"},
+{w:"need",p:"/niːd/",c:"需要",s:"I need help.",t:"🤲 need"},
+{w:"activity",p:"/ækˈtɪvəti/",c:"活动",s:"We have an activity.",t:"🎯 activity"},
+{w:"her",p:"/hɜː/",c:"她",s:"I like her.",t:"👧 her"},
+{w:"class",p:"/klɑːs/",c:"课",s:"I have English class.",t:"🏫 class"},
+{w:"evening",p:"/ˈiːvnɪŋ/",c:"傍晚",s:"Good evening!",t:"🌆 evening"},
+{w:"call",p:"/kɔːl/",c:"打电话",s:"I call my friend.",t:"📞 call"}]},
+6:{title:"U6 周",words:[
+{w:"Monday",p:"/ˈmʌndeɪ/",c:"星期一",s:"I have school on Monday.",t:"📅 Monday"},
+{w:"Tuesday",p:"/ˈtjuːzdeɪ/",c:"星期二",s:"Tuesday is fun.",t:"📅 Tuesday"},
+{w:"Wednesday",p:"/ˈwenzdeɪ/",c:"星期三",s:"Wednesday is hump day.",t:"📅 Wednesday"},
+{w:"Thursday",p:"/ˈθɜːzdeɪ/",c:"星期四",s:"Thursday is art day.",t:"📅 Thursday"},
+{w:"Friday",p:"/ˈfraɪdeɪ/",c:"星期五",s:"Friday is my favorite!",t:"📅 Friday"},
+{w:"Saturday",p:"/ˈsætədeɪ/",c:"星期六",s:"I play on Saturday.",t:"📅 Saturday"},
+{w:"Sunday",p:"/ˈsʌndeɪ/",c:"星期日",s:"Sunday is relaxing.",t:"📅 Sunday"},
+{w:"park",p:"/pɑːk/",c:"公园",s:"I go to the park.",t:"🏞️ park"},
+{w:"visit",p:"/ˈvɪzɪt/",c:"参观",s:"I visit my grandma.",t:"👋 visit"},
+{w:"lesson",p:"/ˈlesən/",c:"课",s:"I have a piano lesson.",t:"📖 lesson"}]},
+7:{title:"补充",words:[
+{w:"football",p:"/ˈfʊtbɔːl/",c:"足球",s:"I play football.",t:"⚽ football"},
+{w:"art",p:"/ɑːt/",c:"美术",s:"I like art class.",t:"🎨 art"},
+{w:"subject",p:"/ˈsʌbdʒɪkt/",c:"科目",s:"What's your favorite subject?",t:"📚 subject"},
+{w:"maths",p:"/mæθs/",c:"数学",s:"I have maths today.",t:"🔢 maths"},
+{w:"science",p:"/ˈsaɪəns/",c:"科学",s:"Science is interesting.",t:"🔬 science"},
+{w:"something",p:"/ˈsʌmθɪŋ/",c:"某事",s:"I have something for you.",t:"🎁 something"},
+{w:"idea",p:"/aɪˈdɪə/",c:"主意",s:"That's a good idea!",t:"💡 idea"},
+{w:"soon",p:"/suːn/",c:"很快",s:"See you soon.",t:"⏰ soon"},
+{w:"teach",p:"/tiːtʃ/",c:"教",s:"I can teach you.",t:"👩‍🏫 teach"},
+{w:"English",p:"/ˈɪŋɡlɪʃ/",c:"英语",s:"I learn English.",t:"🇬🇧 English"},
+{w:"card",p:"/kɑːd/",c:"卡片",s:"I make a card.",t:"💳 card"},
+{w:"busy",p:"/ˈbɪzi/",c:"忙碌的",s:"My mom is busy.",t:"🏃 busy"},
+{w:"old",p:"/əʊld/",c:"老的",s:"My grandpa is old.",t:"👴 old"},
+{w:"some",p:"/sʌm/",c:"一些",s:"I have some apples.",t:"🔢 some"},
+{w:"bookmark",p:"/ˈbʊkmɑːk/",c:"书签",s:"I use a bookmark.",t:"🔖 bookmark"},
+{w:"stick",p:"/stɪk/",c:"棍子",s:"I find a stick.",t:"🪵 stick"},
+{w:"sure",p:"/ʃʊə/",c:"当然",s:"Sure, I can help.",t:"👍 sure"},
+{w:"flower",p:"/ˈflaʊə/",c:"花",s:"The flower is beautiful.",t:"🌸 flower"},
+{w:"afterschool",p:"/ˌɑːftəˈskuːl/",c:"课后",s:"I go to afterschool club.",t:"🏫 afterschool"},
+{w:"club",p:"/klʌb/",c:"俱乐部",s:"I join a club.",t:"🎪 club"},
+{w:"piano",p:"/piˈænəʊ/",c:"钢琴",s:"I play the piano.",t:"🎹 piano"},
+{w:"basketball",p:"/ˈbɑːskɪtbɔːl/",c:"篮球",s:"I like basketball.",t:"🏀 basketball"},
+{w:"computer",p:"/kəmˈpjuːtə/",c:"电脑",s:"I use a computer.",t:"💻 computer"},
+{w:"music",p:"/ˈmjuːzɪk/",c:"音乐",s:"I love music.",t:"🎵 music"}]}
+};
+
+        // ===== 默写数据 =====
+        const dd={
+            1:{title:"U1 默写",s:[{e:"I can draw an animal.",c:"我能画一只动物。"},{e:"The panda is white and black.",c:"熊猫是黑白相间的。"},{e:"The bear is brown.",c:"熊是棕色的。"},{e:"The elephant is tall, not short.",c:"大象很高不矮。"},{e:"The tiger is strong and fast.",c:"老虎又强壮又快。"},{e:"The small lion is cute.",c:"小狮子很可爱。"},{e:"Let's go out of the zoo.",c:"出动物园吧。"},{e:"The monkey can move and dance.",c:"猴子会移动跳舞。"},{e:"Which word is for a shoe?",c:"哪个词是鞋子？"}]},
+            2:{title:"U2 默写",s:[{e:"I'm a child. Let's work!",c:"我是孩子一起行动！"},{e:"You have got two ears. They help you hear well.",c:"两只耳朵帮你听清楚。"},{e:"He has got a long nose.",c:"他有一个长长的鼻子。"},{e:"Your mouth helps you talk and eat.",c:"嘴巴帮你说话吃东西。"},{e:"Stop! Let's ask and answer.",c:"停！提问和回答。"},{e:"He's got arms and big hands.",c:"他有胳膊和大手。"},{e:"My body has a head, face, hair, eyes, legs and feet. It's best and cool.",c:"我的身体最棒最酷。"}]},
+            3:{title:"U3 默写",s:[{e:"Fruit and vegetables are good for us.",c:"水果蔬菜有益。"},{e:"I like bananas and grapes very much.",c:"我非常喜欢香蕉葡萄。"},{e:"Tomatoes and noodles are yummy.",c:"西红柿面条很美味。"},{e:"Chicken, fish and rice are nice food.",c:"鸡鱼肉米饭是美味。"},{e:"I drink milk and juice every afternoon.",c:"我每天下午喝牛奶果汁。"},{e:"I have hot dogs, meat and cake for lunch once a week.",c:"每周一次午餐吃热狗肉蛋糕。"},{e:"What about you? Why do you get up early?",c:"你呢？为什么早起？"},{e:"I have breakfast on time, then I drink some tea.",c:"我按时吃早餐喝茶。"}]},
+            4:{title:"U4 默写",s:[{e:"When does he swim in his free time? After school.",c:"他空闲时什么时候游泳？放学后。"},{e:"The man often flies his kite.",c:"先生常放风筝。"},{e:"These robots are interesting!",c:"这些机器人很有趣！"},{e:"We learn to plant in the garden.",c:"我们在花园里学种植。"},{e:"I study a lot on the ice.",c:"我在冰上学了很多。"},{e:"Asking questions is a good way to learn.",c:"提问是好的学习方式。"}]},
+            5:{title:"U5 默写",s:[{e:"I can tell the time on the clock.",c:"我会看钟表时间。"},{e:"It's seven o'clock. It's time to have our class.",c:"七点该上课了。"},{e:"It's fifteen past eight.",c:"八点十五。"},{e:"It's nine thirty. Let's call her.",c:"九点半了打电话。"},{e:"It's ten forty-five. Let's do homework.",c:"十点四十五分写作业。"},{e:"We have dinner at half past six in the evening.",c:"晚上六点半吃晚饭。"}]},
+            6:{title:"U6 默写",s:[{e:"It's Monday. We have English, maths, science and music.",c:"周一有英语数学科学音乐。"},{e:"On Tuesday, I play football on the computer.",c:"周二在电脑上玩足球。"},{e:"It's Wednesday. I visit the old park.",c:"周三逛老公园。"},{e:"On Thursday, I am busy with my piano lesson.",c:"周四上钢琴课。"},{e:"It's Friday. I love art!",c:"周五最喜欢美术！"},{e:"On Saturday, I make some cards with flowers.",c:"周六用花做卡片。"},{e:"On Sunday, I play basketball. Good idea!",c:"周日打篮球好主意！"}]}
+        };
+
+        // ===== 游戏数据 =====
+        const monsters=[
+            {n:"史莱姆",i:"👹",hp:50,r:10},{n:"蝙蝠怪",i:"🦇",hp:80,r:15},
+            {n:"哥布林",i:"💀",hp:120,r:20},{n:"暗影狼",i:"🐺",hp:170,r:28},
+            {n:"石巨人",i:"🗿",hp:230,r:38},{n:"火焰龙",i:"🐉",hp:310,r:50},
+            {n:"暗影魔王",i:"👿",hp:400,r:65},{n:"远古巨龙",i:"🐲",hp:500,r:80}
+        ];
+        const weapons=[
+            {n:"木剑",i:"🗡️",d:10,p:0},{n:"铁剑",i:"⚔️",d:20,p:50},
+            {n:"寒冰刃",i:"❄️",d:35,p:120},{n:"火焰刀",i:"🔥",d:50,p:250},
+            {n:"雷电锤",i:"⚡",d:70,p:500},{n:"圣光剑",i:"🌟",d:100,p:1000}
+        ];
+        const armors=[
+            {n:"布甲",i:"🛡️",def:5,p:0},{n:"铁甲",i:"🛡️",def:10,p:40},
+            {n:"金甲",i:"✨",def:20,p:150},{n:"钻石甲",i:"💎",def:35,p:400}
+        ];
+
+        // ===== 音效系统(Web Audio) =====
+        let audioCtx=null,soundOn=true;
+        function getAudioCtx(){
+            if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+            return audioCtx;
+        }
+        function playTone(freq,dur,type='square',vol=.15){
+            if(!soundOn)return;
+            try{
+                const c=getAudioCtx();
+                const o=c.createOscillator();const g=c.createGain();
+                o.type=type;o.frequency.value=freq;
+                g.gain.setValueAtTime(vol,c.currentTime);
+                g.gain.exponentialRampToValueAtTime(.001,c.currentTime+dur);
+                o.connect(g);g.connect(c.destination);
+                o.start(c.currentTime);o.stop(c.currentTime+dur);
+            }catch(e){}
+        }
+        function sfxCorrect(){
+            playTone(523, .1,'sine',.12);
+            setTimeout(()=>playTone(659, .1,'sine',.12),100);
+            setTimeout(()=>playTone(784, .15,'sine',.12),200);
+        }
+        function sfxWrong(){
+            playTone(200, .2,'sawtooth',.08);
+            setTimeout(()=>playTone(160, .3,'sawtooth',.08),150);
+        }
+        function sfxHit(){
+            playTone(150, .1,'square',.1);
+            playTone(100, .15,'sawtooth',.05);
+        }
+        function sfxMonsterHit(){
+            playTone(80, .2,'sawtooth',.15);
+            setTimeout(()=>playTone(60, .1,'square',.1),50);
+        }
+        function sfxVictory(){
+            [523,587,659,784,880,1047].forEach((f,i)=>setTimeout(()=>playTone(f,.15,'sine',.1),i*100));
+        }
+        function sfxPlayerHit(){
+            playTone(300, .15,'sawtooth',.08);
+            setTimeout(()=>playTone(200, .2,'square',.06),100);
+        }
+        function sfxCombo(){
+            const f=600+Math.min(gameState.combo,10)*50;
+            playTone(f,.1,'sine',.08);
+        }
+        function sfxCoin(){
+            playTone(800,.08,'sine',.08);
+            setTimeout(()=>playTone(1000,.08,'sine',.08),80);
+        }
+        function sfxLevelUp(){
+            for(let i=0;i<4;i++){
+                setTimeout(()=>playTone(400+i*200,.1,'sine',.1),i*120);
+            }
+        }
+        function toggleSound(){
+            soundOn=!soundOn;
+            document.getElementById('soundBtn').textContent=soundOn?'🔊':'🔇';
+        }
+
+        // ===== 状态 =====
+        const avatars=['🧑','🧒','👦','👧','👨','👩','🦸','🦹','🧙','🧝','🧛','🧜','🤴','👸','🥷','🎅'];
+        
+        let currentUnit=1,currentWordIndex=0;
+        let learnedWords={},gameState={hp:100,maxHp:100,coins:0,monsterLv:0,weaponIdx:0,armorIdx:0,combo:0,monstersDefeated:0};
+        let monsterCurrentHP=50;
+        let quizAnswers={correct:0,total:0};
+        let streak=0,lastStudyDate=null;
+        let gameWord,gameUnit;
+        let playerName='小勇士',playerAvatar='🧑';
+        let isDefensePhase=false,isRecoverPhase=false;
+        let defenseWord,defenseTimer=null;
+
+        function init(){
+            try{loadProgress();}catch(e){}
+            try{updateStreak();}catch(e){}
+            try{updateStats();}catch(e){}
+            try{renderUnitProgress();}catch(e){}
+            try{initDictation();}catch(e){}
+            try{renderShop();}catch(e){}
+            try{initAvatarGrid();}catch(e){}
+            try{initPhonicsAudio();}catch(e){}
+            // 改用 inline onkeydown，更可靠
+        }
+
+        function loadProgress(){
+            try{
+                const d=JSON.parse(localStorage.getItem('engPro'));
+                if(d){
+                    learnedWords=d.lw||{};
+                    gameState=d.gs||{hp:100,maxHp:100,coins:0,monsterLv:0,weaponIdx:0,armorIdx:0,combo:0,monstersDefeated:0};
+                    streak=d.sr||0;lastStudyDate=d.lsd;
+                    quizAnswers=d.qa||{correct:0,total:0};
+                    playerName=d.pn||'小勇士';
+                    playerAvatar=d.pa||'🧑';
+                }
+            }catch(e){}
+            updatePlayerDisplay();
+        }
+        function saveProgress(){
+            try{
+                localStorage.setItem('engPro',JSON.stringify({
+                    lw:learnedWords,gs:gameState,sr:streak,lsd:lastStudyDate,qa:quizAnswers,
+                    pn:playerName,pa:playerAvatar
+                }));
+            }catch(e){}
+        }
+        function updatePlayerDisplay(){
+            document.getElementById('playerNameDisplay').textContent=playerName;
+            document.getElementById('playerAvatar').textContent=playerAvatar;
+        }
+
+        function updateStreak(){
+            const today=new Date().toDateString();
+            if(lastStudyDate!==today){
+                const y=new Date();y.setDate(y.getDate()-1);
+                if(lastStudyDate===y.toDateString()){streak++;}
+                else if(lastStudyDate){streak=1;}else{streak=1;}
+                lastStudyDate=today;saveProgress();
+                if(streak>=3&&streak%3===0){
+                    const bonus=streak*2;
+                    gameState.coins+=bonus;
+                    showCelebration('🔥 连续学习 '+streak+' 天！','获得 '+bonus+' 金币奖励！');
+                }
+            }
+            document.getElementById('streak').textContent=streak;
+            updateHeaderStats();
+        }
+
+        function updateHeaderStats(){
+            document.getElementById('headerCoins').textContent=gameState.coins;
+            document.getElementById('headerLevel').textContent=getLevel();
+        }
+
+        function getLevel(){return Math.floor(gameState.monstersDefeated/3)+1;}
+        function getXP(){return gameState.monstersDefeated%3;}
+        function getMaxXP(){return 3;}
+
+        function updateStats(){
+            let total=0,learned=0;
+            for(let u in vocabulary){total+=vocabulary[u].words.length;if(learnedWords[u]&&Array.isArray(learnedWords[u]))learned+=learnedWords[u].length;}
+            document.getElementById('wordsLearned').textContent=learned;
+            document.getElementById('wordsToLearn').textContent=Math.max(0,total-learned);
+            const p=total?Math.round(learned/total*100):0;
+            document.getElementById('totalProgress').style.width=p+'%';
+            document.getElementById('progressText').textContent=p+'%';
+            document.getElementById('totalCoins').textContent=gameState.coins;
+            document.getElementById('monstersDefeated').textContent=gameState.monstersDefeated;
+            document.getElementById('pgLearned').textContent=learned;
+            document.getElementById('pgMonsters').textContent=gameState.monstersDefeated;
+            document.getElementById('pgCoins').textContent=gameState.coins;
+            document.getElementById('pgLevel').textContent=getLevel();
+            updateHeaderStats();
+            document.querySelectorAll('#home .unit-btn').forEach((b,i)=>{
+                const u=(i+1).toString(),l=learnedWords[u]?learnedWords[u].length:0,t=vocabulary[u].words.length;
+                b.classList.toggle('completed',l===t);
+            });
+        }
+
+        function renderUnitProgress(){
+            let html='';
+            for(let u in vocabulary){
+                const w=vocabulary[u].words,l=learnedWords[u]?learnedWords[u].length:0,p=Math.round(l/w.length*100);
+                html+=`<div style="margin:6px 0"><div style="display:flex;justify-content:space-between;font-size:.82rem"><span>${vocabulary[u].title}</span><span>${l}/${w.length}</span></div><div class="progress-container"><div class="progress-bar" style="width:${p}%"></div></div></div>`;
+            }
+            document.getElementById('unitProgressList').innerHTML=html;
+        }
+
+        function showSection(s){
+            document.querySelectorAll('.section').forEach(e=>e.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+            document.getElementById(s).classList.add('active');
+            const btn=document.querySelector(`button[onclick^="showSection('${s}"]`)||document.querySelector(`button[onclick="showSection('${s}')"]`);
+            if(btn)btn.classList.add('active');
+            if(s==='learn'){renderWordList();showWord(currentWordIndex);}
+            if(s==='game'){startBattle();}
+            if(s==='shop'){renderShop();}
+            if(s==='quiz'&&!quizAnswers.total)startQuiz();
+        }
+
+        function selectUnit(u){
+            currentUnit=u;currentWordIndex=0;
+            document.getElementById('unitTitle').textContent=vocabulary[u].title;
+            showSection('learn');renderWordList();showWord(currentWordIndex);
+        }
+        function renderWordList(){
+            const words=vocabulary[currentUnit].words;
+            const raw=learnedWords[currentUnit];
+            const learned=Array.isArray(raw)?raw:[];
+            let html='';
+            words.forEach((w,i)=>{
+                html+=`<div class="word-item ${learned.includes(i)?'learned':''}" onclick="showWord(${i})"><span class="word">${w.w}</span><span class="meaning">${w.c}</span><button class="dictation-speak-btn" onclick="event.stopPropagation();speakText('${w.w.replace(/'/g,"\\'")}')" style="margin-left:auto;font-size:.85rem">🔊</button></div>`;
+            });
+            document.getElementById('wordList').innerHTML=html;
+            const p=Math.round(learned.length/words.length*100);
+            document.getElementById('unitProgress').style.width=p+'%';
+            document.getElementById('unitProgressText').textContent=learned.length+'/'+words.length;
+        }
+        function showWord(i){
+            const w=vocabulary[currentUnit].words[i];currentWordIndex=i;
+            document.getElementById('cardWord').textContent=w.w;
+            document.getElementById('cardPhonetic').textContent=w.p;
+            document.getElementById('cardChinese').textContent=w.c;
+            document.getElementById('cardSentence').textContent=w.s;
+            document.getElementById('cardTip').textContent=w.t;
+            document.getElementById('flashcard').classList.remove('flipped');
+            speakText(w.w);
+            loadWordImage(w.w,'cardImageContainer',w.t);
+        }
+        function flipCard(){document.getElementById('flashcard').classList.toggle('flipped');}
+        function prevCard(){if(currentWordIndex>0)showWord(currentWordIndex-1);}
+        function nextCard(){if(currentWordIndex<vocabulary[currentUnit].words.length-1)showWord(currentWordIndex+1);}
+
+        function markAsLearned(){
+            try{
+                const raw=learnedWords[currentUnit];
+                if(!raw||!Array.isArray(raw))learnedWords[currentUnit]=[];
+                if(!learnedWords[currentUnit].includes(currentWordIndex)){
+                    learnedWords[currentUnit].push(currentWordIndex);
+                    gameState.coins+=5;sfxCoin();
+                    saveProgress();updateStats();renderWordList();
+                    const w=vocabulary[currentUnit].words;
+                    if(learnedWords[currentUnit].length===w.length){
+                        gameState.coins+=20;
+                        showCelebration('🎉 完成'+vocabulary[currentUnit].title+'!','获得 20 金币！');
+                    }
+                }
+            }catch(e){alert('markAsLearned错误: '+e.message+'\n行'+e.lineNumber);console.error(e);}
+        }
+
+        function showCelebration(t,m){
+            const el=document.getElementById('celebration');
+            document.getElementById('celebrationTitle').textContent=t;
+            document.getElementById('celebrationText').textContent=m||'';
+            el.classList.add('show');
+            for(let i=0;i<80;i++){
+                const c=document.createElement('div');c.className='confetti';
+                c.style.left=Math.random()*100+'%';
+                c.style.background=['#f44336','#4CAF50','#FF9800','#2196F3','#9C27B0','#FFD700','#ff6b6b'][Math.floor(Math.random()*7)];
+                c.style.animationDelay=Math.random()*2+'s';
+                c.style.animationDuration=(2+Math.random()*2)+'s';
+                Object.assign(c.style,{
+                    width:Math.floor(4+Math.random()*6)+'px',
+                    height:Math.floor(4+Math.random()*6)+'px'
+                });
+                el.appendChild(c);
+            }
+            sfxVictory();
+            setTimeout(()=>{el.classList.remove('show');el.querySelectorAll('.confetti').forEach(c=>c.remove());},3500);
+        }
+
+        // ===== 战斗系统 =====
+        function startBattle(){
+            try{
+                const ml=Math.min(gameState.monsterLv,monsters.length-1);
+                const m=monsters[ml];
+                monsterCurrentHP=m.hp+gameState.monsterLv*12;
+                const spr=document.getElementById('monsterSprite');
+                if(spr){spr.textContent=m.i;spr.className='monster-sprite';}
+                const mn=document.getElementById('monsterName');
+                if(mn)mn.textContent=m.n+' Lv.'+(gameState.monsterLv+1);
+                const mhf=document.getElementById('monsterHPFill');
+                if(mhf)mhf.style.width='100%';
+                const mht=document.getElementById('monsterHPText');
+                if(mht)mht.textContent=monsterCurrentHP;
+                const mmh=document.getElementById('monsterMaxHP');
+                if(mmh)mmh.textContent=monsterCurrentHP;
+                updateGameUI();
+                nextGameWord();
+                const bl=document.getElementById('battleLog');
+                if(bl)bl.innerHTML='<div>⚔️ 输入单词攻击怪兽！</div>';
+                const gi=document.getElementById('gameInput');
+                if(gi){gi.value='';gi.disabled=false;}
+                const gf=document.getElementById('gameFeedback');
+                if(gf)gf.textContent='';
+                setTimeout(()=>{const g=document.getElementById('gameInput');if(g)g.focus();},300);
+            }catch(e){console.error('startBattle error',e);}
+        }
+
+        function updateGameUI(){
+            document.getElementById('playerHP').textContent=gameState.hp+'/'+gameState.maxHp;
+            document.getElementById('playerHPBar').style.width=Math.round(gameState.hp/gameState.maxHp*100)+'%';
+            const w=weapons[gameState.weaponIdx];
+            document.getElementById('playerWeapon').textContent=w.i+' '+w.n+'('+w.d+')';
+            document.getElementById('playerCombo').textContent=gameState.combo+'x';
+            const lv=getLevel();
+            document.getElementById('playerXP').textContent=getXP()+'/'+getMaxXP();
+            document.getElementById('playerXPBar').style.width=Math.round(getXP()/getMaxXP()*100)+'%';
+            document.getElementById('gameCoins').textContent=gameState.coins;
+            document.getElementById('shopCoins').textContent=gameState.coins;
+        }
+
+        function getGameWord(){
+            const all=[];
+            for(let u in vocabulary)vocabulary[u].words.forEach((w,i)=>{
+                if(learnedWords[u]&&learnedWords[u].includes(i))all.push({...w,unit:parseInt(u)});
+            });
+            if(all.length===0){
+                for(let u in vocabulary)vocabulary[u].words.forEach((w,i)=>all.push({...w,unit:parseInt(u)}));
+            }
+            return all[Math.floor(Math.random()*all.length)];
+        }
+
+        function nextGameWord(){
+            gameWord=getGameWord();
+            document.getElementById('gamePrompt').textContent=gameWord.c;
+            document.getElementById('gameInput').value='';
+            document.getElementById('gameFeedback').textContent='';
+            document.getElementById('gameInput').disabled=false;
+            document.getElementById('gameInput').focus();
+            if(!isDefensePhase){
+                document.getElementById('gameModeBadge').textContent='🗡️ '+playerName+' 攻击! 输入 ['+gameWord.c+'] 的英文';
+                document.getElementById('gameModeBadge').className='game-mode-badge attack';
+            }
+        }
+
+        // ===== 设置 =====
+        function initAvatarGrid(){
+            const g=document.getElementById('avatarGrid');g.innerHTML='';
+            avatars.forEach((a,i)=>{
+                const b=document.createElement('button');
+                b.className='avatar-btn'+(a===playerAvatar?' selected':'');
+                b.textContent=a;b.onclick=()=>{
+                    document.querySelectorAll('.avatar-btn').forEach(x=>x.classList.remove('selected'));
+                    b.classList.add('selected');
+                    document.getElementById('playerNameInput').dataset.avatar=a;
+                };
+                g.appendChild(b);
+            });
+        }
+        function initPhonicsAudio(){
+            document.querySelectorAll('.phonics-table').forEach(table=>{
+                table.querySelectorAll('tbody tr, tr').forEach(tr=>{
+                    const tds=tr.querySelectorAll('td');
+                    if(tds.length<3)return;
+                    const lastTd=tds[tds.length-1];
+                    const raw=lastTd.textContent.split(',').map(w=>w.trim()).filter(w=>w.length>0);
+                    if(raw.length===0)return;
+                    lastTd.innerHTML='';
+                    raw.forEach((w,i)=>{
+                        const s=document.createElement('span');
+                        s.textContent=w; s.className='phonics-word';
+                        s.onclick=(e)=>{e.stopPropagation();speakText(w);};
+                        s.title='点击听发音';
+                        lastTd.appendChild(s);
+                        if(i<raw.length-1)lastTd.appendChild(document.createTextNode(', '));
+                    });
+                    const btn=document.createElement('button');
+                    btn.className='dictation-speak-btn';
+                    btn.textContent='🔊'; btn.title='朗读全部例词';
+                    btn.onclick=()=>speakText(raw.join('. '));
+                    lastTd.appendChild(btn);
+                });
+            });
+        }
+        function showSettings(){
+            document.getElementById('settingsModal').style.display='flex';
+            document.getElementById('playerNameInput').value=playerName;
+            document.getElementById('playerNameInput').dataset.avatar=playerAvatar;
+            initAvatarGrid();
+        }
+        function closeSettings(){document.getElementById('settingsModal').style.display='none';}
+        function saveSettings(){
+            const name=document.getElementById('playerNameInput').value.trim()||'小勇士';
+            const av=document.getElementById('playerNameInput').dataset.avatar||playerAvatar;
+            playerName=name;playerAvatar=av;
+            updatePlayerDisplay();saveProgress();closeSettings();
+            sfxCoin();
+        }
+        document.getElementById('settingsModal').addEventListener('click',function(e){
+            if(e.target===this)closeSettings();
+        });
+
+        function onGameKey(e){
+            if(e.key!=='Enter')return;
+            try{
+                const input=e.target.value.trim().toLowerCase();
+                if(!input)return;
+                if(isDefensePhase){
+                    if(!defenseWord||!defenseWord.w){
+                        document.getElementById('gameFeedback').textContent='⚠️ 防御阶段异常,重新开始';
+                        document.getElementById('gameFeedback').className='game-feedback wrong';
+                        isDefensePhase=false;setTimeout(startBattle,500);
+                        return;
+                    }
+                    const correct=defenseWord.w.toLowerCase();
+                    if(input===correct){
+                        isDefensePhase=false;
+                        if(defenseTimer){clearTimeout(defenseTimer);defenseTimer=null;}
+                        const armor=armors[gameState.armorIdx];
+                        const actualDmg=Math.max(1,Math.floor((5+gameState.monsterLv*4-armor.def)*.3));
+                        gameState.hp-=actualDmg;
+                        sfxCorrect();
+                        document.getElementById('gameFeedback').textContent='🛡️ 防御成功! 只受'+actualDmg+'伤害';
+                        document.getElementById('gameFeedback').className='game-feedback correct';
+                        speakText(defenseWord.w);
+                        document.getElementById('gameModeBadge').textContent='🗡️ 攻击模式';
+                        document.getElementById('gameModeBadge').className='game-mode-badge attack';
+                        updateGameUI();
+                        if(gameState.hp<=0){
+                            gameState.hp=Math.floor(gameState.maxHp/2);
+                            if(gameState.hp<1)gameState.hp=50;
+                            showCelebration('💀 被击败了','休息一下再战！');
+                            setTimeout(startBattle,3000);
+                        }else{
+                            setTimeout(()=>{nextGameWord();document.getElementById('gameFeedback').textContent='';document.getElementById('gameInput').disabled=false;document.getElementById('gameInput').focus();},3000);
+                        }
+                    }else{
+                        sfxWrong();
+                        document.getElementById('gameFeedback').textContent='❌ 防御失败! 正确: '+defenseWord.w;
+                        document.getElementById('gameFeedback').className='game-feedback wrong';
+                        speakText(defenseWord.w);
+                        if(defenseTimer){clearTimeout(defenseTimer);defenseTimer=null;}
+                        isDefensePhase=false;
+                        const armor=armors[gameState.armorIdx];
+                        const fullDmg=Math.max(1,5+gameState.monsterLv*4-armor.def);
+                        gameState.hp-=fullDmg;
+                        updateGameUI();
+                        if(gameState.hp<=0){
+                            gameState.hp=Math.floor(gameState.maxHp/2);
+                            if(gameState.hp<1)gameState.hp=50;
+                            showCelebration('💀 被击败了','休息一下再战！');
+                            setTimeout(startBattle,3000);
+                        }else{
+                            setTimeout(()=>{nextGameWord();document.getElementById('gameFeedback').textContent='';document.getElementById('gameInput').disabled=false;document.getElementById('gameInput').focus();},3000);
+                        }
+                    }
+                    return;
+                }
+                if(!gameWord||!gameWord.w){
+                    document.getElementById('gameFeedback').textContent='⚠️ 准备中...请稍后重试';
+                    document.getElementById('gameFeedback').className='game-feedback wrong';
+                    return;
+                }
+                const correct=gameWord.w.toLowerCase();
+                if(input===correct){
+                    document.getElementById('gameInput').disabled=true;
+                    attackMonster();
+                }else{
+                    gameState.combo=0;
+                    document.getElementById('gameFeedback').textContent='❌ 应是: '+gameWord.w;
+                    document.getElementById('gameFeedback').className='game-feedback wrong';
+                    sfxWrong();speakText(gameWord.w);
+                    updateGameUI();
+                    setTimeout(()=>{
+                        document.getElementById('gameFeedback').textContent='';
+                        document.getElementById('gameInput').disabled=false;
+                        document.getElementById('gameInput').focus();
+                    },3000);
+                }
+            }catch(err){
+                document.getElementById('gameFeedback').textContent='⚠️ 错误: '+err.message;
+                document.getElementById('gameFeedback').className='game-feedback wrong';
+                console.error(err);
+            }
+        }
+
+        function showDamageFloat(text,color,cls){
+            const area=document.getElementById('monsterArea');
+            const el=document.createElement('div');
+            el.className='dmg-float '+(cls||'');
+            el.textContent=text;
+            el.style.color=color||'#fff';
+            el.style.left=(30+Math.random()*40)+'%';
+            el.style.top=(20+Math.random()*30)+'%';
+            Object.assign(el.style,{fontSize:'1.8rem',position:'absolute',fontWeight:'700',pointerEvents:'none',zIndex:'10'});
+            area.appendChild(el);
+            setTimeout(()=>el.remove(),1000);
+        }
+
+        function attackMonster(){
+            const w=weapons[gameState.weaponIdx];
+            let dmg=w.d;
+            gameState.combo++;
+            const isCrit=Math.random()<.2;
+            let critText='';
+            if(gameState.combo>=3)dmg=Math.floor(dmg*1.5);
+            if(gameState.combo>=5)dmg=Math.floor(dmg*2);
+            if(isCrit){dmg=Math.floor(dmg*2.5);critText='💥 CRIT!';}
+            
+            const log=document.getElementById('battleLog');
+            monsterCurrentHP-=dmg;
+            if(monsterCurrentHP<0)monsterCurrentHP=0;
+            
+            const spr=document.getElementById('monsterSprite');
+            spr.classList.remove('hit','defeated');
+            void spr.offsetWidth;
+            spr.classList.add('hit');
+            
+            showDamageFloat('💥 '+(isCrit?'CRITICAL!':'')+dmg,isCrit?'#FFD700':'#ff6b6b');
+            sfxMonsterHit();
+            
+            log.innerHTML=`<div>${w.i} ${w.n} 攻击 ${gameWord.w} ${dmg}伤害${critText}${gameState.combo>=3?' 🔥x'+gameState.combo:''}</div>`+log.innerHTML;
+            if(log.children.length>8)log.removeChild(log.lastChild);
+            
+            document.getElementById('gameFeedback').textContent=(isCrit?'💥 暴击! ':'✅ ')+'正确! 造成 '+dmg+' 伤害'+(gameState.combo>=3?' 连击x'+gameState.combo:'');
+            document.getElementById('gameFeedback').className='game-feedback correct';
+            speakText(gameWord.w);
+            
+            document.getElementById('monsterHPFill').style.width=monsterCurrentHP/(monsters[Math.min(gameState.monsterLv,monsters.length-1)].hp+gameState.monsterLv*12)*100+'%';
+            document.getElementById('monsterHPText').textContent=monsterCurrentHP;
+            
+            if(monsterCurrentHP<=0){
+                spr.classList.remove('hit');spr.classList.add('defeated');
+                document.getElementById('gameInput').disabled=true;
+                const m=monsters[Math.min(gameState.monsterLv,monsters.length-1)];
+                const reward=m.r+gameState.combo*2+(isCrit?10:0);
+                setTimeout(()=>monsterDefeated(reward),800);
+            }else{
+                // 防御阶段 - 输入单词抵挡
+                document.getElementById('gameInput').disabled=true;
+                document.getElementById('gameFeedback').textContent+=' 怪兽准备反击!';
+                log.innerHTML+=`<div>💢 怪兽准备反击! 准备防御...</div>`;
+                sfxPlayerHit();
+                setTimeout(()=>{
+                    defenseWord=getGameWord();
+                    isDefensePhase=true;
+                    document.getElementById('gameModeBadge').textContent='🛡️ '+playerName+' 快防御! 输入['+defenseWord.c+']的英文!';
+                    document.getElementById('gameModeBadge').className='game-mode-badge defense';
+                    document.getElementById('gamePrompt').textContent=defenseWord.c;
+                    document.getElementById('gameInput').value='';
+                    document.getElementById('gameInput').disabled=false;
+                    document.getElementById('gameInput').focus();
+                    if(defenseTimer)clearTimeout(defenseTimer);
+                    defenseTimer=setTimeout(()=>{
+                        if(isDefensePhase){
+                            isDefensePhase=false;
+                            const armor2=armors[gameState.armorIdx];
+                            const fullDmg2=Math.max(1,5+gameState.monsterLv*4-armor2.def);
+                            gameState.hp-=fullDmg2;
+                            document.getElementById('gameFeedback').textContent='⏰ 超时! 正确: '+defenseWord.w+' 受到 '+fullDmg2+' 伤害';
+                            document.getElementById('gameFeedback').className='game-feedback wrong';
+                            speakText(defenseWord.w);
+                            document.getElementById('gameModeBadge').textContent='🗡️ 攻击模式';
+                            document.getElementById('gameModeBadge').className='game-mode-badge attack';
+                            updateGameUI();
+                            if(gameState.hp<=0){
+                                gameState.hp=Math.floor(gameState.maxHp/2);
+                                if(gameState.hp<1)gameState.hp=50;
+                                showCelebration('💀 被击败了','休息一下再战！');
+                                setTimeout(startBattle,3000);
+                            }else{
+                                setTimeout(()=>{nextGameWord();document.getElementById('gameFeedback').textContent='';document.getElementById('gameInput').disabled=false;document.getElementById('gameInput').focus();},3000);
+                            }
+                        }
+                    },20000);
+                    updateGameUI();
+                    saveProgress();
+                    },3000);
+            }
+        }
+
+        function monsterDefeated(reward){
+            const log=document.getElementById('battleLog');
+            gameState.coins+=reward;
+            gameState.monstersDefeated++;
+            
+            // 检查升级
+            const oldLv=getLevel();
+            gameState.monsterLv=Math.min(gameState.monsterLv+1,monsters.length-1);
+            const newLv=getLevel();
+            if(newLv>oldLv){
+                sfxLevelUp();
+                showCelebration('⭐ 升级到 Lv.'+newLv+'!','获得 '+reward+' 金币！');
+            }else{
+                sfxVictory();
+                showCelebration('🎉 击败怪兽!','获得 '+reward+' 金币！');
+            }
+            
+            log.innerHTML=`<div>🎉 击败! 获得${reward}金币</div>`+log.innerHTML;
+            saveProgress();updateStats();
+            setTimeout(startBattle,2500);
+        }
+
+        // ===== 商店 =====
+        function renderShop(){
+            const c=document.getElementById('shopItems');let html='<div class="shop-grid">';
+            weapons.forEach((w,i)=>{
+                const ow=i<=gameState.weaponIdx;
+                html+=`<div class="shop-item ${ow?'owned':''}"><div class="shop-item-icon">${w.i}</div><div class="shop-item-name">${w.n}</div><div class="shop-item-desc">攻击 ${w.d}</div><div class="shop-item-price">${ow?'\u2713 \u62e5\u6709':'\uD83E\uDE99 '+w.p}</div>${!ow?`<button class="btn-primary" onclick="buyWeapon(${i})">购买</button>`:''}</div>`;
+            });
+            html+='</div><div class="card" style="margin-top:12px"><h3 style="font-size:.9rem">💚 防具 & 道具</h3></div><div class="shop-grid" style="margin-top:0">';
+            armors.forEach((a,i)=>{
+                const ow=i<=gameState.armorIdx;
+                html+=`<div class="shop-item ${ow?'owned':''}"><div class="shop-item-icon">${a.i}</div><div class="shop-item-name">${a.n}</div><div class="shop-item-desc">防御 ${a.def}</div><div class="shop-item-price">${ow?'\u2713':'\uD83E\uDE99 '+a.p}</div>${!ow?`<button class="btn-secondary" onclick="buyArmor(${i})">购买</button>`:''}</div>`;
+            });
+            html+=`<div class="shop-item"><div class="shop-item-icon">💚</div><div class="shop-item-name">回血药水</div><div class="shop-item-desc">恢复30HP</div><div class="shop-item-price">🪙 30</div><button class="btn-gold" onclick="buyPotion()">购买</button></div>`;
+            c.innerHTML=html;
+            document.getElementById('shopCoins').textContent=gameState.coins;
+        }
+
+        function buyWeapon(i){
+            const w=weapons[i];
+            if(gameState.coins>=w.p){
+                gameState.coins-=w.p;gameState.weaponIdx=i;
+                saveProgress();updateStats();renderShop();sfxLevelUp();
+                showCelebration('🎉 '+w.i+w.n+'!','攻击力 '+w.d);
+            }else alert('金币不足! 需要 '+w.p);
+        }
+        function buyArmor(i){
+            const a=armors[i];
+            if(gameState.coins>=a.p){
+                gameState.coins-=a.p;gameState.armorIdx=i;
+                saveProgress();updateStats();renderShop();sfxLevelUp();
+                showCelebration('🎉 '+a.i+a.n+'!','防御 '+a.def);
+            }else alert('金币不足! 需要 '+a.p);
+        }
+        function buyPotion(){
+            if(gameState.coins>=30){
+                gameState.coins-=30;gameState.hp=Math.min(gameState.maxHp,gameState.hp+30);
+                saveProgress();updateStats();renderShop();sfxCoin();
+                showCelebration('💚 回血成功!','+30 HP');
+            }else alert('金币不足! 需要 30');
+        }
+
+        // ===== 测验 =====
+        function startQuiz(){quizAnswers={correct:0,total:0};nextQuizQuestion();updateStats();}
+        function nextQuizQuestion(){
+            const u=Object.keys(vocabulary),ru=u[Math.floor(Math.random()*u.length)];
+            const words=vocabulary[ru].words,word=words[Math.floor(Math.random()*words.length)];
+            const all=[];for(let uu in vocabulary)vocabulary[uu].words.forEach(w=>all.push(w));
+            const wrong=[];
+            while(wrong.length<3){const r=all[Math.floor(Math.random()*all.length)];if(r.w!==word.w&&!wrong.some(x=>x.w===r.w))wrong.push(r);}
+            const opts=[word,...wrong].sort(()=>Math.random()-.5);
+            document.getElementById('quizWord').textContent=word.w;
+            const oc=document.getElementById('quizOptions');oc.innerHTML='';
+            opts.forEach(o=>{
+                const b=document.createElement('button');b.className='quiz-option';
+                b.textContent=o.c;
+                b.onclick=()=>{
+                    quizAnswers.total++;
+                    if(o===word){quizAnswers.correct++;b.classList.add('correct');sfxCorrect();}
+                    else{b.classList.add('wrong');sfxWrong();}
+                    saveProgress();updateStats();
+                    setTimeout(nextQuizQuestion,1200);
+                };
+                oc.appendChild(b);
+            });
+            document.getElementById('quizCorrect').textContent=quizAnswers.correct;
+            document.getElementById('quizTotal').textContent=quizAnswers.total;
+        }
+
+        // ===== 默写 =====
+        function initDictation(){
+            const c=document.getElementById('dictationUnitBtns');let html='';
+            for(let u=1;u<=7;u++)html+=`<button class="unit-btn" data-unit="${u}" onclick="showDictation(${u})" style="font-size:.82rem;padding:7px 12px;">U${u}</button>`;
+            c.innerHTML=html;
+        }
+        function showDictation(u){
+            document.getElementById('dictationContent').style.display='block';
+            document.getElementById('dictationEmpty').style.display='none';
+            const d=dd[u];document.getElementById('dictationTitle').textContent=d.title;
+            document.getElementById('dictationReadAll').dataset.unit=u;
+            let html='';d.s.forEach((s,i)=>{
+                html+=`<div class="dictation-card"><div class="dictation-num">${i+1}</div><div style="flex:1"><div class="dictation-en">${s.e}</div><div class="dictation-cn">${s.c}</div></div><button class="dictation-speak-btn" onclick="speakText('${s.e.replace(/'/g,"\\'")}')" title="朗读">🔊</button></div>`;
+            });
+            document.getElementById('dictationSentences').innerHTML=html;
+            document.querySelectorAll('#dictationUnitBtns button').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.unit)===u));
+        }
+        function speakText(t){
+            if(!window.speechSynthesis)return;
+            window.speechSynthesis.cancel();
+            const u=new SpeechSynthesisUtterance(t);
+            u.lang='en-US';u.rate=.85;u.pitch=1;
+            window.speechSynthesis.speak(u);
+        }
+        function readAllDictation(){
+            const u=parseInt(document.getElementById('dictationReadAll').dataset.unit);
+            const d=dd[u];if(!d)return;
+            const txt=d.s.map(s=>s.e).join('. ');
+            speakText(txt);
+        }
+
+        // ===== 重置 =====
+        function resetProgress(){
+            if(confirm('确定重置所有进度?')){
+                localStorage.removeItem('engPro');
+                learnedWords={};gameState={hp:100,maxHp:100,coins:0,monsterLv:0,weaponIdx:0,armorIdx:0,combo:0,monstersDefeated:0};
+                quizAnswers={correct:0,total:0};streak=0;lastStudyDate=null;
+                saveProgress();init();showSection('home');
+            }
+        }
+        // ===== 拼读解码器 =====
+        const PV=new Set(['a','e','i','o','u']);
+        const PDG=['sh','ch','th','ph','wh','ng','ck','qu'];
+        const PVT=['ai','ay','ea','ee','ie','oa','oe','ue','oo','ar','er','ir','or','ur','aw','au','oi','oy','ou','ow'];
+        const PS={
+            a:{s:'/æ/ /eɪ/',d:'短æ(apple)，长eɪ(cake)'},
+            b:{s:'/b/',d:'浊辅音b'},
+            c:{s:'/k/ /s/',d:'一般读k(cat)，e/i/y前读s(city)'},
+            d:{s:'/d/',d:'浊辅音d'},
+            e:{s:'/e/ /iː/',d:'短e(egg)，长iː(eat, be)'},
+            f:{s:'/f/',d:'清辅音f'},
+            g:{s:'/g/ /dʒ/',d:'一般读g(go)，e/i/y前读dʒ(page)'},
+            h:{s:'/h/',d:'清辅音h'},
+            i:{s:'/ɪ/ /aɪ/',d:'短ɪ(it)，长aɪ(lie, like)'},
+            j:{s:'/dʒ/',d:'浊辅音dʒ'},
+            k:{s:'/k/',d:'清辅音k'},
+            l:{s:'/l/',d:'浊辅音l'},
+            m:{s:'/m/',d:'浊辅音m'},
+            n:{s:'/n/',d:'浊辅音n'},
+            o:{s:'/ɒ/ /əʊ/',d:'短ɒ(hot)，长əʊ(go, open)'},
+            p:{s:'/p/',d:'清辅音p'},
+            q:{s:'/kw/',d:'q后接u读kw(queen)'},
+            r:{s:'/r/',d:'浊辅音r'},
+            s:{s:'/s/ /z/',d:'一般读s(sun)，浊化读z(is)'},
+            t:{s:'/t/',d:'清辅音t'},
+            u:{s:'/ʌ/ /juː/',d:'短ʌ(cup)，长juː(use, unit)'},
+            v:{s:'/v/',d:'浊辅音v'},
+            w:{s:'/w/',d:'半元音w'},
+            x:{s:'/ks/',d:'读ks(box, six)'},
+            y:{s:'/j/ /ɪ/ /aɪ/',d:'辅j(yes)，元ɪ(happy)，元aɪ(my)'},
+            z:{s:'/z/',d:'浊辅音z'},
+            sh:{s:'/ʃ/',d:'sh读ʃ(ship)'},
+            ch:{s:'/tʃ/',d:'ch读tʃ(chair)'},
+            th:{s:'/θ/ /ð/',d:'清θ(think)或浊ð(this)'},
+            ph:{s:'/f/',d:'ph读f(phone)'},
+            wh:{s:'/w/ /h/',d:'一般读w(what)，o前读h(who)'},
+            ng:{s:'/ŋ/',d:'读ŋ(king, sing)'},
+            ck:{s:'/k/',d:'读k(duck, back)'},
+            qu:{s:'/kw/',d:'读kw(queen, quick)'},
+            ai:{s:'/eɪ/',d:'读eɪ(rain, train)'},
+            ay:{s:'/eɪ/',d:'读eɪ(play, day)'},
+            ea:{s:'/iː/ /e/',d:'读iː(eat)或e(bread)'},
+            ee:{s:'/iː/',d:'读iː(see, tree)'},
+            ie:{s:'/aɪ/ /iː/',d:'读aɪ( lie)或iː(chief)'},
+            oa:{s:'/əʊ/',d:'读əʊ(boat, coat)'},
+            oe:{s:'/əʊ/',d:'读əʊ(toe)'},
+            ue:{s:'/uː/ /juː/',d:'读uː(blue)或juː(value)'},
+            oo:{s:'/uː/ /ʊ/',d:'读uː(food)或ʊ(book)'},
+            ar:{s:'/ɑː/',d:'读ɑː(car, star)'},
+            er:{s:'/ɜː/',d:'读ɜː(her)'},
+            ir:{s:'/ɜː/',d:'读ɜː(bird)'},
+            or:{s:'/ɔː/',d:'读ɔː(for, short)'},
+            ur:{s:'/ɜː/',d:'读ɜː(fur)'},
+            aw:{s:'/ɔː/',d:'读ɔː(saw, draw)'},
+            au:{s:'/ɔː/',d:'读ɔː(august)'},
+            oi:{s:'/ɔɪ/',d:'读ɔɪ(oil, coin)'},
+            oy:{s:'/ɔɪ/',d:'读ɔɪ(toy, boy)'},
+            ou:{s:'/aʊ/',d:'读aʊ(out, loud)'},
+            ow:{s:'/aʊ/ /əʊ/',d:'读aʊ(cow, down)或əʊ(snow, low)'}
+        };
+        // ===== 单词图片加载（本地图片，无需网络） =====
+        function getWordEmoji(word){
+            word=word.toLowerCase();
+            for(let u in vocabulary){for(const w of vocabulary[u].words){if(w.w.toLowerCase()===word){const m=w.t.match(/^(\p{Emoji})/u);if(m)return m[1];}}}
+            return'📖';
+        }
+        function loadWordImage(word,cid,fallback){
+            const area=document.getElementById(cid);if(!area)return;
+            const small=cid==='decodeImageArea';word=word.toLowerCase();
+            const i=document.createElement('img');
+            if(small){i.style.cssText='max-width:220px;max-height:140px;border-radius:6px;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,.15)';}else{i.style.cssText='width:100%;height:100%;object-fit:cover';}
+            i.alt=word;
+            i.onerror=()=>{
+                const emo=getWordEmoji(fallback||word);
+                if(small){area.innerHTML='<div style="font-size:3rem;line-height:1;text-align:center;padding:20px">'+emo+'</div>';}else{const cs=['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#98D8C8','#F7DC6F'];area.innerHTML='<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,'+cs[word.length%8]+',rgba(0,0,0,.1) 70%);font-size:5rem;line-height:1"><div>'+emo+'</div></div>';}
+            };
+            i.src='image/'+word+'.jpg';
+            area.innerHTML='';area.appendChild(i);
+        }
+        function doDecode(){
+            const input=document.getElementById('decodeInput').value.trim().toLowerCase();
+            const rd=document.getElementById('decodeResult');
+            const pd=document.getElementById('decodePattern');
+            if(!input){rd.innerHTML='';pd.textContent='';document.getElementById('decodeImageArea').innerHTML='';return;}
+            loadWordImage(input,'decodeImageArea');
+            // 防注入
+            const safe=t=>t.replace(/'/g,"\\'").replace(/"/g,'&quot;');
+            // 1. 分词素
+            function tokenize(w){
+                const tks=[];let i=0;
+                while(i<w.length){
+                    const two=i+1<w.length?w.substr(i,2):'';
+                    if([...PDG,...PVT].includes(two)){tks.push({t:two,k:PVT.includes(two)?'v':'c'});i+=2;continue;}
+                    tks.push({t:w[i],k:PV.has(w[i])?'v':'c'});i++;
+                }
+                if(w.endsWith('le')&&tks.length>=2&&tks[tks.length-2].k==='c'){
+                    tks[tks.length-1].k='v';tks[tks.length-1].schwa=true;
+                }else{
+                    for(let j=tks.length-1;j>=0;j--){
+                        if(tks[j].t==='e'&&tks[j].k==='v'&&j===tks.length-1){
+                            let hasC=false;
+                            for(let k=j-1;k>=0;k--){if(tks[k].k==='c')hasC=true;if(tks[k].k==='v')break;}
+                            if(hasC){tks[j].k='se';for(let k=j-1;k>=0;k--){if(tks[k].k==='v'){tks[k].long=true;break;}}}
+                        }
+                    }
+                }
+                return tks;
+            }
+            // 2. 按音节拆分
+            function toSyllables(tks){
+                const vIdx=[];
+                tks.forEach((t,i)=>{if(t.k==='v'||t.long||t.schwa)vIdx.push(i);});
+                if(vIdx.length<=1)return[tks];
+                const syl=[];let start=0;
+                for(let vi=0;vi<vIdx.length-1;vi++){
+                    const between=[];const nxt=vIdx[vi+1];
+                    for(let j=vIdx[vi]+1;j<nxt;j++)between.push(j);
+                    if(between.length<=1){
+                        syl.push(tks.slice(start,between.length===0?nxt:between[0]));
+                        start=between.length===0?nxt:between[0];
+                    }else{
+                        const mid=Math.floor(between.length/2);
+                        syl.push(tks.slice(start,between[mid]));
+                        start=between[mid];
+                    }
+                }
+                syl.push(tks.slice(start));
+                return syl;
+            }
+            // 3. 判断音节类型
+            function sylType(syl){
+                const hasL=syl.some(t=>t.long);const hasS=syl.some(t=>t.k==='se');const hasSc=syl.some(t=>t.schwa);
+                const hasV=syl.some(t=>PVT.includes(t.t));const lc=syl.length>0&&syl[syl.length-1].k==='c';const hv=syl.some(t=>t.k==='v');
+                if(hasS)return'Silent-e音节';if(hasV)return'元音组合';if(hasSc)return'弱读音节';if(hasL)return'开音节';if(lc&&hv)return'闭音节';if(hv&&!lc)return'开音节';return'音节';
+            }
+            // 4. 渲染单音节（可点击发音）
+            function renderSyl(syl){
+                const st=sylType(syl);const txt=syl.map(t=>t.t).join('');
+                let h='<div style="display:flex;flex-direction:column;align-items:center;gap:2px">';
+                h+=`<div style="display:flex;gap:3px;justify-content:center;cursor:pointer" onclick="speakText('${safe(txt)}')" title="点击听音节">`;
+                syl.forEach(t=>{
+                    const info=PS[t.t]||{};const ipa=t.k==='se'?'':(info.s||'?');
+                    const bg=t.k==='v'?'rgba(255,215,0,.2)':t.long?'rgba(255,165,0,.25)':t.k==='se'?'rgba(200,200,200,.15)':t.schwa?'rgba(200,180,150,.2)':'rgba(65,150,220,.2)';
+                    const bd=t.k==='v'?'#FFD700':t.long?'#FF8C00':t.k==='se'?'#888':t.schwa?'#C8A878':'#4196DC';
+                    const lb=t.k==='se'?'🔇e':t.t;
+                    h+=`<div style="background:${bg};border:2px solid ${bd};border-radius:2px;padding:4px 8px;text-align:center;min-width:30px"><div style="font-weight:700;font-size:1rem">${lb}</div><div style="font-size:.7rem;color:#5a3a1a">${ipa}</div></div>`;
+                });
+                h+=`</div><div style="font-size:.7rem;color:#5a3a1a;margin-top:2px;cursor:pointer" onclick="speakText('${safe(txt)}')">▶ ${st}</div>`;
+                h+='</div>';return h;
+            }
+            const tks=tokenize(input);const syls=toSyllables(tks);
+            let html='<div style="margin-bottom:4px">';
+            html+=`<button style="padding:4px 14px;border:1px solid rgba(0,0,0,.15);background:rgba(255,215,0,.12);border-radius:2px;cursor:pointer;font-size:.85rem;font-family:inherit" onclick="speakText('${safe(input)}')">🔊 朗读单词 (${syls.length}音节)</button>`;
+            html+='</div><div style="display:flex;flex-wrap:wrap;gap:16px;justify-content:center;align-items:flex-start">';
+            syls.forEach(s=>{html+=renderSyl(s);});
+            html+='</div>';
+            // 匹配词汇
+            let vm=null;
+            for(let u in vocabulary){vocabulary[u].words.forEach(w=>{if(w.w.toLowerCase()===input)vm=w;});}
+            if(vm){html+=`<div style="margin-top:8px;padding:6px 12px;background:rgba(255,215,0,.1);border:1px solid rgba(255,215,0,.3);border-radius:2px;font-size:.85rem">📖 ${vm.w} - ${vm.c} (${vm.t})</div>`;}
+            // 拼读规则汇总
+            const rules=[];const seen=new Set();
+            tks.forEach(t=>{const info=PS[t.t];if(info&&info.d&&!seen.has(info.d)){seen.add(info.d);rules.push(info.d);}});
+            if(rules.length>0){
+                html+=`<div style="margin-top:8px;text-align:left;font-size:.8rem;color:#5a3a1a;padding:6px;background:rgba(0,0,0,.05);border-radius:2px"><div style="font-weight:700;margin-bottom:4px;color:#2a1a0a">📋 拼读规则</div><ul style="margin:0;padding-left:16px">${rules.map(r=>`<li style="margin:2px 0">${r}</li>`).join('')}</ul></div>`;
+            }
+            rd.innerHTML=html;
+        }
+        window.onerror=function(m,s,l,c,err){alert('JS错误: '+m+'\\n行'+l+'\\n'+ (err&&err.stack?err.stack:''));};
+        try{init();}catch(e){alert('初始化失败: '+e.message);}
+    </script>
+</body>
+</html>
