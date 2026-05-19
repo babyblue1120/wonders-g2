@@ -1462,12 +1462,13 @@
             const small=cid==='decodeImageArea';word=word.toLowerCase();
             const i=document.createElement('img');
             if(small){i.style.cssText='max-width:220px;max-height:140px;border-radius:6px;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,.15)';}else{i.style.cssText='width:100%;height:100%;object-fit:cover';}
+            i.loading='lazy';i.decoding='async';
             i.alt=word;
             i.onerror=()=>{
                 const emo=getWordEmoji(fallback||word);
                 if(small){area.innerHTML='<div style="font-size:3rem;line-height:1;text-align:center;padding:20px">'+emo+'</div>';}else{const cs=['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#98D8C8','#F7DC6F'];area.innerHTML='<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,'+cs[word.length%8]+',rgba(0,0,0,.1) 70%);font-size:5rem;line-height:1"><div>'+emo+'</div></div>';}
             };
-            i.src='image/'+word+'.jpg';
+            i.src='https://cdn.jsdelivr.net/gh/babyblue1120/mumu-english@master/image/'+word+'.jpg';
             area.innerHTML='';area.appendChild(i);
         }
         function doDecode(){
