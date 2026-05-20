@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -710,8 +710,34 @@
         ];
 
         // ===== 音效系统(Web Audio) =====
-        let audioCtx=null,soundOn=true;
+        let audioCtx=null,soundOn=true,audioUnlocked=false;
+        function setupMobileAudio(){
+            if(audioUnlocked)return;
+            if(window.speechSynthesis){
+                window.speechSynthesis.getVoices();
+                window.speechSynthesis.addEventListener('voiceschanged',function(){
+                    window.speechSynthesis.getVoices();
+                },{once:true});
+            }
+            function unlock(){
+                audioUnlocked=true;
+                if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)();}
+                if(audioCtx&&audioCtx.state==='suspended'){audioCtx.resume();}
+                if(window.speechSynthesis){
+                    var u=new SpeechSynthesisUtterance('');u.volume=0;
+                    speechSynthesis.speak(u);
+                }
+                document.removeEventListener('click',unlock,true);
+                document.removeEventListener('touchstart',unlock,true);
+                document.removeEventListener('keydown',unlock,true);
+            }
+            document.addEventListener('click',unlock,true);
+            document.addEventListener('touchstart',unlock,true);
+            document.addEventListener('keydown',unlock,true);
+        }
         function getAudioCtx(){
+            if(audioCtx&&audioCtx.state==='suspended'){try{audioCtx.resume()}catch(e){}}
+
             if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
             return audioCtx;
         }
@@ -783,6 +809,7 @@
         let defenseWord,defenseTimer=null;
 
         function init(){
+            setupMobileAudio();
             try{loadProgress();}catch(e){}
             try{updateStreak();}catch(e){}
             try{updateStats();}catch(e){}
@@ -1371,9 +1398,14 @@
         function speakText(t){
             if(!window.speechSynthesis)return;
             window.speechSynthesis.cancel();
-            const u=new SpeechSynthesisUtterance(t);
+            var u=new SpeechSynthesisUtterance(t);
             u.lang='en-US';u.rate=.85;u.pitch=1;
+            u.volume=1;
+            var voices=window.speechSynthesis.getVoices();
+            var enVoice=voices.find(function(v){return v.lang.startsWith('en');});
+            if(enVoice)u.voice=enVoice;
             window.speechSynthesis.speak(u);
+            if(window.speechSynthesis.speaking||window.speechSynthesis.pending){setTimeout(function(){if(window.speechSynthesis&&!window.speechSynthesis.speaking&&!window.speechSynthesis.pending){window.speechSynthesis.resume()}},250)}
         }
         function readAllDictation(){
             const u=parseInt(document.getElementById('dictationReadAll').dataset.unit);
