@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⛏️ Wonders G2 预习复习</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+:root{
+  --mc-grass:#7B8D1E;--mc-grass-dark:#5C6A16;--mc-dirt:#8B5E3C;--mc-dirt-dark:#6B3E1C;
+  --mc-stone:#8B8B8B;--mc-stone-dark:#6B6B6B;--mc-wood:#6B3A1F;--mc-gold:#FFD700;
+  --mc-crafting:#C6A87C;--mc-water:#3B7DD8;--bg:#1a1a2e;--card-bg:#2a2a4e;
+  --text:#E8E8E8;--text-light:#AAA;--pixel:'Press Start 2P','Courier New',monospace
+}
+body{font-family:'Courier New','Microsoft YaHei',monospace;background:linear-gradient(180deg,#1a1a2e,#2a2a3e);color:var(--text);min-height:100vh}
+header{background:linear-gradient(180deg,#5C6A16,#3D4A0E);padding:12px 16px;text-align:center;border-bottom:4px solid #2A3A08;box-shadow:0 4px 0 #1A2A00}
+header h1{font-family:var(--pixel);font-size:1rem;color:var(--mc-gold);text-shadow:2px 2px 0 #3D4A0E;letter-spacing:1px}
+.nav{display:flex;justify-content:center;gap:3px;padding:5px 8px;background:linear-gradient(180deg,#6B6B6B,#4A4A4A);border-bottom:3px solid #333;position:sticky;top:0;z-index:100;flex-wrap:wrap}
+.nav button{padding:5px 10px;border:2px solid #555;background:linear-gradient(180deg,#7A7A7A,#5A5A5A);color:#fff;cursor:pointer;font-size:.72rem;transition:all .1s;font-family:inherit;box-shadow:inset 0 1px 0 #999,0 2px 0 #333}
+.nav button:active{transform:translateY(2px);box-shadow:inset 0 2px 4px rgba(0,0,0,.4)}
+.nav button.active{background:linear-gradient(180deg,#FFD700,#DAA520);color:#3A2A00;border-color:#B8860B;box-shadow:inset 0 1px 0 #FFF8DC,0 2px 0 #8B6914}
+main{max-width:900px;margin:0 auto;padding:10px}
+.section{display:none}.section.active{display:block;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card{background:linear-gradient(180deg,#3a3a5e,#2a2a4e);border-radius:2px;padding:16px;margin-bottom:10px;border:2px solid #4a4a6e;box-shadow:0 3px 0 #1a1a2e,0 4px 8px rgba(0,0,0,.3)}
+.card h2{font-size:.95rem;color:var(--mc-gold);margin-bottom:6px}
+.card h3{font-size:.85rem;color:var(--mc-gold);margin-bottom:4px}
+.day-badge{display:inline-block;background:rgba(0,0,0,.3);padding:2px 8px;border:1px solid var(--mc-gold);font-size:.7rem;color:var(--mc-gold)}
+.week-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px}
+.week-btn{background:linear-gradient(180deg,#5a5a7a,#4a4a6a);color:#fff;border:2px solid #5a5a7a;padding:10px;cursor:pointer;font-size:.78rem;text-align:center;transition:all .1s;font-family:inherit;box-shadow:0 2px 0 #2a2a4a}
+.week-btn:active{transform:translateY(2px);box-shadow:none}
+.week-btn.active{background:linear-gradient(180deg,#7B8D1E,#5C6A16);border-color:#4A5A0E;box-shadow:0 2px 0 #3A4A00}
+.preview-arena{background:linear-gradient(180deg,#2a2a4e,#1a1a2e);padding:14px;border:2px solid #4a4a6e;min-height:300px}
+.sentence-card{border-left:4px solid var(--mc-gold);padding:12px;margin-bottom:10px;background:rgba(255,255,255,.03)}
+.sentence-en{font-size:1.05rem;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.4}
+.sentence-cn{font-size:.88rem;color:var(--text-light);margin-bottom:6px}
+.sentence-word{display:inline-block;background:rgba(123,141,30,.2);border:1px solid var(--mc-grass);padding:1px 6px;font-size:.8rem;color:var(--mc-gold);margin-right:4px}
+.sentence-struct{padding:8px;background:rgba(0,0,0,.2);border:1px solid rgba(255,255,255,.05);font-size:.82rem;color:var(--text-light);margin:6px 0}
+.sentence-imitate{font-size:.82rem;color:var(--mc-grass);border-top:1px dashed rgba(255,255,255,.1);padding-top:6px;margin-top:6px}
+.vocab-item{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.05);cursor:pointer;transition:all .2s}
+.vocab-item:hover{background:rgba(255,255,255,.05)}
+.vocab-item .w{font-weight:700;font-size:.9rem}
+.vocab-item .c{color:var(--text-light);font-size:.82rem}
+.vocab-item .p{color:#888;font-size:.72rem}
+.audio-btn{background:none;border:1px solid rgba(255,255,255,.15);color:var(--mc-gold);cursor:pointer;padding:3px 6px;font-size:1rem;transition:all .2s;border-radius:2px}
+.audio-btn:hover{background:rgba(255,255,255,.1)}
+.quiz-container{text-align:center;max-width:480px;margin:0 auto}
+.quiz-word{font-size:1.8rem;font-weight:700;color:var(--mc-gold);margin:10px 0;text-shadow:1px 1px 0 #3D4A0E}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0}
+.quiz-option{padding:10px;background:linear-gradient(180deg,#5a5a7a,#4a4a6a);border:2px solid #5a5a7a;cursor:pointer;font-size:.85rem;color:#fff;font-family:inherit;box-shadow:0 2px 0 #2a2a4a;transition:all .1s}
+.quiz-option:active{transform:translateY(2px);box-shadow:none}
+.quiz-option.correct{background:linear-gradient(180deg,#4a8a2e,#2a6a1e);border-color:#3a7a2e;box-shadow:0 2px 0 #1a4a0e}
+.quiz-option.wrong{background:linear-gradient(180deg,#a03030,#702020);border-color:#802828;box-shadow:0 2px 0 #501010}
+.controls{display:flex;justify-content:center;gap:6px;margin:8px 0;flex-wrap:wrap}
+.controls button{padding:7px 14px;border:2px solid #555;cursor:pointer;font-size:.78rem;font-family:inherit;box-shadow:0 2px 0 #333;border-radius:2px;transition:all .1s}
+.controls button:active{transform:translateY(2px);box-shadow:none}
+.btn-primary{background:linear-gradient(180deg,#7B8D1E,#5C6A16);color:#fff;border-color:#4A5A0E}
+.btn-secondary{background:linear-gradient(180deg,#c69a3e,#a8782e);color:#2a1a00;border-color:#b8883e}
+.btn-gold{background:linear-gradient(180deg,#FFD700,#DAA520);color:#3A2A00;border-color:#B8860B;font-weight:700}
+.btn-outline{background:transparent;color:var(--mc-gold);border:2px solid var(--mc-gold)}
+.celebration{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);display:none;justify-content:center;align-items:center;z-index:1000}
+.celebration.show{display:flex}
+.celebration-content{text-align:center;color:#fff;padding:20px;animation:pop .5s}
+@keyframes pop{0%{transform:scale(0)}80%{transform:scale(1.1)}100%{transform:scale(1)}}
+.celebration h2{font-size:2rem;margin-bottom:10px;text-shadow:2px 2px 0 #3D4A0E}
+.mode-toggle{display:flex;justify-content:center;gap:4px;margin:8px 0}
+.mode-btn{padding:6px 16px;background:linear-gradient(180deg,#5a5a7a,#4a4a6a);border:2px solid #5a5a7a;color:#fff;cursor:pointer;font-size:.78rem;font-family:inherit;box-shadow:0 2px 0 #2a2a4a}
+.mode-btn:active{transform:translateY(2px);box-shadow:none}
+.mode-btn.active{background:linear-gradient(180deg,#7B8D1E,#5C6A16);border-color:#4A5A0E;color:#fff}
+.progress-bar{background:#3a3a3a;height:6px;margin:6px 0;overflow:hidden;border:1px solid #555}
+.progress-fill{background:linear-gradient(90deg,#7B8D1E,#FFD700);height:100%;transition:width .4s}
+.score-display{text-align:center;font-size:.9rem;color:var(--mc-gold);margin:8px 0}
+.mp3-hint{font-size:.7rem;color:var(--text-light);margin-top:10px;padding:8px;background:rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.05)}
+@media(max-width:600px){
+  .week-grid{grid-template-columns:repeat(2,1fr)}
+  .quiz-options{grid-template-columns:1fr}
+
+/* Quiz exercise cards (new) */
+.quiz-card{padding:12px;background:rgba(0,0,0,.2);border:1px solid #4a4a6e;margin-bottom:10px;border-radius:6px}
+.quiz-num{font-weight:700;color:var(--mc-gold);margin-right:4px}
+.tag-phonics{display:inline-block;background:rgba(123,141,30,.25);color:var(--mc-grass);font-size:.7rem;padding:1px 6px;border-radius:3px;margin-right:4px;vertical-align:middle}
+.tag-comp{display:inline-block;background:rgba(59,130,246,.25);color:#60a5fa;font-size:.7rem;padding:1px 6px;border-radius:3px;margin-right:4px;vertical-align:middle}
+.quiz-opt{display:block;width:100%;padding:8px 12px;margin:4px 0;background:linear-gradient(180deg,#5a5a7a,#4a4a6a);border:2px solid #5a5a7a;border-radius:4px;cursor:pointer;font-size:.82rem;color:#fff;font-family:inherit;text-align:left;transition:all .1s}
+.quiz-opt:hover{background:linear-gradient(180deg,#6a6a8a,#5a5a7a);border-color:#7a7a9a}
+.quiz-opt:disabled{opacity:.8}
+.quiz-result{padding:6px;border-radius:4px;font-size:.82rem;font-weight:600}
+@media(max-width:600px){.quiz-opt{font-size:.78rem;padding:10px 8px}}
+  header h1{font-size:.8rem}
+  .sentence-en{font-size:.95rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>⛏️ Wonders G2 预习 · 复习</h1>
+  <div style="margin-top:4px;font-size:.65rem;color:var(--text-light);letter-spacing:1px">
+    Unit 5 · Unit 6
+  </div>
+</header>
+
+<div class="nav">
+  <button onclick="showSec('home')">🏠 首页</button>
+  <button onclick="showSec('overview');renderOverview()">📋 总览</button>
+  <button onclick="showSec('learn')">📖 词汇</button>
+  <button onclick="showSec('story');renderStory()">📖 课文</button>
+  <button onclick="showSec('grammar');renderGrammar()">📐 语法</button>
+  <button onclick="showSec('writing');renderWriting()">✏️ 写作</button>
+  <button onclick="showSec('quiz');renderQuiz()">🎯 复习</button>
+</div>
+
+<main>
+<!-- ===== HOME ===== -->
+<section id="sec-home" class="section active">
+  <div class="card">
+    <h2>🏆 Wonders G2 预习复习</h2>
+    <p style="font-size:.8rem;color:var(--text-light);margin:6px 0">
+      Unit 5 "Let's Make a Difference" · Unit 6 "How on Earth"
+    </p>
+    <p style="font-size:.75rem;color:#888;margin-bottom:8px">
+      预习: 10-15分钟课前快速浏览 · 复习: 10-15分钟课后巩固
+    </p>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="modePreview" onclick="setMode('preview')">📖 预习模式</button>
+      <button class="mode-btn" id="modeReview" onclick="setMode('review')">🎯 复习模式</button>
+    </div>
+    <div id="modeDesc" style="font-size:.78rem;color:var(--text-light);text-align:center;margin:6px 0">
+      看英文 → 中文翻译 → 句型分析 → 仿写练习
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="totalProg" style="width:0%"></div></div>
+    <div style="text-align:center;font-size:.72rem;color:var(--text-light);margin-top:4px">
+      <span id="learnedCount">0</span> / <span id="totalCount">80</span> 单词已学
+    </div>
+  </div>
+  <div class="card">
+    <h2>📚 Unit 5: Let's Make a Difference</h2>
+    <div class="week-grid" id="u5Weeks"></div>
+  </div>
+  <div class="card">
+    <h2>📚 Unit 6: How on Earth</h2>
+    <div class="week-grid" id="u6Weeks"></div>
+  </div>
+  <div class="card mp3-hint">
+    🎵 可用本地MP3音频（与PDF同目录）<br>
+    🔊 也可使用浏览器朗读（TTS）
+  </div>
+</section>
+
+<!-- ===== LEARN ===== -->
+<section id="sec-learn" class="section">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+      <h2 id="learnTitle">Week 1</h2>
+      <span class="day-badge">📖 预习</span>
+    </div>
+    <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap" id="learnVocabTags"></div>
+    <div class="progress-bar"><div class="progress-fill" id="learnProg" style="width:0%"></div></div>
+  </div>
+  <div class="controls">
+    <button class="btn-outline" onclick="navLearn(-1)">◀ 上一周</button>
+    <button class="btn-secondary" onclick="toggleMode()">🔄 切换模式</button>
+    <button class="btn-outline" onclick="navLearn(1)">下一周 ▶</button>
+  </div>
+  <div class="preview-arena" id="learnArena"></div>
+</section>
+
+<!-- ===== STORY ===== -->
+<section id="sec-story" class="section">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+      <h2 id="storyTitle">课文精讲</h2>
+      <span class="day-badge">📖 逐句精讲</span>
+    </div>
+    <div id="storyMeta" style="font-size:.78rem;color:var(--text-light);margin-top:4px"></div>
+  </div>
+  <div class="controls">
+    <button class="btn-outline" onclick="navStory(-1)">◀ 上一周</button>
+    <button class="btn-secondary" onclick="showSec('learn')">📖 回预习</button>
+    <button class="btn-outline" onclick="navStory(1)">下一周 ▶</button>
+  </div>
+  <div class="preview-arena" id="storyArena"></div>
+</section>
+
+
+
+<!-- ===== OVERVIEW ===== -->
+<section id="sec-overview" class="section">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+      <h2 id="ovTitle">课文总览</h2>
+      <span class="day-badge">📋 总览</span>
+    </div>
+    <div id="ovContent" style="margin-top:8px"></div>
+  </div>
+  <div class="controls">
+    <button class="btn-outline" onclick="navOverview(-1)">◀ 上一周</button>
+    <button class="btn-secondary" onclick="showSec('learn')">📖 词汇</button>
+    <button class="btn-outline" onclick="navOverview(1)">下一周 ▶</button>
+  </div>
+</section>
+
+<!-- ===== GRAMMAR ===== -->
+<section id="sec-grammar" class="section">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+      <h2 id="grammarTitle">重点句式 & 语法</h2>
+      <span class="day-badge">📐 语法</span>
+    </div>
+    <div id="grammarContent" style="margin-top:8px"></div>
+  </div>
+  <div class="controls">
+    <button class="btn-outline" onclick="navGrammar(-1)">◀ 上一周</button>
+    <button class="btn-secondary" onclick="showSec('learn')">📖 词汇</button>
+    <button class="btn-outline" onclick="navGrammar(1)">下一周 ▶</button>
+  </div>
+</section>
+
+<!-- ===== WRITING ===== -->
+<section id="sec-writing" class="section">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+      <h2 id="writingTitle">仿写范文 & 写作指导</h2>
+      <span class="day-badge">✏️ 写作</span>
+    </div>
+    <div id="writingContent" style="margin-top:8px"></div>
+  </div>
+  <div class="controls">
+    <button class="btn-outline" onclick="navWriting(-1)">◀ 上一周</button>
+    <button class="btn-secondary" onclick="showSec('learn')">📖 词汇</button>
+    <button class="btn-outline" onclick="navWriting(1)">下一周 ▶</button>
+  </div>
+</section>
+
+<!-- ===== QUIZ / REVIEW ===== -->
+<section id="sec-quiz" class="section">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+      <h2 id="quizTitle">🎯 复习闯关</h2>
+      <span class="day-badge">🎯 复习</span>
+    </div>
+    <div id="quizMeta" style="font-size:.82rem;color:var(--text-light);margin-top:4px"></div>
+    <div id="quizContent" style="margin-top:8px"></div>
+  </div>
+  <div class="controls">
+    <button class="btn-outline" onclick="navQuiz(-1)">◀ 上一周</button>
+    <button class="btn-secondary" onclick="showSec('learn')">📖 词汇</button>
+    <button class="btn-outline" onclick="navQuiz(1)">下一周 ▶</button>
+  </div>
+</section>
+</main>
+
+<div class="celebration" id="celebration">
+  <div class="celebration-content" id="celebContent">
+    <h2>🎉 太棒了!</h2>
+    <p id="celebText" style="color:var(--mc-gold);font-size:1.1rem;margin-top:8px"></p>
+  </div>
+</div>
+
+<script>
+// ===== VOCABULARY DATA =====
+const DATA = {
+  u5: {
+    title: 'Unit 5: Let\'s Make a Difference',
+    weeks: [
+      {
+        title: 'Week 1 — Being a Good Citizen',
+        theme: 'Being a Good Citizen',
+        overview: {
+          essentialQuestion: 'What do good citizens do?',
+          genre: 'Realistic Fiction',
+          coreGrammar: 'Pronouns (subject/object)',
+          coreSkills: 'Summarize, Point of View, Realistic Fiction',
+          storyTitle: 'A Difficult Decision',
+          genreDesc: 'Realistic Fiction — has characters that talk and act like real people; has a setting that could be a real place; can be told in the first person.'
+        },
+        words: [
+          {w:'champion',p:'/ˈtʃæmpiən/',c:'冠军；拥护者',s:'\'I win. I\'m the champion!\' shouted Wyatt.',sc:'\'我赢了，我是冠军！\'怀亚特喊道。',k:['champion 冠军','win 赢','shouted 喊道'],t:'"..." + shouted + 主语 (某人喊道)',e:'\'I\'m the best!\' she shouted. (\'我是最棒的！\'她喊道。)'},
+          {w:'determined',p:'/dɪˈtɜːmɪnd/',c:'坚定的；决心的',s:'\'I\'ve determined that you\'re right!\' said Wyatt.',sc:'\'我确定你是对的！\'怀亚特说。',k:['determined 确定/决定','determine that 确定...','you\'re right 你是对的'],t:'主语 + have/has determined that + 从句',e:'She has determined that she will win. (她确定自己会赢。)'},
+          {w:'issues',p:'/ˈɪʃuːz/',c:'问题；议题',s:'\'Whenever there are issues like this, you help solve the problems,\' said Paul.',sc:'\'每当有这样的问题，你都会帮忙解决，\'保罗说。',k:['issues 问题','solve the problems 解决问题'],t:'Whenever there are issues... 每当有问题...',e:'We can solve these issues together. (我们可以一起解决这些问题。)'},
+          {w:'promises',p:'/ˈprɒmɪsɪz/',c:'承诺',s:'So I made a promise to myself to always try to do the right thing.',sc:'所以我向自己承诺要始终努力做正确的事。',k:['made a promise 做出承诺','promise to do 承诺做','do the right thing 做正确的事'],t:'主语 + make(s) a promise to + 动词原形',e:'She made a promise to help her friend. (她承诺帮助朋友。)'},
+          {w:'responsibility',p:'/rɪˌspɒnsəˈbɪləti/',c:'责任',s:'\'You have a responsibility to return it. It is your duty!\' said Paul.',sc:'\'你有责任归还它，这是你的义务！\'保罗说。',k:['responsibility 责任','have a responsibility to 有责任做','return 归还'],t:'主语 + have/has a responsibility to + 动词原形',e:'We have a responsibility to help others. (我们有责任帮助别人。)'},
+          {w:'rights',p:'/raɪts/',c:'权利',s:'\'I have rights. I found it, so I am claiming it!\' said Wyatt.',sc:'\'我有权利。我找到它了，所以我拥有它！\'怀亚特说。',k:['rights 权利','claim 认领','found 找到'],t:'主语 + have/has + rights (某人有权)',e:'Everyone has the right to learn. (每个人都有学习的权利。)'},
+          {w:'volunteered',p:'/ˌvɒlənˈtɪəd/',c:'自愿做',s:'\'I volunteered my thoughts,\' said Paul.',sc:'\'我主动说出了我的想法，\'保罗说。',k:['volunteered 自愿/主动','volunteer thoughts 主动说出想法'],t:'主语 + volunteered + 名词 (主动提供...)',e:'She volunteered her time to help clean the park. (她自愿花时间帮忙打扫公园。)'},
+          {w:'votes',p:'/vəʊts/',c:'投票',s:'The Parks Department let the kids choose, and the fort got the most votes.',sc:'公园部门让孩子们选择，堡垒获得了最多票数。',k:['votes 票数','got the most votes 获得最多票','choose 选择'],t:'主语 + get(s) + the most votes (获得最多票数)',e:'Our class idea got the most votes. (我们班的主意获得了最多票数。)'},
+        ],
+        grammar: {
+          topic: 'Pronouns (代词)',
+          explanation: 'A pronoun takes the place of one or more nouns. The pronouns I, you, he, she, it, we, and they can be used as subjects in a sentence. Some pronouns come after the verb — me, you, him, her, it, us, and them can be used in the predicate.',
+          examples: ['I like to ski.','You and he like to surf.','Dad gave him the pen.','He used it to write a poem.'],
+          rule: '主语代词: I/you/he/she/it/we/they | 宾格代词: me/you/him/her/it/us/them'
+        },
+        story: [
+          {en:'My best friend Paul and I were excited to go to the park after school.',cn:'我最好的朋友保罗和我很兴奋，放学后要去公园。',k:['excited 兴奋的','after school 放学后'],t:'Subject + were excited to + verb.',e:'I was excited to go to the zoo. (我很兴奋去动物园。)'},
+          {en:'The park had a new fort.',cn:'公园里有个新的堡垒。'},
+          {en:'The Parks Department let the kids choose what kind of equipment to build, and the fort got the most votes.',cn:'公园部门让孩子们选择建什么设施，堡垒获得了最多票数。',k:['let the kids choose 让孩子们选择','got the most votes 获得最多票'],t:'Subject + let + someone + verb + what/how + to + verb.',e:'The teacher let us choose what game to play. (老师让我们选择玩什么游戏。)'},
+          {en:'After school, Mom and I met Paul and his dad at the park.',cn:'放学后，妈妈和我在公园和保罗还有他爸爸碰面。'},
+          {en:'Paul and I raced to the top of the tower.',cn:'保罗和我比赛跑到塔顶。',k:['raced to 比赛去','top of the tower 塔顶'],t:'Subject + raced to + noun.',e:'The boys raced to the finish line. (男孩们比赛冲向终点线。)'},
+          {en:'"I win. I\'m the champion," I shouted. "Look, Paul! Someone left the newest GameMaster here. It\'s mine now!"',cn:'"我赢了，我是冠军！"我喊道。"看，保罗！有人把最新的游戏机落在这儿了。现在它是我的了！"',k:['win 赢','champion 冠军','shouted 喊道'],t:'"..." + 主语 + shouted. 某人喊道……',e:'"I did it!" she shouted. ("我做到了！"她喊道。)'},
+          {en:'Paul raised his eyebrows and looked thoughtful.',cn:'保罗扬起眉毛，看起来若有所思。',k:['raised his eyebrows 扬起眉毛','thoughtful 若有所思的'],t:'Subject + raised + possessive + eyebrows and looked + adjective.',e:'Dad raised his eyebrows and looked surprised. (爸爸扬起眉毛，看起来很惊讶。)'},
+          {en:'"Wyatt, you cannot keep that GameMaster," he said. "You have a responsibility to return it. It is your duty!"',cn:'"怀亚特，你不能留着那个游戏机，"他说。"你有责任归还它。这是你的义务！"',k:['cannot keep 不能留着','responsibility 责任','return 归还','duty 义务'],t:'Subject + has a responsibility to + verb. (某人有责任做某事)',e:'We have a responsibility to help each other. (我们有责任互相帮助。)'},
+          {en:'I asked, "Haven\'t you ever heard the saying, \'finders keepers, losers weepers\'? I have rights. I found it, so I am claiming it."',cn:'我问："你没听过那句俗话吗，\'谁捡到归谁，谁丢了谁哭\'？我有权利。我找到的，所以我认领它。"',k:['heard the saying 听过这句话','have rights 有权利','claiming 认领'],t:'"Haven\'t you ever heard the saying...?" 你没听过……这句话吗？',e:'"Haven\'t you heard the saying \'practice makes perfect\'?" ("你没听过\'熟能生巧\'这句话吗？")'},
+          {en:'We told my mother what happened.',cn:'我们把发生的事情告诉了妈妈。'},
+          {en:'She walked around the park with us so we could try to find the owner of the game.',cn:'她和我们在公园里走了一圈，这样我们可以试着找到游戏机的主人。',k:['try to find 试着找','owner 主人'],t:'Subject + walked around + place + so + subject + could + verb.',e:'We walked around the school so we could find the lost book. (我们在学校走了一圈，这样我们能找到丢失的书。)'},
+          {en:'Soon we saw a boy and his Mom looking for something.',cn:'很快我们看到一个男孩和他妈妈在找什么东西。'},
+          {en:'He looked hopeless, and he burst into tears when we asked him if the game was his.',cn:'他看起来很绝望，当我们问他游戏机是不是他的时，他放声大哭。',k:['burst into tears 放声大哭','hopeless 绝望的'],t:'Subject + burst into tears when... (当……时某人放声大哭)',e:'She burst into tears when she lost her toy. (她丢了玩具时放声大哭。)'},
+          {en:'"Yes," he wailed, "I lost my GameMaster a little while ago."',cn:'"是的，"他哭喊着，"我刚才弄丢了我的游戏机。"'},
+          {en:'"You can do whatever you want, Wyatt, but you know it\'s wrong to keep it," Paul said.',cn:'"你可以做任何你想做的事，怀亚特，但你知道留着它是不对的，"保罗说。',k:['whatever you want 任何你想做的事','it\'s wrong to keep it 留着不对'],t:'You can do whatever you want, but + sentence.',e:'You can eat whatever you want, but don\'t eat too much. (你可以吃任何你想吃的，但别吃太多。)'},
+          {en:'Then he added, "Whenever there are issues like this at school, you\'re the one who helps solve the problems. Now you aren\'t taking your own advice."',cn:'然后他补充道："每当学校有这样的问题时，你都是那个帮忙解决问题的人。现在你自己却不听自己的建议。"',k:['issues 问题','aren\'t taking your own advice 不听自己的建议'],t:'Whenever there are issues like this, ... (每当有这样的问题时……)',e:'Whenever there are problems, my dad helps solve them. (每当有问题，我爸爸都会帮忙解决。)'},
+          {en:'Then Paul added, "I volunteered my thoughts. If you don\'t want to take the help I offered, there\'s nothing I can do."',cn:'然后保罗补充道："我主动说出了我的想法。如果你不想接受我提供的帮助，我也没办法。"',k:['volunteered my thoughts 主动说出想法','offered 提供'],t:'If + subject + don\'t/doesn\'t + verb, there\'s nothing + subject + can do.',e:'If you don\'t want my help, there\'s nothing I can do. (如果你不需要我的帮助，我也没办法。)'},
+          {en:'Paul was right.',cn:'保罗是对的。'},
+          {en:'I couldn\'t keep the game because it wasn\'t mine.',cn:'我不能留着游戏机，因为它不是我的。',k:['couldn\'t keep 不能留着','wasn\'t mine 不是我的'],t:'Subject + couldn\'t + verb + because + 从句.',e:'I couldn\'t eat the candy because it wasn\'t mine. (我不能吃那个糖果，因为它不是我的。)'},
+          {en:'The person who lost it would be upset.',cn:'弄丢它的人会难过的。'},
+          {en:'I cleared my throat and said in my best deep voice, "I\'ve determined that you\'re right!"',cn:'我清了清嗓子，用我最深沉的嗓音说："我确定你是对的！"',k:['cleared my throat 清了清嗓子','determined that 确定'],t:'Subject + cleared + possessive + throat and said... (某人清了清嗓子说……)',e:'He cleared his throat and began to speak. (他清了清嗓子，开始说话。)'},
+          {en:'"I\'m delighted you decided to do the right thing," said Paul.',cn:'"我很高兴你决定做正确的事，"保罗说。',k:['delighted 高兴的','do the right thing 做正确的事'],t:'"I\'m delighted + 从句," said + 主语.',e:'"I\'m delighted you came," said Mom. ("我很高兴你来了，"妈妈说。)'},
+          {en:'Afterward, Mom and I walked home.',cn:'之后，妈妈和我走回家。'},
+          {en:'I was glad I returned the toy to the boy.',cn:'我很高兴我把玩具还给了那个男孩。',k:['returned 归还','glad 高兴的'],t:'Subject + was glad + 从句.',e:'I was glad I helped my friend. (我很高兴我帮助了朋友。)'},
+          {en:'So I made a promise to myself to always try to do the right thing.',cn:'所以我向自己承诺要始终努力做正确的事。',k:['made a promise 承诺','try to do 努力做'],t:'Subject + made a promise to + possessive + self to + verb.',e:'She made a promise to herself to study hard. (她向自己承诺要努力学习。)'},
+          {en:'Now that is a vow I can keep!',cn:'这是一个我能遵守的誓言！'},
+        ],
+        quiz: {
+          phonics: 'Diphthongs ou/ow + Irregular Plurals',
+          exercises: [
+            {type:'phonics',q:'圈出正确的单词: Which word has the /ou/ sound?',options:['mouse','mop'],answer:'mouse'},
+            {type:'phonics',q:'圈出正确的单词: Which word has the /ou/ sound?',options:['ox','owl'],answer:'owl'},
+            {type:'phonics',q:'连一连: mouse 的复数形式是?',options:['mice','mouses','children'],answer:'mice'},
+            {type:'phonics',q:'连一连: child 的复数形式是?',options:['childs','children','childes'],answer:'children'},
+            {type:'comprehension',q:'故事里两个女孩是如何发现小猫丢失的?',options:['她们在电视上看到','她们看到一张寻猫启事','邻居告诉她们的'],answer:'她们看到一张寻猫启事'},
+            {type:'comprehension',q:'Cora 对小猫丢失是什么感受?',options:['开心兴奋','伤心难过','无所谓'],answer:'伤心难过'},
+            {type:'comprehension',q:'故事中的叙述者 (Pam) 是什么态度?',options:['她认为还有希望','她不想去找猫','她责怪Sally'],answer:'她认为还有希望'},
+            {type:'comprehension',q:'Sally 找到小猫后是什么感受?',options:['疲惫无聊','感激开心','生气'],answer:'感激开心'},
+          ]
+        },
+      },
+      {
+        title: 'Week 2 — Cooperation Works!',
+        theme: 'Cooperation Works!',
+        overview: {
+          essentialQuestion: 'How do people get along?',
+          genre: 'Fiction',
+          coreGrammar: 'Pronouns (subject/object)',
+          coreSkills: 'Summarize, Point of View, Fiction, Idioms',
+          storyTitle: 'Soccer Friends',
+          genreDesc: 'Fiction — has made-up characters and events; has a problem and a solution.'
+        },
+        words: [
+          {w:'amused',p:'/əˈmjuːzd/',c:'被逗乐的',s:'The girls laughed, but Kelly was not amused.',sc:'女孩们笑了，但凯莉并不觉得好笑。',k:['not amused','laughed','upset'],t:'Subject + was/were not amused.',e:'The children laughed at the joke, but the teacher was not amused. 孩子们听了笑话笑了，但老师并不觉得好笑。'},
+          {w:'cooperate',p:'/kəʊˈɒpəreɪt/',c:'合作',s:'I think our team can be great if we cooperate and work together.',sc:'我想如果我们合作并一起努力，我们的团队会很棒。',k:['work together','team','great'],t:'If we cooperate and work together, ...',e:'If we cooperate and work together, we can finish the project on time. 如果我们合作并一起努力，就能按时完成项目。'},
+          {w:'describe',p:'/dɪˈskraɪb/',c:'描述',s:'Can you describe what\'s wrong?',sc:'你能描述一下出了什么问题吗？',k:['describe what\'s wrong','mom asked','tell'],t:'Can you describe what / how / why ...?',e:'Can you describe what happened at the park? 你能描述一下公园里发生了什么吗？'},
+          {w:'entertained',p:'/ˌentəˈteɪnd/',c:'被娱乐的',s:'Kelly watched as Selena entertained some girls by bouncing the ball on her head.',sc:'凯莉看着塞莱娜用头颠球来逗一些女孩开心。',k:['entertained some girls','bouncing the ball','showing off'],t:'Subject + entertained + someone + by + doing something.',e:'The clown entertained the children by making balloon animals. 小丑通过做气球动物来逗孩子们开心。'},
+          {w:'imagination',p:'/ɪˌmædʒɪˈneɪʃən/',c:'想象力',s:'She would use her imagination to picture the ball, and then she would fly toward it.',sc:'她会运用想象力想象球的位置，然后飞快地冲过去。',k:['use her imagination','picture the ball','fly toward it'],t:'Use one\'s imagination to + verb.',e:'I use my imagination to draw a beautiful castle. 我用想象力画出一座美丽的城堡。'},
+          {w:'interact',p:'/ˌɪntərˈækt/',c:'互动',s:'She liked to chat and interact with them.',sc:'她喜欢和他们聊天交流。',k:['chat and interact','friends','talk'],t:'Subject + likes to + interact with + someone.',e:'The students like to interact with each other during group work. 学生们喜欢在小组活动中互相交流。'},
+          {w:'patient',p:'/ˈpeɪʃənt/',c:'耐心的',s:'She could not be patient because she just loved racing to get the ball.',sc:'她无法保持耐心，因为她就是喜欢冲过去抢球。',k:['could not be patient','loved racing','excited'],t:'Subject + could not be patient because ...',e:'He could not be patient because he was so excited about the trip. 他无法保持耐心，因为他对这次旅行太兴奋了。'},
+          {w:'peaceful',p:'/ˈpiːsfəl/',c:'和平的；平静的',s:'Kelly practiced at home during the calm, peaceful mornings.',sc:'凯莉在宁静平和的早晨在家练习。',k:['calm, peaceful mornings','practiced at home','quiet'],t:'During the calm, peaceful + noun, ...',e:'I like to read books during the calm, peaceful evenings. 我喜欢在宁静平和的傍晚读书。'},
+        ],
+        grammar: {
+          topic: 'Pronouns (代词)',
+          explanation: 'A pronoun takes the place of one or more nouns. The pronouns I, you, he, she, it, we, and they can be used as subjects. The pronouns me, you, him, her, it, us, and them can be used in the predicate.',
+          examples: ['I like to ski.','You and he like to surf.','Dad gave him the pen.','He used it to write a poem.'],
+          rule: '主语代词: I/you/he/she/it/we/they | 宾格代词: me/you/him/her/it/us/them'
+        },
+        story: [
+          {en:'Kelly couldn\'t wait until soccer season began.',cn:'凯莉等不及足球赛季开始了。',k:['couldn\'t wait 等不及','soccer season 足球赛季'],t:'Subject + couldn\'t wait until + noun + verb.',e:'I couldn\'t wait until summer vacation began. (我等不及暑假开始了。)'},
+          {en:'She could not be patient because she just loved racing to get the ball.',cn:'她无法保持耐心，因为她就是喜欢冲过去抢球。',k:['could not be patient 无法耐心','loved racing 喜欢冲抢'],t:'Subject + could not be patient because + 从句.',e:'He could not be patient because he was so excited. (他无法耐心因为他太兴奋了。)'},
+          {en:'She would use her imagination to picture the ball, and then she would fly toward it.',cn:'她会用想象力想象球的位置，然后飞快地冲过去。',k:['use her imagination 运用想象力','picture 想象','fly toward 飞向'],t:'Use one\'s imagination to + verb.',e:'I use my imagination to draw a castle. (我用想象力画城堡。)'},
+          {en:'Kelly practiced at home during the calm, peaceful mornings.',cn:'凯莉在宁静平和的早晨在家练习。',k:['calm, peaceful mornings 宁静平和的早晨'],t:'During the calm, peaceful + noun, ...',e:'I like to read during the calm, peaceful evenings. (我喜欢在宁静的傍晚读书。)'},
+          {en:'At the first team practice, Kelly greeted her friends.',cn:'第一次球队训练，凯莉和朋友们打招呼。'},
+          {en:'She liked to chat and interact with them.',cn:'她喜欢和他们聊天交流。',k:['chat and interact 聊天交流'],t:'Subject + likes to + interact with + someone.',e:'The students like to interact with each other. (学生们喜欢互相交流。)'},
+          {en:'Then she saw a new girl.',cn:'然后她看到了一个新女孩。'},
+          {en:'"That\'s Selena. She\'s a really fast runner," reported Kelly\'s friend Tara.',cn:'"那是塞莱娜，她跑得真快，"凯莉的朋友塔拉说。',k:['fast runner 跑得快的人'],t:'"That\'s + name. He/She\'s a really + adjective + noun," reported + possessive + friend.',e:'"That\'s Tom. He\'s a really good singer," reported my friend. ("那是汤姆，他唱歌真棒，"我朋友说。)'},
+          {en:'At first, Kelly held her tongue and said nothing.',cn:'起初，凯莉一言不发。',k:['held her tongue 保持沉默','said nothing 什么也没说'],t:'At first, ... held + possessive + tongue and said nothing.',e:'At first, the new student held her tongue in class. (起初新学生在班里一言不发。)'},
+          {en:'She was worried.',cn:'她很担心。'},
+          {en:'She had always been the fastest runner on the team.',cn:'她一直是队里跑得最快的。'},
+          {en:'Then she said, "I can beat her."',cn:'然后她说："我能赢她。"'},
+          {en:'"On your mark, get set, GO!" the coach shouted.',cn:'"各就各位，预备，跑！"教练喊道。'},
+          {en:'Kelly ran as fast as she could but she noticed Selena getting ahead of her.',cn:'凯莉拼命跑，但她发现塞莱娜超过了她。',k:['as fast as she could 拼命地跑','getting ahead of 超过'],t:'Subject + verb + as + adverb + as + pronoun + could but...',e:'He ran as fast as he could but he missed the bus. (他拼命跑但还是错过了公交车。)'},
+          {en:'Kelly tried her best but couldn\'t match Selena.',cn:'凯莉尽了最大努力，但还是比不上塞莱娜。',k:['tried her best 尽了最大努力','couldn\'t match 比不上'],t:'Subject + tried + possessive + best but couldn\'t + verb.',e:'I tried my best but couldn\'t finish on time. (我尽了最大努力还是没能按时完成。)'},
+          {en:'Later, Kelly watched as Selena entertained some girls by bouncing the ball on her head.',cn:'后来，凯莉看着塞莱娜用头颠球逗一些女孩开心。',k:['entertained 逗乐','bouncing the ball 颠球'],t:'Subject + watched as + someone + verb + by + doing something.',e:'The children watched as the clown entertained them by making balloons. (孩子们看着小丑做气球逗他们开心。)'},
+          {en:'The girls laughed, but Kelly was not amused.',cn:'女孩们笑了，但凯莉并不觉得好笑。',k:['laughed 笑了','not amused 不觉得好笑'],t:'Subject + verb, but + subject + was/were not amused.',e:'Everyone laughed at the joke, but the teacher was not amused. (大家都笑了，但老师并不觉得好笑。)'},
+          {en:'That night, Mom could tell Kelly was upset.',cn:'那天晚上，妈妈看出凯莉不开心。'},
+          {en:'"Can you describe what\'s wrong?" she asked.',cn:'"你能描述一下出了什么问题吗？"她问。',k:['describe 描述','what\'s wrong 怎么了'],t:'Can you describe what / how / why...?',e:'Can you describe what happened? (你能描述一下发生了什么吗？)'},
+          {en:'"A new girl named Selena beat me at the races. It stinks to get beaten!" said Kelly.',cn:'"一个叫塞莱娜的新女孩在赛跑中赢了我。输了真糟糕！"凯莉说。'},
+          {en:'"I know that\'s disappointing for you," Mom said. "But it also sounds like good news for your team."',cn:'"我知道这让你很失望，"妈妈说。"但这对你的团队来说也是好消息。"',k:['disappointing 令人失望的','sounds like 听起来像','good news 好消息'],t:'"I know that\'s + adjective + for you," + subject + said.',e:'"I know that\'s hard for you," Mom said. ("我知道这很难，"妈妈说。)"'},
+          {en:'Kelly thought about her Mom\'s words.',cn:'凯莉想了想妈妈的话。'},
+          {en:'At the next practice, the team played a game.',cn:'下一次训练时，球队打了一场比赛。'},
+          {en:'Kelly and Selena were on the same team and Selena was goalie.',cn:'凯莉和塞莱娜在同一队，塞莱娜是守门员。'},
+          {en:'She quickly blocked a goal.',cn:'她迅速挡住了一个球。'},
+          {en:'Then Kelly got the ball and thumped it hard toward the net.',cn:'然后凯莉拿到球，用力踢向球门。',k:['blocked 挡住','thumped 用力踢'],t:'Subject + quickly blocked + and + thumped + ...',e:'The player blocked the pass and kicked the ball. (球员挡住了传球并踢出了球。)'},
+          {en:'She scored the winning goal!',cn:'她进了制胜的一球！'},
+          {en:'After practice, Selena said to Kelly, "You were really great today."',cn:'训练后，塞莱娜对凯莉说："你今天表现真棒。"'},
+          {en:'"Thanks, so were you. I think our team can be great if we cooperate and work together," said Kelly.',cn:'"谢谢，你也是。我想如果我们合作并一起努力，我们的团队会很棒，"凯莉说。',k:['cooperate 合作','work together 一起努力'],t:'I think + subject + can be + adjective + if + subject + verb.',e:'I think our class can be great if we help each other. (我想如果我们互相帮助，我们班会很棒。)'},
+          {en:'"I think you\'re right about that," said Selena.',cn:'"我觉得你说得对，"塞莱娜说。'},
+          {en:'"I\'d love to keep playing," Kelly said. "Want to come over to my house and practice?"',cn:'"我很想继续踢球，"凯莉说。"要不要来我家练习？"'},
+        ],
+        quiz: {
+          phonics: 'le 音节 (tumble, tunnel, puddle, total)',
+          exercises: [
+            {type:'phonics',q:'合成单词: tum + ble = ?',options:['tumble','table','trouble'],answer:'tumble'},
+            {type:'phonics',q:'合成单词: tun + nel = ?',options:['tunnel','turtle','total'],answer:'tunnel'},
+            {type:'phonics',q:'合成单词: pud + dle = ?',options:['puddle','puzzle','paddle'],answer:'puddle'},
+            {type:'comprehension',q:'故事发生在哪里?',options:['在家里','在学校','在公园'],answer:'在学校'},
+            {type:'comprehension',q:'Luz 对扮演 Henny Penny 是什么态度?',options:['她觉得自己应该演','她不想演','她不关心'],answer:'她觉得自己应该演'},
+            {type:'comprehension',q:'Mr. Webb 怎么解决角色分配问题?',options:['直接指定Luz','进行试镜','抽签决定'],answer:'进行试镜'},
+          ]
+        },
+      },
+      {
+        title: 'Week 3 — Our Heroes',
+        theme: 'Our Heroes',
+        overview: {
+          essentialQuestion: 'What makes a hero?',
+          genre: 'Biography / Expository Text',
+          coreGrammar: 'Pronouns with -self/-selves',
+          coreSkills: 'Main Idea, Key Details, Text Features',
+          storyTitle: 'Cesar Chavez / Bessie Coleman',
+          genreDesc: 'Biography — tells the story of a real person\'s life; gives facts and information.'
+        },
+        words: [
+          {w:'agree',p:'/əˈɡriː/',c:'同意',s:'Bessie did not agree with the rules, but she could not find anyone to teach her to fly.',sc:'贝茜不同意这些规定，但她找不到任何人教她飞行。',k:['did not agree with the rules','could not find','teach her to fly'],t:'Subject + did not agree with + noun.',e:'I did not agree with the decision, so I spoke up. 我不同意这个决定，所以我发表了意见。'},
+          {w:'challenging',p:'/ˈtʃælɪndʒɪŋ/',c:'有挑战性的',s:'Bessie performed challenging flying stunts like figure eights and tailspins.',sc:'贝茜表演了具有挑战性的飞行特技，如八字飞行和尾旋。',k:['challenging flying stunts','figure eights','tailspins'],t:'Subject + performed + challenging + noun.',e:'The gymnast performed a challenging routine at the competition. 这位体操运动员在比赛中表演了一套具有挑战性的动作。'},
+          {w:'discover',p:'/dɪˈskʌvə/',c:'发现',s:'Cesar and his family would quickly discover that migrant farm workers had difficult lives.',sc:'塞萨尔和他的家人很快就发现 migrant 农场工人的生活很艰难。',k:['discover','difficult lives','farm workers'],t:'Subject + would quickly discover that ...',e:'The explorers would quickly discover that the jungle was full of surprises. 探险家们很快就发现丛林里充满了惊喜。'},
+          {w:'heroes',p:'/ˈhɪərəʊz/',c:'英雄',s:'Who are your heroes? For many farm workers, Cesar Chavez is a hero.',sc:'谁是你的英雄？对许多农场工人来说，塞萨尔·查韦斯是一位英雄。',k:['heroes','farm workers','Cesar Chavez'],t:'Who are your heroes?',e:'Who are your heroes? My mom and dad are my heroes. 谁是你的英雄？我的爸爸妈妈是我的英雄。'},
+          {w:'interest',p:'/ˈɪntrəst/',c:'兴趣；使...感兴趣',s:'Cesar had a strong interest in education.',sc:'塞萨尔对教育有着浓厚的兴趣。',k:['strong interest','education','desire to learn'],t:'Subject + had a strong interest in + noun.',e:'She has a strong interest in science and experiments. 她对科学和实验有着浓厚的兴趣。'},
+          {w:'perform',p:'/pəˈfɔːm/',c:'表演；表现',s:'The work they had to perform made their backs hurt and their fingers bleed.',sc:'他们必须做的工作让他们的背疼痛、手指流血。',k:['work to perform','backs hurt','fingers bleed'],t:'The work + subject + had to perform + made ...',e:'The tasks we had to perform were very tiring. 我们必须完成的任务非常累人。'},
+          {w:'study',p:'/ˈstʌdi/',c:'学习；研究',s:'First Bessie had to study how to inspect a plane before she could fly it.',sc:'首先贝茜必须学习如何检查飞机，然后才能驾驶它。',k:['study how to inspect','plane','learn'],t:'Subject + had to study how to + verb.',e:'First you need to study how to use the tools before starting the project. 在开始项目之前，你需要先学习如何使用工具。'},
+          {w:'succeed',p:'/səkˈsiːd/',c:'成功',s:'His mother taught Cesar to find peaceful ways to solve problems. These lessons helped him succeed later in life.',sc:'他的母亲教塞萨尔寻找和平的方式解决问题。这些教训帮助他在以后的生活中取得成功。',k:['succeed','peaceful ways','solve problems'],t:'... helped + someone + succeed.',e:'Hard work and practice helped her succeed in the competition. 努力和练习帮助她在比赛中成功了。'},
+        ],
+        grammar: {
+          topic: 'Pronouns with -self/-selves (反身代词)',
+          explanation: 'Some pronouns in the predicate tell about an action that a subject does for or to itself. The ending -self is used with singular pronouns. The ending -selves is used with plural pronouns. A possessive pronoun takes the place of a possessive noun. My, your, his, her, its, our, and their are possessive pronouns.',
+          examples: ['The boy made himself a snack.','We gave ourselves a pear.','I gave my homework to our teacher.'],
+          rule: '反身代词: myself/yourself/himself/herself/itself/ourselves/yourselves/themselves | 物主代词: my/your/his/her/its/our/their'
+        },
+        story: [
+          {en:'Who are your heroes?',cn:'谁是你的英雄？',k:['heroes 英雄'],t:'Who are your + noun?',e:'Who are your role models? (谁是你的榜样？)'},
+          {en:'For many farm workers, Cesar Chavez is a hero.',cn:'对许多农场工人来说，塞萨尔·查韦斯是一位英雄。',k:['farm workers 农场工人','hero 英雄'],t:'For + noun, + subject + is a hero.',e:'For many students, the teacher is a hero. (对许多学生来说，老师是英雄。)'},
+          {en:'He is the brave man who spent his life helping them.',cn:'他是那个用一生帮助他们的勇敢的人。',k:['brave 勇敢的','spent his life 用一生'],t:'Subject + is the + adjective + noun + who + verb.',e:'She is the kind woman who helps everyone. (她是那个帮助每个人的善良女人。)'},
+          {en:'Cesar Chavez was born in Arizona.',cn:'塞萨尔·查韦斯出生在亚利桑那州。'},
+          {en:'His parents taught him about learning, hard work, and helping others.',cn:'他的父母教导他学习、努力工作和帮助他人。',k:['taught him about 教导他','learning 学习','hard work 努力工作','helping others 帮助他人'],t:'Subject + taught + someone + about + noun.',e:'My parents taught me about honesty and kindness. (我的父母教导我诚实和善良。)'},
+          {en:'Cesar had a strong interest in education.',cn:'塞萨尔对教育有着浓厚的兴趣。',k:['strong interest in 浓厚兴趣'],t:'Subject + had a strong interest in + noun.',e:'She has a strong interest in science. (她对科学有浓厚兴趣。)'},
+          {en:'But when Cesar was in the eighth grade, his father had an accident.',cn:'但当塞萨尔上八年级时，他的父亲出了事故。'},
+          {en:'So Cesar had to leave school and work in the fields to help his family.',cn:'所以塞萨尔不得不辍学，到田里干活来养家。',k:['had to leave school 不得不辍学'],t:'Subject + had to + verb + and + verb + to + verb.',e:'He had to stay home and take care of his sister. (他不得不待在家照顾妹妹。)'},
+          {en:'Cesar and his family would quickly discover that migrant farm workers had difficult lives.',cn:'塞萨尔和他的家人很快就发现移民农场工人的生活很艰难。',k:['discover 发现','migrant farm workers 移民农场工人'],t:'Subject + would quickly discover that + 从句.',e:'The explorers would quickly discover that the desert was harsh. (探险家们很快就发现沙漠很严酷。)'},
+          {en:'The work they had to perform made their backs hurt and their fingers bleed.',cn:'他们必须做的工作让他们的背疼痛、手指流血。',k:['perform 执行','backs hurt 背疼'],t:'The work + subject + had to perform + made + noun + verb.',e:'The heavy lifting made his arms ache. (重物搬运让他的胳膊酸痛。)'},
+          {en:'His mother taught Cesar to find peaceful ways to solve problems.',cn:'他的母亲教塞萨尔寻找和平的方式解决问题。',k:['peaceful ways 和平的方式'],t:'Subject + taught + someone + to + verb + adjective + ways to + verb.',e:'The coach taught us to find smart ways to win. (教练教我们找聪明的方法赢。)'},
+          {en:'These lessons helped him succeed later in life.',cn:'这些教训帮助他在以后的生活中取得成功。',k:['succeed 成功'],t:'These lessons helped + someone + succeed.',e:'These lessons helped her become a better person. (这些教训帮助她成为更好的人。)'},
+          {en:'Bessie Coleman was the first African American woman to earn a pilot\'s license.',cn:'贝茜·科尔曼是第一位获得飞行员执照的非裔美国女性。',k:['pilot\'s license 飞行员执照'],t:'Subject + was the first + noun + to + verb.',e:'She was the first girl in her family to go to college. (她是家里第一个上大学的女孩。)'},
+          {en:'Bessie did not agree with the rules, but she could not find anyone to teach her to fly.',cn:'贝茜不同意这些规定，但她找不到任何人教她飞行。',k:['did not agree with 不同意'],t:'Subject + did not agree with + noun, but + subject + could not + verb.',e:'I did not agree with the decision, but I could not change it. (我不同意这个决定，但我无法改变它。)'},
+          {en:'So she moved to France to study.',cn:'所以她搬到法国去学习。'},
+          {en:'First Bessie had to study how to inspect a plane before she could fly it.',cn:'首先贝茜必须学习如何检查飞机，然后才能驾驶它。',k:['inspect a plane 检查飞机'],t:'First + subject + had to study how to + verb + before + subject + could + verb.',e:'First you have to learn how to swim before you can dive. (首先你必须学会游泳才能潜水。)'},
+          {en:'Bessie performed challenging flying stunts like figure eights and tailspins.',cn:'贝茜表演了具有挑战性的飞行特技。',k:['performed 表演','challenging 有挑战性的'],t:'Subject + performed + challenging + noun + like + examples.',e:'The gymnast performed difficult moves like flips. (体操运动员表演了翻转等高难度动作。)'},
+          {en:'She became a hero to many people.',cn:'她成为了许多人心中的英雄。'},
+          {en:'Bessie showed that with courage and determination, you can achieve your dreams.',cn:'贝茜证明了只要有勇气和决心，你就能实现梦想。',k:['courage 勇气','determination 决心','achieve your dreams 实现梦想'],t:'Subject + showed that with + noun + and + noun, + subject + can + verb.',e:'She showed that with hard work, you can succeed. (她证明了只要努力，你就能成功。)'},
+        ],
+        quiz: {
+          phonics: 'oo 发音辨析 (blue vs look) + 缩略词',
+          exercises: [
+            {type:'phonics',q:'should not 的缩略形式是?',options:['shouldn\'t','should\'nt','shouldnot'],answer:'shouldn\'t'},
+            {type:'phonics',q:'would not 的缩略形式是?',options:['wouldn\'t','would\'nt','wouldnot'],answer:'wouldn\'t'},
+            {type:'phonics',q:'are not 的缩略形式是?',options:['aren\'t','arn\'t','are\'nt'],answer:'aren\'t'},
+            {type:'comprehension',q:'Elizabeth Blackwell 是什么人?',options:['第一位女教师','第一位女医生','第一位女护士'],answer:'第一位女医生'},
+            {type:'comprehension',q:'Elizabeth 小时候全家搬到了哪个国家?',options:['英国','美国','法国'],answer:'美国'},
+            {type:'comprehension',q:'为什么 Elizabeth 想成为医生?',options:['她的朋友希望医生是女性','她喜欢学医','家人要求'],answer:'她的朋友希望医生是女性'},
+          ]
+        },
+      },
+      {
+        title: 'Week 4 — Preserving Our Earth',
+        theme: 'Preserving Our Earth',
+        overview: {
+          essentialQuestion: 'How can we protect the Earth?',
+          genre: 'Fiction',
+          coreGrammar: 'Contractions (pronoun + verb)',
+          coreSkills: 'Make Predictions, Problem and Solution, Homophones',
+          storyTitle: 'The Art Project',
+          genreDesc: 'Fiction — tells a story about imaginary characters; includes a problem and solution; often includes dialogue.'
+        },
+        words: [
+          {w:'curious',p:'/ˈkjʊəriəs/',c:'好奇的',s:'Hal said, \'I\'m curious about your idea. I want to learn why you would use old paper.\'',sc:'哈尔说：\'我对你的想法很好奇。我想知道你为什么要用旧纸。\'',k:['curious about','want to learn','old paper'],t:'Subject + is curious about + noun.',e:'I am curious about how robots work. 我对机器人如何工作很好奇。'},
+          {w:'distance',p:'/ˈdɪstəns/',c:'距离；远方',s:'From a distance, the paper cranes appeared to be softly flying.',sc:'从远处看，纸鹤看起来在轻柔地飞翔。',k:['from a distance','paper cranes','softly flying'],t:'From a distance, ... appeared to be ...',e:'From a distance, the mountain appeared to be covered in snow. 从远处看，那座山看起来被雪覆盖了。'},
+          {w:'Earth resources',p:'/ɜːθ rɪˈzɔːsɪz/',c:'地球资源',s:'So we can save Earth\'s resources. When we use recycled paper, we use natural materials and save trees.',sc:'这样我们就能节约地球资源。当我们使用再生纸时，我们使用了天然材料并节约了树木。',k:['save Earth\'s resources','recycled paper','save trees'],t:'We can save Earth\'s resources by + doing something.',e:'We can save Earth\'s resources by turning off the lights when we leave. 我们离开时关灯可以节约地球资源。'},
+          {w:'enormous',p:'/ɪˈnɔːməs/',c:'巨大的',s:'The paper crane mobile hung in the enormous community center room.',sc:'纸鹤挂饰悬挂在巨大的社区中心房间里。',k:['enormous','community center','paper crane mobile'],t:'... hung in the enormous + noun.',e:'The enormous whale swam slowly through the ocean. 巨大的鲸鱼在海洋中缓慢游动。'},
+          {w:'gently',p:'/ˈdʒentli/',c:'温柔地',s:'The crane mobile swayed gently as people walked past.',sc:'当人们走过时，纸鹤挂饰轻轻地摇摆着。',k:['swayed gently','walked past','mobile'],t:'Subject + verb + gently + as ...',e:'The leaves swayed gently in the breeze. 树叶在微风中轻轻摇摆。'},
+          {w:'proudly',p:'/ˈpraʊdli/',c:'自豪地',s:'As the class proudly accepted their prize, they could not stop grinning.',sc:'当全班自豪地接受他们的奖品时，他们止不住地笑。',k:['proudly accepted','prize','grinning'],t:'Subject + proudly + verb + noun.',e:'She proudly showed her award to her parents. 她自豪地向父母展示她的奖项。'},
+          {w:'rarely',p:'/ˈreəli/',c:'很少',s:'Pablo did not often raise his hand. He rarely spoke up, so everyone was surprised when he offered an idea.',sc:'巴勃罗不经常举手。他很少发言，所以当他提出一个主意时，大家都很惊讶。',k:['rarely spoke up','surprised','offered an idea'],t:'Subject + rarely + verb.',e:'She rarely eats junk food because she likes to stay healthy. 她很少吃垃圾食品，因为她想保持健康。'},
+          {w:'supply',p:'/səˈplaɪ/',c:'供应；供给',s:'Mrs. Simon said, \'Our classroom supply of art materials is low because it\'s the end of the year.\'',sc:'西蒙夫人说：\'我们教室的美术材料供应不足了，因为现在是学年末。\'',k:['supply of art materials','low','end of the year'],t:'Our supply of + noun + is low.',e:'Our supply of clean water is low, so we need to save it. 我们的清洁水供应不足了，所以我们需要节约用水。'},
+        ],
+        grammar: {
+          topic: 'Contractions (缩略形式)',
+          explanation: 'A contraction can be the short form of a pronoun combined with a verb. An apostrophe takes the place of the letter or letters that are left out.',
+          examples: ['I\'m sorry that you\'ll miss class today.','We\'re about to call the doctor.','Do you think she\'ll be able to help?'],
+          rule: 'I am = I\'m | you will = you\'ll | we are = we\'re | she will = she\'ll | it is = it\'s'
+        },
+        story: [
+          {en:'"Look! The community center is having an art contest," said Grace.',cn:'"看！社区中心正在举办艺术比赛，"格蕾丝说。'},
+          {en:'She was holding a flyer.',cn:'她拿着一张传单。'},
+          {en:'Mrs. Simon read the flyer aloud.',cn:'西蒙夫人大声读了传单。'},
+          {en:'Everyone agreed they would like to enter the art contest.',cn:'大家都同意他们想参加艺术比赛。'},
+          {en:'Mrs. Simon said, \'Our classroom supply of art materials is low because it\'s the end of the year.\'',cn:'西蒙夫人说："我们教室的美术材料供应不足了，因为现在是学年末。"',k:['supply of art materials 美术材料供应','low 不足'],t:'Our supply of + noun + is low because + 从句.',e:'Our supply of water is low because it hasn\'t rained. (我们的水供应不足因为没下雨。)'},
+          {en:'I\'ll check with Mrs. Rice to see what she has.',cn:'我去问问赖斯老师她有什么。"'},
+          {en:'Mrs. Rice, the art teacher, didn\'t have any art materials.',cn:'美术老师赖斯夫人没有任何美术材料。'},
+          {en:'"I won\'t be getting a supply until next year," she said.',cn:'"我要到明年才有供应，"她说。'},
+          {en:'The whole class was disappointed.',cn:'全班都很失望。'},
+          {en:'"How can we enter the art contest without art materials?" asked Grace.',cn:'"没有美术材料我们怎么参加比赛？"格蕾丝问。'},
+          {en:'"Maybe we can raise some money. We could have a bake sale," suggested Hal.',cn:'"也许我们可以筹点钱。我们可以搞个烘焙义卖，"哈尔建议道。'},
+          {en:'"I don\'t think there\'s time," Mrs. Simon said.',cn:'"我觉得没时间了，"西蒙夫人说。'},
+          {en:'"Let\'s use the paper in the recycling bin," Pablo said.',cn:'"我们用回收箱里的纸吧，"巴勃罗说。'},
+          {en:'Pablo did not often raise his hand.',cn:'巴勃罗不经常举手。'},
+          {en:'He rarely spoke up, so everyone was surprised when he offered an idea.',cn:'他很少发言，所以当他提出主意时大家都很惊讶。',k:['rarely spoke up 很少发言'],t:'Subject + rarely + verb, so + subject + was surprised when + 从句.',e:'She rarely talks, so we were surprised when she gave a speech. (她很少说话，所以我们很惊讶她发表了演讲。)'},
+          {en:'I want to learn why you would use old paper.',cn:'我想知道你为什么用旧纸。',k:['curious about 对……好奇'],t:'Subject + is curious about + noun.',e:'I am curious about how planes fly. (我对飞机如何飞行很好奇。)'},
+          {en:'"So we can save Earth\'s resources," replied Pablo.',cn:'"这样我们就能节约地球资源，"巴勃罗回答。',k:['save Earth\'s resources 节约地球资源'],t:'We can save Earth\'s resources by + doing something.',e:'We can save Earth\'s resources by recycling. (我们可以通过回收来节约地球资源。)'},
+          {en:'"When we use recycled paper, we use natural materials and save trees."',cn:'"当我们用再生纸时，我们使用了天然材料并节约了树木。"'},
+          {en:'"We can also use this old string and these wire hangers," added Grace.',cn:'"我们还可以用这些旧绳子和衣架，"格蕾丝补充道。'},
+          {en:'Now the class had to decide what to do with the materials.',cn:'现在全班得决定用这些材料做什么。'},
+          {en:'Pablo had another idea.',cn:'巴勃罗有了另一个主意。'},
+          {en:'"We can fold the paper into cranes. Then we can attach the cranes to a frame to make a mobile."',cn:'"我们可以把纸折成鹤，然后固定在框架上做一个挂饰。"'},
+          {en:'Mrs. Simon taught the children how to fold the paper into cranes.',cn:'西蒙夫人教孩子们如何把纸折成鹤。'},
+          {en:'Then everyone helped.',cn:'然后每个人都帮忙了。'},
+          {en:'On the day of the art contest, the paper crane mobile hung in the enormous community center room.',cn:'艺术比赛那天，纸鹤挂饰悬挂在巨大的社区中心房间里。',k:['enormous 巨大的'],t:'On the day of + noun, + subject + hung in + location.',e:'On the day of the festival, the decorations hung in the hall. (节日那天，装饰品挂在大厅里。)'},
+          {en:'The crane mobile swayed gently as people walked past.',cn:'纸鹤挂饰轻轻地摇摆着。',k:['swayed gently 轻轻摇摆'],t:'Subject + swayed gently as + subject + verb.',e:'The flowers swayed gently as the wind blew. (花儿在风中轻轻摇摆。)'},
+          {en:'From a distance, the paper cranes appeared to be softly flying.',cn:'从远处看，纸鹤看起来在轻柔地飞翔。',k:['from a distance 从远处','appeared to be 看起来'],t:'From a distance, + subject + appeared to be + doing.',e:'From a distance, the birds appeared to be dancing. (从远处看，鸟儿们在翩翩起舞。)'},
+          {en:'The judges checked each art project.',cn:'评委们检查了每个艺术作品。'},
+          {en:'They looked closely at the crane mobile.',cn:'他们仔细看了看纸鹤挂饰。'},
+          {en:'The paper crane mobile won the prize for the most creative use of materials.',cn:'纸鹤挂饰获得了最具创意材料利用奖。'},
+          {en:'As the class proudly accepted their prize, they could not stop grinning.',cn:'当全班自豪地接受奖品时，他们止不住地笑。',k:['proudly accepted 自豪地接受','could not stop grinning 止不住地笑'],t:'As + subject + proudly accepted + noun, + subject + could not stop + doing.',e:'As she proudly accepted the award, she could not stop smiling. (当她自豪地接受奖项时，止不住地笑。)'},
+          {en:'Grace exclaimed, "We made our art project, and we saved the Earth at the same time!"',cn:'格蕾丝惊叹道："我们做了艺术项目，同时保护了地球！"'},
+        ],
+        quiz: {
+          phonics: 'aw/au 发音 + 复合词',
+          exercises: [
+            {type:'phonics',q:'en + joy 合成的词是?',options:['enjoy','enjoyed','enjoining'],answer:'enjoy'},
+            {type:'phonics',q:'weath + er 合成的词是?',options:['weather','whether','weathered'],answer:'weather'},
+            {type:'phonics',q:'tooth + paste 合成的词是?',options:['toothpaste','toothbrush','toothpick'],answer:'toothpaste'},
+            {type:'comprehension',q:'Grover 学校的问题是什么?',options:['学生迟到','学生浪费太多纸','学生不写作业'],answer:'学生浪费太多纸'},
+            {type:'comprehension',q:'Ms. Hines 用了什么办法来解决?',options:['惩罚扔纸的学生','举办回收比赛','减少用纸量'],answer:'举办回收比赛'},
+            {type:'comprehension',q:'获胜班级的奖品是什么?',options:['额外10分钟休息','零食','奖杯'],answer:'额外10分钟休息'},
+          ]
+        },
+      },
+      {
+        title: 'Week 5 — Rights and Rules',
+        theme: 'Rights and Rules',
+        overview: {
+          essentialQuestion: 'Why are rules important?',
+          genre: 'Expository Text',
+          coreGrammar: 'Pronoun-Verb Agreement',
+          coreSkills: 'Main Idea, Key Details, Text Structure',
+          storyTitle: 'Rights and Rules / The Declaration of Independence',
+          genreDesc: 'Expository Text — gives facts and information about a topic; includes text features.'
+        },
+        words: [
+          {w:'exclaimed',p:'/ɪkˈskleɪmd/',c:'惊叫；呼喊',s:'Janet exclaimed, \'That\'s where the Declaration of Independence was signed!\'',sc:'珍妮特惊呼道：\'那就是《独立宣言》签署的地方！\'',k:['exclaimed','Declaration of Independence','signed'],t:'Subject + exclaimed, \'...!\'',e:'\'Look at that rainbow!\' exclaimed the little girl. \'看那道彩虹！\'小女孩惊叹道。'},
+          {w:'finally',p:'/ˈfaɪnəli/',c:'最终',s:'Finally, Janet and her family explored Franklin Court.',sc:'最后，珍妮特和她的家人参观了富兰克林庭院。',k:['finally','explored','Franklin Court'],t:'Finally, subject + verb + ...',e:'Finally, we reached the top of the mountain. 最后，我们到达了山顶。'},
+          {w:'form',p:'/fɔːm/',c:'形成；组成',s:'The colonies would be united to form a new country together.',sc:'各殖民地会联合起来，共同组成一个新的国家。',k:['united to form','new country','colonies'],t:'Subject + would be united to + verb.',e:'The groups united to form a new club. 这些小组联合起来组成了一个新俱乐部。'},
+          {w:'history',p:'/ˈhɪstəri/',c:'历史',s:'The Changs went there to learn about their country\'s history or past.',sc:'张家去那里是为了了解他们国家的历史或过去。',k:['history','learn about','country\'s past'],t:'Learn about + possessive + history.',e:'We visited the museum to learn about our city\'s history. 我们参观了博物馆，了解我们城市的历史。'},
+          {w:'public',p:'/ˈpʌblɪk/',c:'公共的',s:'It is said that the famous bell rang on July 8, 1776 for the first public reading of the Declaration of Independence.',sc:'据说那口著名的钟在1776年7月8日响起，那是《独立宣言》第一次公开宣读。',k:['public reading','Declaration of Independence','Liberty Bell'],t:'First public + noun + of ...',e:'The first public performance of the play was a great success. 这部戏剧的首次公开演出非常成功。'},
+          {w:'rules',p:'/ruːlz/',c:'规则',s:'Rules are important. They help to keep order in a country and give people rights.',sc:'规则很重要。它们有助于维持国家秩序并赋予人们权利。',k:['rules are important','keep order','give rights'],t:'Rules are important because ...',e:'Rules are important because they keep everyone safe. 规则很重要，因为它们保证每个人的安全。'},
+          {w:'united',p:'/juːˈnaɪtɪd/',c:'团结的；联合的',s:'In 1776, this statement was written to tell the King of England that the colonies were free from his rule. The colonies would be united to form a new country together.',sc:'1776年，这份声明被写下来告知英格兰国王，各殖民地已脱离他的统治。各殖民地将联合起来组成一个新的国家。',k:['united','colonies','new country'],t:'Subject + would be united to + verb.',e:'The students united to clean up the park. 学生们联合起来清理公园。'},
+          {w:'writers',p:'/ˈraɪtəz/',c:'作家',s:'Franklin was one of the writers of the Declaration of Independence.',sc:'富兰克林是《独立宣言》的起草者之一。',k:['writers','Declaration of Independence','Benjamin Franklin'],t:'Subject + was one of the writers of + noun.',e:'She was one of the writers of the school newspaper. 她是校报的撰稿人之一。'},
+        ],
+        grammar: {
+          topic: 'Pronoun-Verb Agreement (主谓一致)',
+          explanation: 'The verb of a sentence must agree with the pronoun that is the subject of the verb.',
+          examples: ['She laughs while we perform our play.','She draws a map.','They think we may be lost.'],
+          rule: '第三人称单数 (he/she/it) + 动词加-s | 其他人称用动词原形'
+        },
+        story: [
+          {en:'On the Fourth of July, skies across the United States light up.',cn:'七月四日，全美国的天空都亮了起来。'},
+          {en:'It\'s Independence Day!',cn:'这是独立日！'},
+          {en:'The holiday celebrates the Declaration of Independence.',cn:'这个节日庆祝《独立宣言》的签署。'},
+          {en:'In 1776, this statement was written to tell the King of England that the colonies were free from his rule.',cn:'1776年，这份声明被写下来告知英格兰国王各殖民地已脱离统治。',k:['statement 声明','free from his rule 脱离统治'],t:'In + year, + subject + was written to + verb + that + 从句.',e:'In 1949, this law was written to protect people\'s rights. (1949年，这部法律被写下来保护人们的权利。)'},
+          {en:'The colonies would be united to form a new country together.',cn:'各殖民地将联合起来组成一个新的国家。',k:['united 联合','form a new country 组成新国家'],t:'Subject + would be united to + verb.',e:'The groups united to form a new team. (这些小组联合起来组成了一个新团队。)'},
+          {en:'Franklin was one of the writers of the Declaration of Independence.',cn:'富兰克林是《独立宣言》的起草者之一。',k:['writers 起草者'],t:'Subject + was one of the writers of + noun.',e:'She was one of the writers of the school newspaper. (她是校报的撰稿人之一。)'},
+          {en:'The Changs went to Philadelphia to learn about their country\'s history or past.',cn:'张家去费城了解他们国家的历史。',k:['learn about 了解','history 历史'],t:'Learn about + possessive + history.',e:'We visited the museum to learn about our city\'s history. (我们参观博物馆了解城市历史。)'},
+          {en:'Janet exclaimed, "That\'s where the Declaration of Independence was signed!"',cn:'珍妮特惊呼道："那就是《独立宣言》签署的地方！"',k:['exclaimed 惊呼','signed 签署'],t:'Subject + exclaimed, "..."!',e:'"Look at that!" exclaimed the boy. ("看那个！"男孩惊呼道。)'},
+          {en:'It is said that the famous bell rang on July 8, 1776 for the first public reading of the Declaration of Independence.',cn:'据说那口著名的钟在1776年7月8日第一次公开宣读《独立宣言》时响起。',k:['public reading 公开宣读'],t:'It is said that + 从句.',e:'It is said that the Great Wall can be seen from space. (据说从太空能看到长城。)'},
+          {en:'Finally, Janet and her family explored Franklin Court.',cn:'最后，珍妮特和她的家人参观了富兰克林庭院。',k:['finally 最后','explored 探索'],t:'Finally, subject + verb + noun.',e:'Finally, we reached the top of the mountain. (最后我们到达了山顶。)'},
+          {en:'Rules are important.',cn:'规则很重要。'},
+          {en:'They help to keep order in a country and give people rights.',cn:'它们有助于维持国家秩序并赋予人们权利。',k:['keep order 维持秩序','give rights 赋予权利'],t:'Rules are important because + 从句.',e:'Rules are important because they keep everyone safe. (规则很重要，因为它们保护每个人的安全。)'},
+          {en:'Citizens have rights and responsibilities.',cn:'公民有权利也有责任。'},
+          {en:'A citizen shows responsibility by keeping their neighborhood clean.',cn:'公民通过保持社区清洁来体现责任感。'},
+          {en:'A citizen has rights, such as the right to go to school.',cn:'公民拥有权利，比如上学的权利。'},
+        ],
+        quiz: {
+          phonics: '复习 — 按字母顺序排列单词',
+          exercises: [
+            {type:'comprehension',q:'篮球中得分的方式是?',options:['传球给队友','把球投进篮筐','运球'],answer:'把球投进篮筐'},
+            {type:'comprehension',q:'棒球中击球手三振出局后会发生什么?',options:['继续击球','出局换下一位','得一分'],answer:'出局换下一位'},
+            {type:'comprehension',q:'没有规则的运动场会怎样?',options:['更刺激','混乱无人知道怎么玩','更公平'],answer:'混乱无人知道怎么玩'},
+            {type:'comprehension',q:'棒球中跑垒得分需要做什么?',options:['击球','跑过本垒板','投球'],answer:'跑过本垒板'},
+          ]
+        },
+      },
+    ]
+  },
+  u6: {
+    title: 'Unit 6: How on Earth',
+    weeks: [
+      {
+        title: 'Week 1 — Plant Myths and Facts',
+        theme: 'Plant Myths and Facts',
+        overview: {
+          essentialQuestion: 'What do plants need?',
+          genre: 'Myth',
+          coreGrammar: 'Adjectives',
+          coreSkills: 'Theme, Reread, Context Clues',
+          storyTitle: 'Why Fir Tree Keeps His Leaves',
+          genreDesc: 'Myth — a made-up story; explains why things are the way they are; has an important lesson or message.'
+        },
+        words: [
+          {w:'appeared',p:'/əˈpɪəd/',c:'出现',s:'Just then, Squirrel appeared on the edge of the forest.',sc:'就在这时，松鼠出现在了森林边缘。',k:['appeared on the edge','forest','Squirrel'],t:'Subject + appeared + on / at + location.',e:'A rainbow appeared in the sky after the rain. 雨后彩虹出现在天空中。'},
+          {w:'crops',p:'/krɒps/',c:'庄稼；农作物',s:'During the first summer, Fir Tree watched Bird and Squirrel play in Farmer\'s corn and tomato crops.',sc:'第一个夏天，枞树看着小鸟和松鼠在农民的玉米和番茄庄稼里玩耍。',k:['corn and tomato crops','Farmer','summer'],t:'... play in + possessive + crops.',e:'The farmer grew wheat crops in the big field. 农民在大田里种植了小麦庄稼。'},
+          {w:'develop',p:'/dɪˈveləp/',c:'发展；成长',s:'Soon you will develop an understanding of your purpose.',sc:'你很快就会逐渐明白你的使命。',k:['develop an understanding','purpose','learn'],t:'Subject + will develop + noun.',e:'You will develop new skills as you practice more. 随着你练习得更多，你会发展出新技能。'},
+          {w:'edge',p:'/edʒ/',c:'边缘',s:'Squirrel appeared on the edge of the forest.',sc:'松鼠出现在了森林边缘。',k:['edge of the forest','appeared','cold'],t:'On the edge of + noun.',e:'We stood on the edge of the river and looked at the water. 我们站在河边看着水面。'},
+          {w:'golden',p:'/ˈɡəʊldən/',c:'金色的',s:'Maple, Oak, and Elm\'s leaves turned beautiful shades of orange, red, and yellow. The leaves shone as golden as the sun.',sc:'枫树、橡树和榆树的叶子变成了美丽的橙色、红色和黄色。那些叶子像太阳一样金光闪闪。',k:['golden as the sun','leaves','beautiful shades'],t:'... as golden as the sun.',e:'The golden sunset painted the sky with beautiful colors. 金色的日落给天空涂上了美丽的色彩。'},
+          {w:'rustled',p:'/ˈrʌsəld/',c:'沙沙作响',s:'The breeze blew and rustled their leaves.',sc:'微风吹过，吹动了它们的叶子沙沙作响。',k:['rustled their leaves','breeze blew','sound'],t:'The breeze blew and rustled + noun.',e:'The wind rustled the papers on the desk. 风吹动了桌上的纸，沙沙作响。'},
+          {w:'shining',p:'/ˈʃaɪnɪŋ/',c:'发光的',s:'The shining sun warmed them.',sc:'闪耀的太阳温暖着它们。',k:['shining sun','warmed them','bright'],t:'The shining + noun + verb + object.',e:'The shining stars lit up the night sky. 闪耀的星星照亮了夜空。'},
+          {w:'stages',p:'/ˈsteɪdʒɪz/',c:'阶段',s:'Why don\'t I have stages and change like my friends? I seem to be stuck in one period of life!',sc:'为什么我没有像朋友们那样的生长阶段和变化？我好像被困在生命的某一个时期了！',k:['stages','change','period of life'],t:'Have stages and change like ...',e:'A butterfly goes through different stages before it can fly. 蝴蝶在能飞之前要经历不同的阶段。'},
+        ],
+        grammar: {
+          topic: 'Adjectives (形容词)',
+          explanation: 'An adjective is a word that describes a noun. Some adjectives tell what kind or how many. The words the, a, and an are special adjectives called articles. Use a before words that begin with consonant sounds. Use an before words that begin with vowel sounds.',
+          examples: ['Three dogs with red collars ran down the dark street.','An owl built the nest high in a tree.'],
+          rule: '形容词修饰名词，说明种类或数量 | 不定冠词: a + 辅音开头, an + 元音开头'
+        },
+        story: [
+          {en:'So Fir Tree waited.',cn:'于是枞树等待着。'},
+          {en:'The temperature dropped even more.',cn:'温度降得更低了。'},
+          {en:'Bird flew south, and Squirrel was nowhere around.',cn:'小鸟飞向了南方，松鼠也不见踪影。'},
+          {en:'Maple, Oak, and Elm lost their leaves, but Fir Tree\'s green leaves remained.',cn:'枫树、橡树和榆树的叶子都落了，但枞树的绿叶还在。',k:['lost their leaves 落叶','remained 保留'],t:'Subject + lost + noun, but + possessive + noun + verb.',e:'The flowers lost their petals, but the stems remained. (花儿落了花瓣，但茎还在。)'},
+          {en:'Soon snow blanketed the ground.',cn:'很快雪覆盖了大地。',k:['blanketed 覆盖'],t:'Subject + blanketed + noun.',e:'Fog blanketed the city in the morning. (晨雾笼罩了城市。)'},
+          {en:'Again, Fir Tree protested to Mother Nature.',cn:'枞树再次向大自然母亲抗议。'},
+          {en:'"Why am I different? Why don\'t I have stages and change like my friends?"',cn:'"为什么我与众不同？为什么我没有像朋友们那样的生长阶段和变化？"',k:['stages 阶段','change 变化'],t:'Why don\'t + subject + have + noun + and + verb + like + possessive + friends?',e:'Why don\'t I have wings and fly like the birds? (为什么我没有翅膀像鸟儿一样飞翔？)'},
+          {en:'"I seem to be stuck in one period of life!"',cn:'"我好像被困在生命的某一个时期了！"',k:['stuck in 被困在'],t:'Subject + seem(s) to be stuck in + noun.',e:'He seems to be stuck in a bad habit. (他好像被困在一个坏习惯里了。)'},
+          {en:'"Be patient," Mother Nature replied.',cn:'"耐心点，"大自然母亲回答道。'},
+          {en:'"Soon you will develop an understanding of your purpose."',cn:'"你很快就会明白你的使命。"',k:['develop an understanding of 理解','purpose 使命'],t:'Subject + will develop + noun + of + possessive + noun.',e:'You will develop a love of reading as you grow. (随着你成长，你会培养对阅读的热爱。)'},
+          {en:'Just then, Squirrel appeared on the edge of the forest.',cn:'就在这时，松鼠出现在了森林边缘。',k:['appeared on the edge 出现在边缘'],t:'Subject + appeared + on/at + location.',e:'A rainbow appeared in the sky after the rain. (雨后彩虹出现在天空中。)'},
+          {en:'She was cold.',cn:'她很冷。'},
+          {en:'When she went inside the forest, she saw Maple.',cn:'当她走进森林时，她看到了枫树。'},
+          {en:'She asked if she could build a warm nest in his branches.',cn:'她问能否在他的树枝上搭一个温暖的窝。'},
+        ],
+        quiz: {
+          phonics: '开音节/闭音节 + 复合词',
+          exercises: [
+            {type:'phonics',q:'合成: tick + et = ?',options:['ticket','tickle','thicket'],answer:'ticket'},
+            {type:'phonics',q:'合成: pa + per = ?',options:['paper','papa','pepper'],answer:'paper'},
+            {type:'phonics',q:'合成: bath + tub = ?',options:['bathtub','bathroom','bathing'],answer:'bathtub'},
+            {type:'comprehension',q:'雅典国王要求两位神祇做什么?',options:['比武','送礼物','说出预言'],answer:'送礼物'},
+            {type:'comprehension',q:'Poseidon 的礼物是什么?',options:['一口井','一棵橄榄树','一匹马'],answer:'一口井'},
+            {type:'comprehension',q:'Athena 的礼物是什么?',options:['橄榄树','猫头鹰','金苹果'],answer:'橄榄树'},
+            {type:'comprehension',q:'国王更喜欢谁的礼物?',options:['Poseidon','Athena','都喜欢'],answer:'Athena'},
+          ]
+        },
+      },
+      {
+        title: 'Week 2 — We Need Energy',
+        theme: 'We Need Energy',
+        overview: {
+          essentialQuestion: 'What is energy?',
+          genre: 'Expository Text',
+          coreGrammar: 'Adjectives & Articles',
+          coreSkills: 'Main Idea, Details, Text Features',
+          storyTitle: 'We Need Energy',
+          genreDesc: 'Expository Text — gives facts and information about a topic; explains real-world concepts.'
+        },
+        words: [
+          {w:'electricity',p:'/ɪˌlekˈtrɪsəti/',c:'电',s:'Soon they were producing electricity to run their laptop computers.',sc:'很快他们就在发电来运行他们的笔记本电脑了。',k:['producing electricity','laptop computers','pedaling'],t:'Subject + was/were producing electricity to + verb.',e:'The solar panels produce electricity to power the house. 太阳能板发电为房子供电。'},
+          {w:'energy',p:'/ˈenədʒi/',c:'能量',s:'Energy is the ability to do work. Solar energy comes from the Sun.',sc:'能量是做功的能力。太阳能来自太阳。',k:['energy','ability to do work','Solar energy'],t:'Energy is the ability to + verb.',e:'Energy is the ability to make things move and work. 能量是让物体移动和工作的能力。'},
+          {w:'flows',p:'/fləʊz/',c:'流动',s:'As long as a student pedals the bicycle, electricity flows, or runs, through the generator.',sc:'只要学生踩自行车，电流就会流过发电机。',k:['electricity flows','runs','generator'],t:'As long as ..., electricity flows through ...',e:'Water flows through the pipes into the house. 水通过管道流入房子。'},
+          {w:'haul',p:'/hɔːl/',c:'拖运；搬运',s:'Teachers can haul, or carry, laptop computers to the battery and plug them in for power.',sc:'老师们可以把笔记本电脑搬运到电池那里，插上电源。',k:['haul','carry','battery'],t:'Subject + can haul + noun + to + location.',e:'The truck hauls heavy boxes to the store every day. 卡车每天把重箱子运到商店。'},
+          {w:'power',p:'/ˈpaʊə/',c:'力量；电力',s:'Some students at one school hopped on bikes connected to generators and pedaled in place. Soon they were producing electricity. This shift of power or energy makes the bike move.',sc:'一所学校的一些学生骑上连接到发电机的自行车原地踩踏。很快他们就在发电了。这种能量或动力的转换使自行车移动。',k:['power','generators','makes the bike move'],t:'This shift of power or energy makes + noun + verb.',e:'The power of the wind makes the windmill spin. 风的力量使风车旋转。'},
+          {w:'silent',p:'/ˈsaɪlənt/',c:'安静的',s:'Solar energy comes from the Sun. It\'s a silent source of energy, because it makes no sound.',sc:'太阳能来自太阳。它是一种安静的能量来源，因为它不发出任何声音。',k:['silent source','no sound','solar energy'],t:'It\'s a silent + noun, because + reason.',e:'The owl is a silent hunter because its feathers muffle sound. 猫头鹰是安静的猎手，因为它的羽毛能消音。'},
+          {w:'solar',p:'/ˈsəʊlə/',c:'太阳能的',s:'Solar energy comes from the Sun. It\'s a silent source of energy, because it makes no sound.',sc:'太阳能来自太阳。它是一种安静的能量来源，因为它不发出任何声音。',k:['Solar energy','Sun','silent source'],t:'Solar energy comes from + noun.',e:'Solar energy comes from the sun and gives us light and heat. 太阳能来自太阳，给我们光和热。'},
+          {w:'underground',p:'/ˌʌndəˈɡraʊnd/',c:'地下的',s:'Some plants were buried millions and millions of years ago and turned to coal. Then my energy stayed deep underground, locked inside the coal.',sc:'一些植物在数百万年前被掩埋，变成了煤炭。然后我的能量就留在了深深的地下，锁在煤炭里面。',k:['deep underground','coal','buried'],t:'... stayed deep underground, locked inside + noun.',e:'Water flows through pipes that run underground. 水通过地下管道流动。'},
+        ],
+        grammar: {
+          topic: 'Adjectives & Articles (形容词与冠词)',
+          explanation: 'An adjective describes a noun. Some adjectives tell what kind or how many. The words the, a, and an are special adjectives called articles. Use a before consonant sounds and an before vowel sounds.',
+          examples: ['Three dogs with red collars ran down the dark street.','An owl built the nest high in a tree.'],
+          rule: '形容词修饰名词 | a + 辅音开头, an + 元音开头, the 特指'
+        },
+        story: [
+          {en:'Energy is the ability to do work.',cn:'能量是做功的能力。',k:['energy 能量','ability 能力'],t:'Energy is the ability to + verb.',e:'Energy is the ability to make things move. (能量是让物体移动的能力。)'},
+          {en:'Solar energy comes from the Sun.',cn:'太阳能来自太阳。',k:['Solar energy 太阳能'],t:'Solar energy comes from + noun.',e:'Solar energy comes from the sun and gives us light. (太阳能来自太阳，给我们光明。)'},
+          {en:'It\'s a silent source of energy, because it makes no sound.',cn:'它是一种安静的能量来源。',k:['silent source 安静来源'],t:'It\'s a silent + noun, because + 从句.',e:'The owl is a silent hunter because it flies quietly. (猫头鹰是安静的猎手。)'},
+          {en:'There is also energy that comes from wind and water.',cn:'还有来自风和水的能量。'},
+          {en:'Did you know your own energy can power a laptop computer?',cn:'你知道吗，你自己的能量也能给笔记本电脑供电？'},
+          {en:'Some students at one school hopped on bikes connected to generators and pedaled in place.',cn:'一些学生骑上连接到发电机的自行车原地踩踏。'},
+          {en:'Soon they were producing electricity to run their laptop computers.',cn:'很快他们就在发电来运行笔记本电脑了。',k:['producing electricity 发电'],t:'Subject + were producing + noun + to + verb.',e:'The solar panels are producing electricity to power the house. (太阳能板正在发电给房子供电。)'},
+          {en:'As long as a student pedals the bicycle, electricity flows through the generator.',cn:'只要学生踩自行车，电流就会流过发电机。',k:['as long as 只要','electricity flows 电流流动'],t:'As long as + subject + verb, + noun + flows through + noun.',e:'As long as you turn the handle, water flows through the pipe. (只要你转动把手，水就会流过管道。)'},
+          {en:'Teachers can haul laptop computers to the battery and plug them in for power.',cn:'老师们可以把笔记本电脑搬运到电池那里插上电源。',k:['haul 搬运','plug in 插上电源'],t:'Subject + can haul + noun + to + location + and + verb.',e:'We can carry the boxes to the truck and load them. (我们可以把箱子搬到卡车上装好。)'},
+          {en:'This shift of power or energy makes the bike move.',cn:'这种能量转换使自行车移动。',k:['shift of power 能量转换'],t:'This shift of + noun + makes + noun + verb.',e:'The shift of weight makes the boat tip. (重量的转移使船倾斜。)'},
+          {en:'Some plants were buried millions of years ago and turned to coal.',cn:'一些植物在数百万年前被掩埋变成了煤炭。'},
+          {en:'Then my energy stayed deep underground, locked inside the coal.',cn:'然后我的能量就留在了深深的地下锁在煤炭里面。',k:['stayed deep underground 留在地下深处','locked inside 锁在里面'],t:'Subject + stayed + location, locked inside + noun.',e:'The treasure stayed hidden underground, locked inside the chest. (宝藏藏在地下锁在箱子里。)'},
+        ],
+        quiz: {
+          phonics: '元音+辅音+e 音节 + 后缀 -ful/-less, re-/un-',
+          exercises: [
+            {type:'phonics',q:'playful 的意思是?',options:['充满玩乐','没有玩乐','玩乐再次'],answer:'充满玩乐'},
+            {type:'phonics',q:'unclean 的意思是?',options:['不干净','再次干净','干净'],answer:'不干净'},
+            {type:'phonics',q:'refill 的意思是?',options:['没有填满','再次填满','装填'],answer:'再次填满'},
+            {type:'comprehension',q:'海洋的潮汐能是如何产生的?',options:['海水蒸发','潮水涨落','海洋风暴'],answer:'潮水涨落'},
+            {type:'comprehension',q:'波浪能是如何发电的?',options:['波浪推动机器内部部件旋转','海水蒸发驱动涡轮','海风吹动风扇'],answer:'波浪推动机器内部部件旋转'},
+            {type:'comprehension',q:'热能利用的是海水的什么特性?',options:['海水咸度','表层和深层的水温差','海水颜色'],answer:'表层和深层的水温差'},
+          ]
+        },
+      },
+      {
+        title: 'Week 3 — Team Up to Explore',
+        theme: 'Team Up to Explore',
+        overview: {
+          essentialQuestion: 'How do teams help us explore?',
+          genre: 'Expository Text / Narrative Nonfiction',
+          coreGrammar: 'This/That/These/Those',
+          coreSkills: 'Main Idea, Text Structure, Context Clues',
+          storyTitle: 'Team Up to Explore',
+          genreDesc: 'Expository Text — gives facts and information about a topic; includes text features.'
+        },
+        words: [
+          {w:'exploration',p:'/ˌekspləˈreɪʃən/',c:'探索；探险',s:'The team reads information and studies a map where they think the ship sank. They are excited about their exploration.',sc:'团队阅读信息并研究他们认为沉船位置的地图。他们对自己的探险感到兴奋。',k:['exploration','excited','sunken ship'],t:'Subject + is excited about + possessive + exploration.',e:'The scientists were excited about their exploration of the cave. 科学家们对洞穴探险感到兴奋。'},
+          {w:'important',p:'/ɪmˈpɔːtənt/',c:'重要的',s:'Each job on a dive team is important.',sc:'潜水队里的每项工作都很重要。',k:['each job','dive team','important'],t:'Each + noun + is important.',e:'Each member of the team is important for our success. 团队的每个成员对我们的成功都很重要。'},
+          {w:'machine',p:'/məˈʃiːn/',c:'机器',s:'One serious job is using machines the dive team needs.',sc:'一项重要的工作是使用潜水队需要的机器。',k:['using machines','dive team','needs'],t:'One job is using machines + relative clause.',e:'One important task is using machines to build the house. 一项重要的任务是用机器建造房子。'},
+          {w:'prepare',p:'/prɪˈpeə/',c:'准备',s:'Before the team dives, they prepare for their special jobs.',sc:'在团队潜水之前，他们为各自的特殊任务做准备。',k:['prepare for','special jobs','before diving'],t:'Before + subject + verb, they prepare for + noun.',e:'Before the test, we prepare for it by studying hard. 考试前，我们通过努力学习做准备。'},
+          {w:'repair',p:'/rɪˈpeə/',c:'修理',s:'Another job is to repair, or fix, these devices when they don\'t work.',sc:'另一项工作是在这些设备出故障时进行修理。',k:['repair','fix','devices'],t:'Another job is to repair + noun + when ...',e:'My dad can repair the broken chair when it breaks. 我爸爸能在椅子坏了的时候修理它。'},
+          {w:'result',p:'/rɪˈzʌlt/',c:'结果',s:'The team now has important results from their discovery to share.',sc:'团队现在有了重要的发现结果可以分享。',k:['important results','discovery','share'],t:'Subject + has + results from + noun + to share.',e:'The scientists had exciting results from their experiment to share. 科学家们有来自实验的激动人心的结果可以分享。'},
+          {w:'scientific',p:'/ˌsaɪənˈtɪfɪk/',c:'科学的',s:'They decide to make a scientific study of it.',sc:'他们决定对它进行科学研究。',k:['scientific study','decide','shipwreck'],t:'Make a scientific study of + noun.',e:'We made a scientific study of the plants in the garden. 我们对花园里的植物进行了科学研究。'},
+          {w:'teamwork',p:'/ˈtiːmwɜːk/',c:'团队合作',s:'Teamwork is important for a dive team. Team members depend on one another. They divide up the tasks and each person helps to get the job done.',sc:'团队合作对潜水队很重要。队员相互依赖。他们分工合作，每个人都帮忙完成任务。',k:['teamwork','depend on one another','divide up tasks'],t:'Teamwork is important for + noun.',e:'Teamwork is important for a sports team to win games. 团队合作对运动队赢得比赛很重要。'},
+        ],
+        grammar: {
+          topic: 'This/That/These/Those (指示形容词)',
+          explanation: 'This, that, these, and those are special adjectives that tell how many and how close. This and that refer to singular nouns. These and those refer to plural nouns. This and these refer to things that are close. That and those refer to things that are farther away.',
+          examples: ['I will read these books in my arms before I read those books on the shelf.','This movie is great!','Those monsters scared me.'],
+          rule: 'This(近单) / That(远单) / These(近复) / Those(远复)'
+        },
+        story: [
+          {en:'Imagine exploring the underwater world of the ocean.',cn:'想象一下探索海洋的水下世界。'},
+          {en:'Perhaps you want to see how sea animals live, or you may hope to search for sunken ships.',cn:'也许你想看看海洋动物如何生活，或者希望寻找沉船。',k:['search for sunken ships 寻找沉船'],t:'Perhaps + subject + want(s) to + verb + how..., or + subject + may hope to + verb.',e:'Perhaps you want to learn how stars shine, or you may hope to explore space. (也许你想了解星星如何发光，或者希望探索太空。)'},
+          {en:'That is just what Gloria did!',cn:'格洛丽亚就是这么做的！'},
+          {en:'Gloria has always lived close to the ocean.',cn:'格洛丽亚一直住在海边。'},
+          {en:'Now she is training to be a member of a dive team.',cn:'现在她在训练成为潜水队的一员。'},
+          {en:'Each job on a dive team is important.',cn:'潜水队里的每项工作都很重要。',k:['each job 每项工作','dive team 潜水队','important 重要的'],t:'Each + noun + on a + noun + is important.',e:'Each player on a team is important. (队里的每个队员都很重要。)'},
+          {en:'Before the team dives, they prepare for their special jobs.',cn:'在团队潜水之前，他们为各自的任务做准备。',k:['prepare for 为……做准备'],t:'Before + subject + verb, + subject + prepare(s) for + noun.',e:'Before the test, we prepare for it by studying. (考试前我们通过学习做准备。)'},
+          {en:'One serious job is using machines the dive team needs.',cn:'一项重要的工作是使用潜水队需要的机器。'},
+          {en:'Another job is to repair these devices when they don\'t work.',cn:'另一项工作是在设备出故障时修理。',k:['repair 修理','devices 设备'],t:'Another job is to repair + noun + when + 从句.',e:'Another task is to clean the tools when we finish. (另一项任务是我们完成后清洁工具。)'},
+          {en:'The team reads information and studies a map where they think the ship sank.',cn:'团队阅读信息并研究他们认为沉船位置的地图。'},
+          {en:'They are excited about their exploration.',cn:'他们对自己的探险感到兴奋。',k:['excited about 对……兴奋','exploration 探险'],t:'Subject + is excited about + possessive + noun.',e:'The children are excited about their trip to the museum. (孩子们对博物馆之旅很兴奋。)'},
+          {en:'They decide to make a scientific study of it.',cn:'他们决定对它进行科学研究。',k:['scientific study 科学研究'],t:'Make a scientific study of + noun.',e:'We made a scientific study of the plants in the garden. (我们对花园里的植物进行了研究。)'},
+          {en:'Teamwork is important for a dive team.',cn:'团队合作对潜水队很重要。',k:['teamwork 团队合作'],t:'Teamwork is important for + noun.',e:'Teamwork is important for a sports team. (团队合作对运动队很重要。)'},
+          {en:'Team members depend on one another.',cn:'队员相互依赖。'},
+          {en:'They divide up the tasks and each person helps to get the job done.',cn:'他们分工合作，每个人帮忙完成任务。',k:['divide up the tasks 分工','get the job done 完成任务'],t:'Subject + divide(s) up the tasks and each + noun + helps to + verb.',e:'We divide up the chores and each person helps to clean. (我们分工，每个人帮忙打扫。)'},
+          {en:'The team now has important results from their discovery to share.',cn:'团队现在有了重要的发现结果可以分享。',k:['results 结果','discovery 发现','share 分享'],t:'Subject + has + results from + noun + to share.',e:'The scientists had interesting results from the experiment to share. (科学家们有了有趣的实验结果可以分享。)'},
+        ],
+        quiz: {
+          phonics: 'le 结尾音节 + 缩略词',
+          exercises: [
+            {type:'phonics',q:'little 按音节划分是?',options:['lit-tle','li-ttle','litt-le'],answer:'lit-tle'},
+            {type:'phonics',q:'paddle 按音节划分是?',options:['pad-dle','pa-ddle','padd-le'],answer:'pad-dle'},
+            {type:'phonics',q:'you will 的缩略形式是?',options:['you\'ll','y\'will','you\'ull'],answer:'you\'ll'},
+            {type:'comprehension',q:'南极考察队队员怎么到达基地?',options:['坐巴士','坐飞机','坐船'],answer:'坐飞机'},
+            {type:'comprehension',q:'科学家们在基地做什么?',options:['建造房屋','研究动植物和气候','做医生看护病人'],answer:'研究动植物和气候'},
+            {type:'comprehension',q:'这篇文章的主要观点是什么?',options:['南极很冷','探索南极需要团队合作','科学家工作很辛苦'],answer:'探索南极需要团队合作'},
+          ]
+        },
+      },
+      {
+        title: 'Week 4 — Money Matters',
+        theme: 'Money Matters',
+        overview: {
+          essentialQuestion: 'How does money work?',
+          genre: 'Expository Text',
+          coreGrammar: 'Adverbs & Prepositional Phrases',
+          coreSkills: 'Summarize, Problem and Solution, Paragraph Clues',
+          storyTitle: 'The Life of a Dollar Bill',
+          genreDesc: 'Expository Text — gives facts and information about a topic; presents problems and solutions.'
+        },
+        words: [
+          {w:'invented',p:'/ɪnˈventɪd/',c:'发明',s:'The bill is printed on a machine that was invented, or created, to save time.',sc:'钞票是在一台为节省时间而发明（或创造）的机器上印制的。',k:['invented','machine','save time'],t:'Subject + was invented to + verb.',e:'The telephone was invented to help people communicate far away. 电话是为了帮助人们远程交流而发明的。'},
+          {w:'money',p:'/ˈmʌni/',c:'钱',s:'The boy brings the dollar bill to the bookstore. He checks prices to see how much the books cost. Then he decides what he can purchase.',sc:'男孩把一美元钞票带到书店。他查看价格，看看书要多少钱。然后决定能买什么。',k:['money','prices','purchase'],t:'Subject + uses money to + verb.',e:'I use money to buy food and clothes. 我用钱买食物和衣服。'},
+          {w:'prices',p:'/ˈpraɪsɪz/',c:'价格',s:'He checks prices to see how much the books cost.',sc:'他查看价格，看看这些书要多少钱。',k:['checks prices','how much','cost'],t:'Check prices to see how much + noun + cost.',e:'I check prices to see how much the toys cost before I buy them. 我买之前先查看价格，看看玩具要多少钱。'},
+          {w:'purchase',p:'/ˈpɜːtʃəs/',c:'购买',s:'Then he decides what he can purchase. He finds a book to buy.',sc:'然后他决定他能购买什么。他找到了一本想买的书。',k:['purchase','buy','book'],t:'Decide what + subject + can purchase.',e:'She looked at the menu and decided what she could purchase. 她看着菜单，决定她能买什么。'},
+          {w:'record',p:'/rɪˈkɔːd/',c:'记录',s:'Workers use a record to keep track of how many bills are printed and destroyed.',sc:'工作人员用记录来追踪有多少钞票被印制和销毁。',k:['record','keep track','bills printed and destroyed'],t:'Subject + use a record to keep track of + noun.',e:'The librarian uses a record to keep track of all the books. 图书管理员用记录来追踪所有的书。'},
+          {w:'system',p:'/ˈsɪstəm/',c:'系统',s:'They make sure there are enough bills in the system so people can buy and sell things.',sc:'他们确保系统里有足够的钞票，这样人们就可以买卖东西。',k:['system','bills','buy and sell'],t:'... enough + noun + in the system so that ...',e:'There are enough seats in the system for all the students. 系统里有足够的位置给所有学生。'},
+          {w:'value',p:'/ˈvæljuː/',c:'价值',s:'The boy reads the back of the book and thinks about the price. The boy decides the book is a good value, so he exchanges his money for the book.',sc:'男孩读了书的背面，想了想价格。他认为这本书很值，所以用钱换了书。',k:['good value','price','exchanges money'],t:'Subject + decides + noun + is a good value.',e:'My mom thinks the jacket is a good value because it is warm and cheap. 我妈妈觉得这件夹克很值，因为它又暖和又便宜。'},
+          {w:'worth',p:'/wɜːθ/',c:'值得的',s:'He finds a book to buy, but is it worth the price? He\'s not sure.',sc:'他找到了一本想买的书，但它值这个价钱吗？他不确定。',k:['worth the price','book','not sure'],t:'Is it worth the + noun?',e:'Is it worth the money to buy a new computer? 花这些钱买一台新电脑值得吗？'},
+        ],
+        grammar: {
+          topic: 'Adverbs & Prepositional Phrases (副词与介词短语)',
+          explanation: 'An adverb is a word that tells more about a verb. Adverbs tell how, when, or where. Many adverbs end in -ly. A preposition comes before a noun or a pronoun. Together they make a prepositional phrase. Common prepositions include in, at, of, from, with, to, and by.',
+          examples: ['I listened closely to the news.','The storm moved slowly out to sea.','We ran quickly to the front of the line.'],
+          rule: '副词修饰动词，说明方式/时间/地点 | 介词短语: 介词 + 名词/代词'
+        },
+        story: [
+          {en:'The dollar bill goes to a boy for his allowance.',cn:'一美元钞票到了男孩手里作为零花钱。'},
+          {en:'The boy brings the dollar bill to the bookstore.',cn:'男孩把一美元钞票带到书店。'},
+          {en:'He checks prices to see how much the books cost.',cn:'他查看价格看看书要多少钱。',k:['checks prices 查看价格'],t:'Check prices to see how much + noun + cost.',e:'I check prices to see how much the toys cost. (我查看价格看看玩具多少钱。)'},
+          {en:'Then he decides what he can purchase.',cn:'然后他决定能买什么。',k:['purchase 购买'],t:'Decide what + subject + can purchase.',e:'She looked at the menu and decided what she could purchase. (她看了看菜单决定能买什么。)'},
+          {en:'He finds a book to buy, but is it worth the price?',cn:'他找到了一本想买的书，但它值这个价吗？',k:['worth the price 值这个价'],t:'Is it worth the + noun?',e:'Is it worth the money to buy a new bike? (花这些钱买新自行车值吗？)'},
+          {en:'He\'s not sure.',cn:'他不确定。'},
+          {en:'The boy reads the back of the book and thinks about the price.',cn:'男孩读了书的背面想了想价格。'},
+          {en:'The boy decides the book is a good value, so he exchanges his money for the book.',cn:'男孩认为这本书很值，所以用钱换了书。',k:['good value 物有所值'],t:'Subject + decides + noun + is a good value.',e:'My mom thinks the jacket is a good value. (我妈妈觉得这件夹克很值。)'},
+          {en:'Later, a girl buys a birthday card at the bookstore.',cn:'后来一个女孩在书店买了一张生日卡。'},
+          {en:'She gets the dollar bill as change.',cn:'她拿到了一美元钞票作为找零。'},
+          {en:'She takes the dollar bill home and saves it in her piggy bank.',cn:'她把一美元带回家存进存钱罐。'},
+          {en:'When the girl wants to see a movie, she takes money out of her piggy bank.',cn:'当女孩想看电影时，她从存钱罐里拿出钱。'},
+          {en:'She uses it to pay for the ticket.',cn:'她用钱买了票。'},
+          {en:'Then the dollar bill travels on.',cn:'然后一美元继续旅行。'},
+          {en:'Almost two years pass and now a man gets the dollar bill.',cn:'差不多两年过去了，一个男人拿到了这张一美元。'},
+          {en:'It is worn out and torn.',cn:'它已经磨损破旧了。'},
+          {en:'The man is not sure if it\'s usable.',cn:'这个男人不确定它还能不能用。'},
+          {en:'What happens to the ripped bill?',cn:'破旧的钞票会怎么样呢？'},
+          {en:'The man takes it to his local bank and trades it in for a new dollar bill.',cn:'男人把它拿到当地银行换了一张新的一美元。'},
+          {en:'Workers use a record to keep track of how many bills are printed and destroyed.',cn:'工作人员用记录来追踪有多少钞票被印制和销毁。',k:['keep track of 追踪'],t:'Subject + use a record to keep track of + noun.',e:'The librarian uses a record to keep track of books. (图书管理员用记录追踪书籍。)'},
+          {en:'They make sure there are enough bills in the system so people can buy and sell things.',cn:'他们确保系统里有足够的钞票让人们买卖东西。',k:['system 系统'],t:'... enough + noun + in the system so that + 从句.',e:'There are enough seats in the room for everyone. (房间里有足够的位置给每个人。)'},
+          {en:'The next time you hold a one-dollar bill, think of where it has been and where it is going.',cn:'下次你拿着一张一美元钞票时，想想它去过哪里又要去哪里。'},
+          {en:'Each dollar bill has a busy, useful life.',cn:'每张一美元都有忙碌而有用的生活。'},
+        ],
+        quiz: {
+          phonics: '元音组合 (crayon, tower, balloon) + 比较级 -er/-est',
+          exercises: [
+            {type:'phonics',q:'close + est = ?',options:['closest','closst','closeest'],answer:'closest'},
+            {type:'phonics',q:'funny + est = ?',options:['funnyest','funniest','funnyst'],answer:'funniest'},
+            {type:'phonics',q:'wet + er = ?',options:['weter','wetter','weterr'],answer:'wetter'},
+            {type:'comprehension',q:'故事开头提出的问题是什么?',options:['钱花光了怎么办','怎么找工作','怎么省钱'],answer:'钱花光了怎么办'},
+            {type:'comprehension',q:'解决问题的方案是什么?',options:['找更多工作','做预算','借钱'],answer:'做预算'},
+            {type:'comprehension',q:'收入 (income) 包括哪些?',options:['零花钱、工作收入、礼物','买食物和交通','储蓄'],answer:'零花钱、工作收入、礼物'},
+            {type:'comprehension',q:'照片里的女孩怎么存钱?',options:['把钱给爸爸','把钱存银行','把钱花掉'],answer:'把钱存银行'},
+          ]
+        },
+      },
+      {
+        title: 'Week 5 — The World of Ideas',
+        theme: 'The World of Ideas',
+        overview: {
+          essentialQuestion: 'How do ideas inspire us?',
+          genre: 'Poetry',
+          coreGrammar: 'Adjectives',
+          coreSkills: 'Poetry Elements, Rhyme, Rhythm, Metaphor',
+          storyTitle: 'A Box of Crayons / Eating While Reading',
+          genreDesc: 'Poetry — uses rhyme and rhythm to create a feeling; uses figurative language like metaphor.'
+        },
+        words: [
+          {w:'create',p:'/kriˈeɪt/',c:'创造',s:'With crayons you can always create something exciting, something great!',sc:'有了蜡笔，你总能创造出令人兴奋的、很棒的东西！',k:['create','crayons','exciting'],t:'With + noun + you can always create + noun.',e:'With blocks you can always create a tall tower. 有了积木，你总能创造出高高的塔。'},
+          {w:'dazzling',p:'/ˈdæzlɪŋ/',c:'耀眼的',s:'I\'ve got dazzling colors, all you could want.',sc:'我有你想要的所有的炫目色彩。',k:['dazzling colors','book cover','bright'],t:'Subject + has got dazzling + noun.',e:'The fireworks show had dazzling lights in the night sky. 烟花表演在夜空中有炫目的光芒。'},
+          {w:'imagination',p:'/ɪˌmædʒɪˈneɪʃən/',c:'想象力',s:'Use your imagination, and you\'ll soon go places, too!',sc:'运用你的想象力，你很快也能去很多地方！',k:['imagination','go places','travel'],t:'Use your imagination, and you\'ll + verb + ...',e:'Use your imagination, and you\'ll create wonderful stories. 运用你的想象力，你就能创作出精彩的故事。'},
+          {w:'seconds',p:'/ˈsɛkəndz/',c:'秒',s:'I have a special ticket that takes me anywhere. My journeys take just seconds.',sc:'我有一张特殊的票，能带我去任何地方。我的旅程只需要几秒钟。',k:['seconds','journeys','anywhere'],t:'Subject + takes just seconds to + verb.',e:'The microwave heats my food in just seconds. 微波炉只需几秒钟就能加热我的食物。'},
+          {w:'beats',p:'/biːts/',c:'节拍（诗歌）',s:'Poets use rhyme and rhythm to give their poems a light feeling.',sc:'诗人运用押韵和节奏给他们的诗歌一种轻快的感觉。',k:['rhythm','beats','light feeling'],t:'Poets use rhyme and rhythm to + verb.',e:'Music has a strong rhythm that makes people want to dance. 音乐有强烈的节奏，让人想跳舞。'},
+          {w:'message',p:'/ˈmesɪdʒ/',c:'信息；寓意',s:'Use important details from \'Eating While Reading\' to describe the poem\'s message.',sc:'用《边吃边读》中的重要细节来描述这首诗传达的信息。',k:['message','poem','important details'],t:'Describe the poem\'s message using + noun.',e:'The message of the story is to always be kind to others. 这个故事传达的信息是要始终善待他人。'},
+          {w:'metaphor',p:'/ˈmetəfə/',c:'比喻',s:'A metaphor compares two different things. It does not use the words \'like\' or \'as\'.',sc:'隐喻比较两个不同的事物。它不使用\'像\'或\'如同\'这样的词。',k:['metaphor','compares','different things'],t:'A metaphor compares + noun + to + noun.',e:'The metaphor \'Her voice is music\' compares her voice to beautiful music. \'她的声音是音乐\'这个隐喻把她的声音比作优美的音乐。'},
+          {w:'repeated lines',p:'/rɪˈpiːtɪd laɪnz/',c:'重复行',s:'A rhyming poem has words with the same sound at the end of some lines; has regular, repeating rhythm.',sc:'押韵诗在一些行末有相同声音的词；有规律的、重复的节奏。',k:['repeating rhythm','rhyming poem','same sound'],t:'A rhyming poem has regular, repeating + noun.',e:'The song has a chorus with repeated lines that everyone can sing along to. 这首歌有重复的副歌部分，每个人都能跟着唱。'},
+        ],
+        grammar: {
+          topic: 'Adjectives (形容词)',
+          explanation: 'An adjective describes a noun. Some adjectives tell what kind or how many. The words the, a, and an are special adjectives called articles.',
+          examples: ['Three dogs with red collars ran down the dark street.','We\'ll need four apples for the pie.','Could I become a famous chef?'],
+          rule: '形容词修饰名词 | 冠词: a/an/the 用于名词前'
+        },
+        story: [
+          {en:'A box of crayons is the sun on a dreary, rainy day.',cn:'一盒蜡笔是沉闷雨天里的太阳。',k:['dreary 沉闷的'],t:'A + noun + is the + noun + on a + adjective + day.',e:'A good book is a friend on a lonely day. (一本好书是寂寞日子的朋友。)'},
+          {en:'You can draw a hot air balloon and travel far far away.',cn:'你可以画一个热气球飞到很远很远的地方。'},
+          {en:'You can draw a beach and play in the silky sand.',cn:'你可以画一个沙滩在丝滑的沙子上玩耍。'},
+          {en:'You can draw a drum and play a beat with both hands.',cn:'你可以画一个鼓用双手敲击节奏。'},
+          {en:'With crayons you can always create something exciting, something great!',cn:'有了蜡笔，你总能创造出令人兴奋的、很棒的东西！',k:['create 创造','exciting 令人兴奋的'],t:'With + noun + you can always create + noun.',e:'With blocks you can always create a tall tower. (有了积木，你总能创造出高高的塔。)'},
+          {en:'I have a special ticket that takes me anywhere.',cn:'我有一张特殊的票能带我去任何地方。'},
+          {en:'My journeys take just seconds.',cn:'我的旅程只需要几秒钟。',k:['journeys 旅程','seconds 秒'],t:'Subject\'s journeys take just + time.',e:'The train\'s journey takes just minutes. (火车旅程只需要几分钟。)'},
+          {en:'Use your imagination, and you\'ll soon go places, too!',cn:'运用你的想象力，你很快也能去很多地方！',k:['imagination 想象力'],t:'Use your + noun, and you\'ll + verb + ...',e:'Use your imagination, and you\'ll create great stories. (运用你的想象力，你会创作出很棒的故事。)'},
+          {en:'Poets use rhyme and rhythm to give their poems a light feeling.',cn:'诗人运用押韵和节奏给诗歌一种轻快的感觉。',k:['rhyme 押韵','rhythm 节奏'],t:'Poets use rhyme and rhythm to + verb.',e:'Musicians use rhythm to make people dance. (音乐家用节奏让人们跳舞。)'},
+          {en:'A metaphor compares two different things.',cn:'隐喻比较两个不同的事物。'},
+          {en:'A rhyming poem has words with the same sound at the end of some lines.',cn:'押韵诗在一些行末有相同发音的词。',k:['rhyming poem 押韵诗','same sound 相同发音'],t:'A rhyming poem has + noun + with + adjective + noun.',e:'A rhyming song has words with the same ending sound. (押韵的歌有相同结尾音的词。)'},
+          {en:'Use important details from "Eating While Reading" to describe the poem\'s message.',cn:'用《边吃边读》中的重要细节来描述诗传达的信息。',k:['message 寓意'],t:'Describe the poem\'s message using + noun.',e:'Describe the story\'s lesson using examples from the text. (用课文中的例子描述故事的寓意。)'},
+        ],
+        quiz: {
+          phonics: '无练习册内容',
+          exercises: [
+            {type:'comprehension',q:'本周主题是关于想象的诗歌。你能说出诗歌里提到的三个职业吗?',options:['厨师、消防员','老师、医生','司机、警察'],answer:'厨师、消防员'},
+          ]
+        },
+      },
+    ]
+  },
+};// ===== STATE =====
+let currentUnit = 'u5';
+let currentWeek = 0;
+let currentMode = 'preview';
+let quizState = {words:[],current:0,correct:0,wrong:[],done:false};
+let learned = JSON.parse(localStorage.getItem('wonders_learned')||'[]');
+
+// ===== INIT =====
+function init() {
+  renderWeekButtons();
+  loadWeek();
+}
+
+function renderWeekButtons() {
+  ['u5','u6'].forEach(uk => {
+    const d = DATA[uk];
+    const el = document.getElementById(uk+'Weeks');
+    el.innerHTML = '';
+    d.weeks.forEach((w,i) => {
+      const b = document.createElement('button');
+      b.className = 'week-btn' + (uk===currentUnit&&i===currentWeek?' active':'');
+      b.textContent = w.title;
+      b.onclick = () => { currentUnit=uk; currentWeek=i; loadWeek(); showSec('learn'); };
+      el.appendChild(b);
+    });
+  });
+}
+
+function showSec(id) {
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  const map = {home:0,overview:1,learn:2,story:3,grammar:4,writing:5,quiz:6};
+  const btns = document.querySelectorAll('.nav button');
+  if(btns[map[id]]) btns[map[id]].classList.add('active');
+}
+
+function setMode(m) {
+  currentMode = m;
+  document.getElementById('modePreview').classList.toggle('active', m==='preview');
+  document.getElementById('modeReview').classList.toggle('active', m==='review');
+  const desc = document.getElementById('modeDesc');
+  desc.textContent = m==='preview'
+    ? '看英文 → 中文翻译 → 句型分析 → 仿写练习'
+    : '看中文选英文 → 看英文选中文 → 拼写挑战';
+}
+
+function toggleMode() {
+  setMode(currentMode==='preview'?'review':'preview');
+  loadWeek();
+}
+
+function getWeek() {
+  return DATA[currentUnit].weeks[currentWeek];
+}
+
+function saveLearned() {
+  localStorage.setItem('wonders_learned', JSON.stringify(learned));
+  updateStats();
+}
+
+function updateStats() {
+  const total = DATA.u5.weeks.reduce((a,w)=>a+w.words.length,0) + DATA.u6.weeks.reduce((a,w)=>a+w.words.length,0);
+  document.getElementById('learnedCount').textContent = learned.length;
+  document.getElementById('totalCount').textContent = total;
+  document.getElementById('totalProg').style.width = (learned.length/total*100)+'%';
+}
+
+function isLearned(w) { return learned.includes(w); }
+function toggleLearned(w) {
+  const i = learned.indexOf(w);
+  if(i>=0) learned.splice(i,1); else learned.push(w);
+  saveLearned();
+}
+
+// ===== LOAD WEEK =====
+function loadWeek() {
+  const w = getWeek();
+  renderWeekButtons();
+  document.getElementById('learnTitle').textContent = DATA[currentUnit].title + ' — ' + w.title;
+
+  // vocab tags
+  const tags = document.getElementById('learnVocabTags');
+  tags.innerHTML = w.words.map(v =>
+    `<span style="display:inline-block;padding:2px 6px;background:rgba(123,141,30,.2);border:1px solid var(--mc-grass);font-size:.7rem;color:var(--mc-gold);margin:2px">${v.w}</span>`
+  ).join('');
+
+  if(currentMode === 'preview') renderPreview(w);
+  else renderReview(w);
+  updateStats();
+}
+
+function renderStory() {
+  const w = getWeek();
+  renderWeekButtons();
+  document.getElementById('storyTitle').textContent = DATA[currentUnit].title + ' — ' + w.title + ' 课文精讲';
+  const story = w.story || [];
+  const area = document.getElementById('storyArena');
+  if(!story.length) { area.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-light)">📖 本周暂无课文精讲数据</div>'; return; }
+  document.getElementById('storyMeta').textContent = '📚 共 ' + story.length + ' 句 · 逐句翻译 + 重点解析';
+  area.innerHTML = story.map(function(s,i) {
+    const hasDetail = s.k && s.k.length && s.t && s.e;
+    return '<div class="sentence-card">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+        '<div style="flex:1">' +
+          '<div class="sentence-en" style="font-size:.95rem">' + (i+1) + '. ' + s.en + '</div>' +
+          '<div style="font-size:.85rem;color:var(--text-light);margin-top:4px">' + (s.cn||'') + '</div>' +
+        '</div>' +
+        '<button class="audio-btn" onclick="speak(\'' + s.en.replace(/'/g,"\\'") + '\')" style="margin-left:8px">🔊</button>' +
+      '</div>' +
+      (hasDetail ?
+        '<div style="margin-top:6px;font-size:.78rem;color:var(--text-light)">' +
+          '<span style="color:var(--mc-gold)">🔑 关键词:</span> ' +
+          s.k.map(function(k){return '<span class="sentence-word">' + k + '</span>';}).join(' ') +
+        '</div>' +
+        '<div class="sentence-struct"><span style="color:var(--mc-gold)">📐 句型:</span> ' + s.t + '</div>' +
+        '<div class="sentence-imitate"><span style="color:var(--mc-gold)">✏️ 仿写:</span> ' + s.e + '</div>'
+      : '') +
+    '</div>';
+  }).join('');
+}
+
+function navStory(d) {
+  const weeks = DATA[currentUnit].weeks;
+  currentWeek = (currentWeek + d + weeks.length) % weeks.length;
+  renderStory();
+  showSec('story');
+}
+
+function renderPreview(w) {
+  const area = document.getElementById('learnArena');
+  area.innerHTML = w.words.map((v,i) => `
+    <div class="sentence-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <div class="sentence-en">${i+1}. ${v.w} <span style="font-weight:400;font-size:.75rem;color:#888">${v.p}</span></div>
+          <div style="font-size:.82rem;color:var(--mc-gold);margin-bottom:8px">${v.c}</div>
+        </div>
+        <div style="display:flex;gap:4px">
+          <button class="audio-btn" onclick="speak('${v.w}')">🔊</button>
+          <button class="audio-btn" onclick="speak('${v.s}')">📖</button>
+        </div>
+      </div>
+      <div style="padding:8px;background:rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.05)">
+        <div style="color:#fff;font-size:.9rem;margin-bottom:4px">${v.s}</div>
+        <div style="color:var(--text-light);font-size:.82rem">${v.sc}</div>
+      </div>
+      <div style="margin-top:6px;font-size:.78rem;color:var(--text-light)">
+        <span style="color:var(--mc-gold)">🔑 关键词:</span>
+        ${v.k.map(k=>`<span class="sentence-word">${k}</span>`).join(' ')}
+      </div>
+      <div class="sentence-struct">
+        <span style="color:var(--mc-gold)">📐 句型:</span> ${v.t}
+      </div>
+      <div class="sentence-imitate">
+        <span style="color:var(--mc-gold)">✏️ 仿写:</span> ${v.e}
+      </div>
+      <div style="margin-top:6px;text-align:right">
+        <button class="audio-btn" onclick="event.stopPropagation();toggleLearned('${v.w}');loadWeek()" style="font-size:.7rem;padding:2px 8px">
+          ${isLearned(v.w)?'✅ 已学':'⬜ 标为已学'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('learnProg').style.width = (w.words.filter(v=>isLearned(v.w)).length/w.words.length*100)+'%';
+}
+
+function renderReview(w) {
+  const area = document.getElementById('quizArena');
+  if (!area) return;
+  area.innerHTML = `<div class="quiz-container" id="quizContainer"></div>`;
+  startQuiz(w);
+}
+
+// ===== QUIZ =====
+function startQuiz(w) {
+  quizState = {
+    words: [...w.words].sort(()=>Math.random()-.5),
+    current: 0,
+    correct: 0,
+    wrong: [],
+    done: false
+  };
+  const qtEl = document.getElementById('quizTotal');
+  const qpEl = document.getElementById('quizProg');
+  if (qtEl) qtEl.textContent = w.words.length;
+  if (qpEl) qpEl.style.width = '0%';
+  showQuestion();
+}
+
+function showQuestion() {
+  const s = quizState;
+  if(s.current >= s.words.length) { finishQuiz(); return; }
+  const v = s.words[s.current];
+  const qcEl = document.getElementById('quizCorrect');
+  const qtEl = document.getElementById('quizTotal');
+  const qpEl = document.getElementById('quizProg');
+  if (qcEl) qcEl.textContent = s.correct;
+  if (qtEl) qtEl.textContent = s.words.length;
+  if (qpEl) qpEl.style.width = (s.current/s.words.length*100)+'%';
+
+  // Pick 4 random options
+  const allWords = Object.values(DATA).flatMap(u=>u.weeks.flatMap(w=>w.words));
+  let opts = [v.c];
+  while(opts.length < 4) {
+    const r = allWords[Math.floor(Math.random()*allWords.length)].c;
+    if(!opts.includes(r)) opts.push(r);
+  }
+  opts.sort(()=>Math.random()-.5);
+
+  const container = document.getElementById('quizContainer');
+  if (!container) return;
+  container.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px">
+      <div class="quiz-word">${v.w}</div>
+      <button class="audio-btn" onclick="speak('${v.w}')">🔊</button>
+    </div>
+    <div style="font-size:.78rem;color:var(--text-light);margin-bottom:8px">选择正确的中文意思</div>
+    <div class="quiz-options" id="quizOpts">
+      ${opts.map(o => `<button class="quiz-option" onclick="answerQuiz('${o.replace(/'/g,"\\'")}','${v.c.replace(/'/g,"\\'")}',this)">${o}</button>`).join('')}
+    </div>
+    <div id="quizFeedback" style="min-height:24px;margin-top:6px"></div>
+    <div style="font-size:.75rem;color:#888;margin-top:6px">${s.current+1}/${s.words.length}</div>
+  `;
+}
+
+function answerQuiz(selected, correct, btn) {
+  const fb = document.getElementById('quizFeedback');
+  if(!btn) return;
+  if(!fb) { return; }
+  document.querySelectorAll('.quiz-option').forEach(b=>b.onclick=null);
+  const isCorrect = selected === correct;
+  btn.classList.add(isCorrect?'correct':'wrong');
+  if(isCorrect) {
+    quizState.correct++;
+    fb.innerHTML = '✅ 正确! ' + (quizState.words[quizState.current].e||'');
+    fb.style.color = '#7B8D1E';
+  } else {
+    quizState.wrong.push(quizState.words[quizState.current]);
+    fb.innerHTML = `❌ 正确答案: ${correct}`;
+    fb.style.color = '#f44336';
+    document.querySelectorAll('.quiz-option').forEach(b=>{if(b.textContent===correct)b.classList.add('correct')});
+  }
+  setTimeout(() => {
+    quizState.current++;
+    showQuestion();
+  }, 1500);
+}
+
+function finishQuiz() {
+  const s = quizState;
+  const total = s.words.length;
+  const pct = Math.round(s.correct/total*100);
+  const container = document.getElementById('quizContainer');
+  if (!container) return;
+  container.innerHTML = `
+    <div style="padding:20px">
+      <div style="font-size:2rem;margin-bottom:10px">${pct>=80?'🏆':pct>=60?'⭐':'💪'}</div>
+      <h2 style="color:var(--mc-gold);margin-bottom:6px">${pct>=80?'太棒了！':pct>=60?'继续加油！':'再试一次！'}</h2>
+      <div style="font-size:1.2rem;margin:10px 0">${s.correct} / ${total} (${pct}%)</div>
+      <div style="font-size:.78rem;color:var(--text-light);margin:8px 0">
+        ${s.wrong.length>0?'需要复习: '+s.wrong.map(v=>v.w).join(', '):'全部正确！🎉'}
+      </div>
+      <div style="margin-top:12px">
+        <button class="btn-primary" onclick="startQuiz(getWeek())" style="padding:8px 20px">🔄 再来一次</button>
+        <button class="btn-secondary" onclick="showSec('learn')" style="padding:8px 20px;margin-left:6px">📖 回预习</button>
+      </div>
+    </div>
+  `;
+  if(pct===100) showCelebration('🎉 全部正确!', '所有的单词都掌握了！');
+}
+
+function navLearn(d) {
+  const w = getWeek();
+  const weeks = DATA[currentUnit].weeks;
+  let idx = weeks.indexOf(w);
+  idx = (idx + d + weeks.length) % weeks.length;
+  currentWeek = idx;
+  loadWeek();
+}
+
+function speak(text) {
+  if(!text) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  window.speechSynthesis.speak(u);
+}
+
+
+
+function showCelebration(title, text) {
+  const el = document.getElementById('celebration');
+  document.getElementById('celebContent').querySelector('h2').textContent = title;
+  document.getElementById('celebText').textContent = text;
+  el.style.display = 'flex';
+  setTimeout(()=>el.style.display='none',2000);
+}
+
+// click outside celebration to close
+document.getElementById('celebration').onclick = function() {
+  this.style.display = 'none';
+};
+
+
+
+
+// ===== NEW SECTION RENDERERS =====
+function renderOverview() {
+  const w = getWeek();
+  const ov = w.overview || {};
+  document.getElementById('ovTitle').textContent = (DATA[currentUnit].title || '') + ' — ' + (w.title || '') + ' 总览';
+  const el = document.getElementById('ovContent');
+  el.innerHTML = '<div class="sentence-card">' +
+    '<table style="width:100%;border-collapse:collapse;font-size:.85rem">' +
+    '<tr><td style="padding:6px 8px;border:1px solid #4a4a6e;color:var(--mc-gold);width:100px"><b>Essential Question</b></td><td style="padding:6px 8px;border:1px solid #4a4a6e">' + (ov.essentialQuestion||'') + '</td></tr>' +
+    '<tr><td style="padding:6px 8px;border:1px solid #4a4a6e;color:var(--mc-gold)"><b>课文标题</b></td><td style="padding:6px 8px;border:1px solid #4a4a6e">' + (ov.storyTitle||'') + '</td></tr>' +
+    '<tr><td style="padding:6px 8px;border:1px solid #4a4a6e;color:var(--mc-gold)"><b>文体类型</b></td><td style="padding:6px 8px;border:1px solid #4a4a6e">' + (ov.genre||'') + '</td></tr>' +
+    '<tr><td style="padding:6px 8px;border:1px solid #4a4a6e;color:var(--mc-gold)"><b>核心语法</b></td><td style="padding:6px 8px;border:1px solid #4a4a6e">' + (ov.coreGrammar||'') + '</td></tr>' +
+    '<tr><td style="padding:6px 8px;border:1px solid #4a4a6e;color:var(--mc-gold)"><b>核心能力</b></td><td style="padding:6px 8px;border:1px solid #4a4a6e">' + (ov.coreSkills||'') + '</td></tr>' +
+    '</table>' +
+    '<div style="margin-top:8px;padding:8px;background:rgba(255,255,255,.03);font-size:.82rem;color:var(--text-light)">' +
+    '<span style="color:var(--mc-gold)"><b>📖 体裁说明:</b></span> ' + (ov.genreDesc||'') +
+    '</div>' +
+  '</div>';
+  renderWeekButtons();
+}
+
+function navOverview(d) {
+  const weeks = DATA[currentUnit].weeks;
+  currentWeek = (currentWeek + d + weeks.length) % weeks.length;
+  renderOverview();
+  showSec('overview');
+}
+
+function renderGrammar() {
+  const w = getWeek();
+  renderWeekButtons();
+  document.getElementById('grammarTitle').textContent = (DATA[currentUnit].title || '') + ' — ' + (w.title || '') + ' 语法';
+  const g = w.grammar || {};
+  const el = document.getElementById('grammarContent');
+  let html = '<div class="sentence-card">' +
+    '<h3 style="color:var(--mc-gold);margin-bottom:8px">' + (g.topic||'') + '</h3>' +
+    '<div style="padding:10px;background:rgba(0,0,0,.15);border:1px solid #4a4a6e;font-size:.85rem;margin-bottom:8px">' +
+    (g.explanation||'') +
+    '</div>' +
+    '<div style="font-size:.82rem;color:var(--mc-grass);margin-bottom:8px"><b>📐 规则:</b> ' + (g.rule||'') + '</div>';
+  if (g.examples && g.examples.length) {
+    html += '<div style="font-size:.85rem;color:var(--text-light)"><b>📝 例句:</b></div>';
+    g.examples.forEach(function(ex, i) {
+      html += '<div style="padding:6px 10px;background:rgba(255,255,255,.03);margin:4px 0;font-size:.85rem">' +
+        '<button class="audio-btn" onclick="speak(`' + ex.replace(/'/g,"\\'") + '`)" style="margin-right:6px">🔊</button>' + ex +
+        '</div>';
+    });
+  }
+  html += '</div>';
+  el.innerHTML = html;
+}
+
+function navGrammar(d) {
+  const weeks = DATA[currentUnit].weeks;
+  currentWeek = (currentWeek + d + weeks.length) % weeks.length;
+  renderGrammar();
+  showSec('grammar');
+}
+
+function renderWriting() {
+  const w = getWeek();
+  renderWeekButtons();
+  document.getElementById('writingTitle').textContent = (DATA[currentUnit].title || '') + ' — ' + (w.title || '') + ' 写作';
+  const ov = w.overview || {};
+  const el = document.getElementById('writingContent');
+  // Generate a writing prompt based on the week's theme
+  const prompts = {
+    "Being a Good Citizen": "Write about a time you made a difficult decision to do the right thing. What happened? How did you feel?",
+    "Cooperation Works!": "Write about a time you worked with someone as a team. How did cooperation help you succeed?",
+    "Our Heroes": "Write about someone who is your hero. What makes this person a hero? What have you learned from them?",
+    "Preserving Our Earth": "Write about one way you can help protect the Earth. Why is it important?",
+    "Rights and Rules": "Write about an important rule at home or school. Why is this rule important? What would happen without it?",
+    "Plant Myths and Facts": "Write a short myth that explains why something in nature is the way it is (e.g., why the sky is blue, why leaves change color).",
+    "We Need Energy": "Write about different kinds of energy. Which kind of energy do you think is most important? Why?",
+    "Team Up to Explore": "Write about a team you would like to be part of. What would your job be? How would you help the team?",
+    "Money Matters": "If you had one dollar, what would you do with it? Write a story about where your dollar bill travels.",
+    "The World of Ideas": "Write a short poem about something you love. Use your imagination and describe it with colorful words!"
+  };
+  const prompt = prompts[w.theme] || "Write a short paragraph about this week's topic.";
+  const storyText = w.storyText || '';
+  const firstSentence = storyText.split(/[.!?]/)[0] || '';
+  
+  el.innerHTML = '<div class="sentence-card">' +
+    '<h3 style="color:var(--mc-gold);margin-bottom:6px">✏️ 写作题目</h3>' +
+    '<div style="padding:10px;background:rgba(0,0,0,.15);border:1px solid #4a4a6e;font-size:.9rem;margin-bottom:12px;line-height:1.5">' +
+    prompt +
+    '</div>' +
+    '<h3 style="color:var(--mc-gold);margin-bottom:6px">💡 写作提示</h3>' +
+    '<div style="padding:10px;background:rgba(0,0,0,.15);border:1px solid #4a4a6e;font-size:.82rem;margin-bottom:12px;color:var(--text-light)">' +
+    '<div style="margin-bottom:6px"><b>1. 开头引入:</b> 用一个句子引出你的主题，可以参考课文中的开头方式。</div>' +
+    '<div style="margin-bottom:6px"><b>2. 中间展开:</b> 用2-3个句子详细描述，包括细节（时间、地点、人物、感受）。</div>' +
+    '<div style="margin-bottom:6px"><b>3. 结尾总结:</b> 用一个句子总结你的观点或感受。</div>' +
+    '<div style="margin-top:6px;color:var(--mc-gold)"><b>📐 参考句式:</b> ' + (firstSentence ? '"' + firstSentence + '..."' : '用课文中学到的句型') + '</div>' +
+    '</div>' +
+    '<h3 style="color:var(--mc-gold);margin-bottom:6px">📚 可用词汇</h3>' +
+    '<div style="font-size:.82rem;color:var(--text-light)">' +
+    (w.words ? w.words.map(function(v) {
+      return '<span class="sentence-word">' + v.w + '</span>';
+    }).join(' ') : '') +
+    '</div>' +
+  '</div>';
+}
+
+function navWriting(d) {
+  const weeks = DATA[currentUnit].weeks;
+  currentWeek = (currentWeek + d + weeks.length) % weeks.length;
+  renderWriting();
+  showSec('writing');
+}
+
+// ===== QUIZ RENDERER =====
+function renderQuiz() {
+  const w = getWeek();
+  renderWeekButtons();
+  const q = w.quiz || {phonics:'', exercises:[]};
+  document.getElementById('quizTitle').textContent = '🎯 复习闯关 — ' + (w.title || '');
+  document.getElementById('quizMeta').textContent = '🔤 语音/拼写: ' + (q.phonics || '无') + '  ·  📝 共 ' + q.exercises.length + ' 题';
+  const el = document.getElementById('quizContent');
+  if (!q.exercises || !q.exercises.length) {
+    el.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-light)">🎉 本周暂无练习，继续加油！</div>';
+    return;
+  }
+  el.innerHTML = q.exercises.map(function(ex, i) {
+    const opts = ex.options.map(function(o, oi) {
+      return '<button class="quiz-opt" data-idx="' + i + '" data-opt="' + oi + '" onclick="checkQuizAnswer(' + i + ',' + oi + ')">' + o + '</button>';
+    }).join(' ');
+    // Build result div for each question
+    return '<div class="quiz-card" id="quiz-q-' + i + '">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
+        '<div style="flex:1">' +
+          '<div class="sentence-en" style="font-size:.9rem;margin-bottom:6px">' +
+            '<span class="quiz-num">' + (i+1) + '.</span> ' +
+            '<span class="' + (ex.type==='phonics' ? 'tag-phonics' : 'tag-comp') + '">' + (ex.type==='phonics'?'🔤语音':'📖理解') + '</span> ' +
+            ex.q +
+          '</div>' +
+          '<div class="quiz-options">' + opts + '</div>' +
+        '</div>' +
+        '<button class="audio-btn" onclick="speak(`' + ex.q + '`)" style="margin-left:8px">🔊</button>' +
+      '</div>' +
+      '<div class="quiz-result" id="quiz-result-' + i + '" style="display:none;margin-top:6px;padding:6px;border-radius:4px"></div>' +
+    '</div>';
+  }).join('');
+  // Reset all quiz states
+  quizAnswered = {};
+}
+
+var quizAnswered = {};
+
+function checkQuizAnswer(qIdx, optIdx) {
+  const w = getWeek();
+  const q = w.quiz || {exercises:[]};
+  const ex = q.exercises[qIdx];
+  if (!ex) return;
+  const resultDiv = document.getElementById('quiz-result-' + qIdx);
+  const selected = ex.options[optIdx];
+  const correct = selected === ex.answer;
+  // Mark all answer buttons in this question
+  const card = document.getElementById('quiz-q-' + qIdx);
+  const btns = card.querySelectorAll('.quiz-opt');
+  btns.forEach(function(b, i) {
+    b.disabled = true;
+    b.style.cursor = 'default';
+    if (ex.options[i] === ex.answer) {
+      b.style.background = '#2d5a2d';
+      b.style.borderColor = '#4caf50';
+    } else if (i === optIdx && !correct) {
+      b.style.background = '#5a2d2d';
+      b.style.borderColor = '#f44336';
+    }
+  });
+  resultDiv.style.display = 'block';
+  resultDiv.style.background = correct ? 'rgba(76,175,80,.15)' : 'rgba(244,67,54,.15)';
+  resultDiv.style.border = '1px solid ' + (correct ? '#4caf50' : '#f44336');
+  resultDiv.style.color = correct ? '#4caf50' : '#f44336';
+  resultDiv.textContent = correct ? '✅ 回答正确！' : '❌ 正确答案是: ' + ex.answer;
+}
+
+function navQuiz(d) {
+  const weeks = DATA[currentUnit].weeks;
+  currentWeek = (currentWeek + d + weeks.length) % weeks.length;
+  renderQuiz();
+  showSec('quiz');
+}
+
+init();
+</script>
+</body>
+</html>
